@@ -1,0 +1,1 @@
+export { StrongSidesCard } from "./StrongSidesCard";

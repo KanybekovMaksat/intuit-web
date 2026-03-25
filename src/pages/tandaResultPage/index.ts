@@ -1,0 +1,1 @@
+export { ResultPageRoute } from "./tandaResult.route";
