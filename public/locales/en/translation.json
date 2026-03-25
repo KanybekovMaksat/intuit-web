@@ -1,0 +1,816 @@
+{
+  "header": {
+    "international": "For International Students"
+  },
+  "homepage": {
+    "title": "International University of Innovative Technologies",
+    "programs": "programs",
+    "studyForms": "Forms of study",
+    "resume": "Resume",
+    "eventError": "Failed to load event",
+    "creationDate": "Creation Date",
+    "universityBlogArticles": "University Blog Articles",
+    "TeachingStaff": "Teaching Staff",
+    "HeadPage": {
+      "name": "Mambetkulov Ormon",
+      "learningExperience": "I really enjoy the learning experience here — no boring lectures, just practice! Everything is to the point and immediately applicable in practice.",
+      "rectoratePlans": {
+        "2020-2021": "Rectorate Plan 2020-2021",
+        "march2021": "Rectorate Plan March 2021",
+        "aprilJuly2021": "Rectorate Plan April-July 2021",
+        "november2021": "Rectorate Plan November 2021",
+        "december2021January2022": "Rectorate Plan December 2021 - January 2022",
+        "februaryJuly2022": "Rectorate Plan February - July 2022",
+        "october2022January2023": "Rectorate Plan October 2022 - January 2023",
+        "januaryAugust2023": "Rectorate Plan January - August 2023",
+        "augustDecember2023": "Rectorate Plan August - December 2023",
+        "januaryAugust2024": "Rectorate Plan January - August 2024",
+        "augustDecember2024": "Rectorate Plan August - December 2024",
+        "januaryAugust2025": "Rectorate Plan January - August 2025",
+        "2020-2021_full": "Rectorate Plan for 2020-2021",
+        "2021-2022_full": "Rectorate Plan for 2021-2022",
+        "2022-2023_full": "Rectorate Plan for 2022-2023",
+        "2023-2024_full": "Rectorate Plan for 2023-2024",
+        "2024-2025_full": "Rectorate Plan for 2024-2025"
+      },
+      "UniversityRectorate": "University Rectorate",
+      "content": "Here you can familiarize yourself with the documents related to the activities of our university's rectorate. Click the links below to view or download the files"
+    },
+    "degrees": {
+      "degreeCategory": "Fields of Study",
+      "collegesCount": "faculties",
+      "colleges": "Colleges",
+      "programCount": "programs",
+      "programs": "Programs of Study",
+      "selectDegreePlaceholder": "Select Education Level",
+      "selectDirectionPlaceholder": "Select Field of Study"
+    },
+    "loading": {
+      "loading": "Loading",
+      "error": "Error",
+      "dataLoading": "Data is being loaded",
+      "dataNotLoaded": "Data not loaded",
+      "fileUpload": "File Upload",
+      "clear": "Clear"
+    },
+    "opportunities": {
+      "title": "With us, your opportunities are limitless",
+      "materials": {
+        "title": "Availability of study materials",
+        "moodle": "All materials are available in the MOODLE system.",
+        "review": "Review materials and take notes at any time.",
+        "keepUp": "Catch up with classmates and stay informed."
+      },
+      "transfer": {
+        "title": "Transfer from another university",
+        "contact": "Contact the admissions office",
+        "documents": "Provide a set of documents",
+        "assistance": "Our staff is ready to answer all your questions and assist with the transfer"
+      },
+      "payment": {
+        "title": "Online tuition payment",
+        "onlineCheck": "Online payment verification",
+        "mobileApps": "Payment via mobile apps",
+        "monthly": "Convenient, including monthly payments with personal code"
+      },
+      "career": {
+        "title": "Employment and career",
+        "resumeHelp": "We will help you create a resume",
+        "interviewPrep": "Prepare you for an interview",
+        "referenceLetter": "We will write a recommendation letter"
+      }
+    },
+    "availability": {
+      "title": "Availability of Learning Materials",
+      "points": [
+        "All materials are available on the MOODLE system.",
+        "Review and take notes anytime.",
+        "Keep up with your classmates and stay updated."
+      ]
+    },
+    "transfer": {
+      "title": "Transfer from Another University",
+      "points": [
+        "Contact the admissions office",
+        "Provide a set of documents",
+        "Our staff is ready to answer all your questions and assist with the transfer."
+      ]
+    },
+    "onlinePayment": {
+      "title": "Online Tuition Payment",
+      "points": [
+        "Online payment verification",
+        "Payment via mobile apps",
+        "Convenient monthly payments using your personal code."
+      ]
+    },
+    "employment": {
+      "title": "Employment and Career",
+      "points": [
+        "We'll help you write a resume",
+        "Prepare you for interviews",
+        "Write a recommendation letter."
+      ]
+    },
+    "aboutUniversity": {
+      "title": "About the University",
+      "goal": "Our goal is quality education for your successful career",
+      "description": "At MUIT, we train highly skilled specialists in demand in Kyrgyzstan and abroad. Start building your professional future with us. For over 25 years, MUIT has been teaching relevant and in-demand professions. Here, you’ll gain knowledge that can help grow your business or land a job in a major company."
+    },
+    "staff": {
+      "rectorate": "Rectorate",
+      "directors": "Institute Directors",
+      "departmentHead": "Department Head",
+      "uvrDeputyDirector": "Deputy Director for Academic Affairs",
+      "professorStaff": "Professorial Teaching Staff"
+    },
+    "diploma": {
+        "yourFutureDiploma": "Your future diploma",
+      "listTitle": "Your Future Diploma",
+      "buttonText": "View",
+      "bachelor": {
+        "degree": "Bachelor's Degree",
+        "description": "State Bachelor's Diploma"
+      },
+      "master": {
+        "degree": "Master's Degree",
+        "description": "State Master's Diploma"
+      },
+      "postgraduate": {
+        "degree": "Postgraduate",
+        "description": "State Postgraduate Diploma"
+      },
+      "diplomaSupplement": {
+        "title": "Diploma Supplement",
+        "description": "Supplement to the diploma"
+      }
+    },
+    "buttons": {
+      "viewButton": "View",
+      "applyButton": "Apply"
+    },
+    "enrollment": {
+      "title": "Enrollment",
+      "description": "Fill out the form to enroll in our university.",
+      "successMessage": "Your application has been successfully submitted!",
+      "formError": "Please fill out all fields correctly."
+    },
+    "enrollForm": {
+      "title": "Submit your application for training",
+      "placeholders": {
+        "name": "Name",
+        "phone": "Phone number",
+        "email": "Email"
+      },
+      "buttons": {
+        "submit": "Submit application"
+      }
+    },
+    "education-form": {
+      "title": "Full-time",
+      "text": "You will attend lectures and seminars during the day 5-6 times a week, take tests and exams. The academic year begins on September 1 and is divided into 2 semesters.",
+      "secondTitle": "Сorrespondence",
+      "secondText": "In the correspondence course, you study most of the program on your own. Twice a year you come to the University for practice and the closing examination session."
+    },
+    "License": {
+      "documents": "Documents",
+      "scholarship": "Scholarship places",
+      "content": "The International University of Innovative Technologies has a state license and accreditation, which is why we allocate state-funded places each year in several faculties for the most talented students.",
+      "licenses": "License ",
+      "viewDocument": "Click to view the document",
+      "certificate": "Certificate"
+    },
+    "Stats": {
+      "yearOfEstablishment": "Year of Establishment",
+      "institutes": "Institutes",
+      "facultyMembers": "Faculty Members",
+      "graduates": "Graduates"
+    }
+  },
+  "historypage": {
+    "InternationalUniversity": "International University of Innovative Technologies (IUIT)",
+    "history": "History of the University",
+    "content": "The International University of Innovative Technologies (IUIT), established in 2006 as the Academy of Innovative Technologies, hereinafter referred to as IUIT or the University, is an institution that implements higher professional education programs. Address: 720048, Kyrgyz Republic, Bishkek, Ankara Street, 1/17. Certificate of state registration/re-registration of a legal entity: № 55786-3301-U-e; OKPO code 24275760; GPY № 0025883. Tax identification number: 00308200610153. Date of registration/re-registration with the Ministry of Justice of the Kyrgyz Republic: 02.05.2017. The University operates under the Law of the Kyrgyz Republic 'On Education', the Civil Code of the Kyrgyz Republic, the Law of the Kyrgyz Republic 'On Licensing', the Charter of IUIT, and other regulatory acts. In accordance with the Resolution of the Government of the Kyrgyz Republic 'On Establishing a Two-Level Structure of Higher Professional Education in the Kyrgyz Republic' dated August 23, 2011, No. 496, and the order of the Ministry of Education and Science of the Kyrgyz Republic dated April 16, 2012, No. 244/1, starting from 2012, the University adopted a two-level higher education structure.",
+    "adress": "Address and Registration Details",
+    "location": "Address: 720048, Kyrgyz Republic, Bishkek, Ankara Street, 1/17. Certificate Number: № 55786-3301-U-e; OKPO code: 24275760. Registration with the Ministry of Justice of the Kyrgyz Republic: 02.05.2017.",
+    "Educational": "Licenses and Educational Programs",
+    "content2": "The university carries out its educational activities and prepares specialists under higher professional education programs for bachelor's, master's, and doctoral studies based on the licenses of the Ministry of Education and Science of the Kyrgyz Republic: No. LD150000763 dated 07.08.2015 (bachelor's, specialty), LD150001054 No. 1-18-1 dated 04.12.2015, No. LD 160000749 No. 1-19 dated 01.11.2016 (master's), LE150000095 dated 13.11.2014, LE150001566 dated 07.08.2015, LF150000373 dated 23.09.2015 (short-term professional development and further education courses)",
+    "bachelor": "Bachelor's Programs",
+    "programma": "Program",
+    "programms": "Programs",
+    "profil": "Profil",
+    "master": "Master's Programs",
+    "doctoral": "Doctoral Research Specialties",
+    "specialty": "Specialty",
+    "continuing": "Continuing Education Courses",
+    "course": "Course",
+    "structure": "IUIT Structure",
+    "funding": "Funding and Faculty",
+    "title": "The university has planned income and expenditure budgets that are adjusted annually. Currently, the IUIT faculty consists of 120 members.",
+    "contact": "Contact Information",
+    "location2": "Address: 720048, Kyrgyz Republic, Bishkek, Ankarа Street, 1/17 Phone: +996 (312) 590-599",
+    "code": "Code",
+    "bachelor2": "Bachelor's Programs",
+    "code1": "510200",
+    "program1": "appliedMath",
+    "profile1": "programmingTech",
+
+    "code2": "530300",
+    "program2": "psychology",
+    "profile2": "innovationPsych, educationPsych, servicePsych",
+
+    "code3": "531100",
+    "program3": "linguistics",
+    "profile3": "linguisticsTech, translation",
+
+    "code4": "531200",
+    "program4": "computationalLinguistics",
+    "profile4": "compLing, interculturalCommunication",
+
+    "code5": "570400",
+    "program5": "design",
+    "profile5": "interiorDesign, fashionDesign",
+
+    "code6": "570020",
+    "program6": "design",
+    "profile6": "animationDesign, motionDesign, gameDesign",
+
+    "code7": "580100",
+    "program7": "economics",
+    "profile7": "financeMgmt, financeCredit, accountingAudit, automation1c, businessAnalysis, taxation, economicSecurity, bankingTech",
+
+    "code8": "580200",
+    "program8": "management",
+    "profile8": "innovationMgmt, hotelMgmt",
+
+    "code9": "590100",
+    "program9": "informationSecurity",
+    "profile9": "automatedSecurity, telecomSecurity",
+
+    "code10": "640200",
+    "program10": "powerEngineering",
+    "profile10": "powerSupply, alternativeEnergy",
+
+    "code11": "670200",
+    "program11": "transportMachines",
+    "profile11": "autoService, autoManagement",
+
+    "code12": "710200",
+    "program12": "informationSystems",
+    "profile12": "managementIS, customsIS, bankingIS, constructionIS",
+
+    "code13": "710300",
+    "program13": "appliedInformatics",
+    "profile13": "softwareDev, architectureAI, economicsAI, designAI, trafficSafetyAI",
+
+    "code14": "710400",
+    "program14": "softwareEngineering",
+    "profile14": "softwareSystems",
+
+    "code15": "740700",
+    "program15": "lightIndustry",
+    "profile15": "clothingDesign",
+
+    "code16": "750200",
+    "program16": "architecturalDesign",
+    "profile16": "",
+
+    "code17": "750500",
+    "program17": "construction",
+    "profile17": "civilConstruction, buildingDesign, materialsProduction, bimTech",
+
+    "code18": "630004",
+    "program18": "physicalMining",
+    "profile18": "",
+    "postgraduateSpecialties": {
+      "code1": "01.01.09",
+      "specialty1": "Discrete Mathematics and Mathematical Cybernetics",
+      "code2": "01.02.04",
+      "specialty2": "Mechanics of Deformable Solids",
+      "code3": "05.13.01",
+      "specialty3": "Systems Analysis, Control and Information Processing (by industries)",
+      "code4": "05.13.18",
+      "specialty4": "Mathematical Modeling, Numerical Methods, and Software Complexes",
+      "code5": "05.23.01",
+      "specialty5": "Building Structures, Buildings, and Facilities",
+      "code6": "05.23.05",
+      "specialty6": "Construction Materials and Products",
+      "code7": "05.23.07",
+      "specialty7": "Hydraulic Engineering",
+      "code8": "05.23.17",
+      "specialty8": "Structural Mechanics",
+      "code9": "05.20.02",
+      "specialty9": "Electrical Technologies and Equipment in Agriculture"
+    },
+    "masterPrograms": {
+      "code1": "580100",
+      "program1": "Economics",
+      "details1": "Innovative enterprise financial management, Accounting, analysis and audit, Tax consulting, International business, International trade, Business valuation and corporate finance, Modern banking and management models, E-business, Business data analytics",
+
+      "code2": "580200",
+      "program2": "Management",
+      "details2": "Management of innovation activities in scientific, technical, and production fields",
+
+      "code3": "640200",
+      "program3": "Power Engineering and Electrical Engineering",
+      "details3": "Optimization of developing power supply systems",
+
+      "code4": "710200",
+      "program4": "Information Systems and Technologies",
+      "details4": "Information technologies in management, Information technologies in accounting",
+
+      "code5": "750500",
+      "program5": "Construction",
+      "details5": "Design, calculation and seismic resistance of buildings and structures, Quality management in construction"
+    },
+    "additionalCourses": {
+      "course1": "Driver training for categories 'B' and 'BC'",
+      "course2": "Computer literacy in programming",
+      "course3": "Courses on fundamental disciplines of industry-specific programs",
+      "course4": "Cutting and sewing, Seamstress",
+      "course5": "Plasterer – Painter, Concrete Worker, Mason, Rebar Worker",
+      "course6": "Control and measuring instrument technician",
+      "course7": "Electrical fitter for distribution networks and secondary circuits",
+      "course8": "Instrument and automation mechanic",
+      "course9": "Electric and gas welder",
+      "course10": "Occupational safety and health",
+      "course11": "Basics of accounting (1C Accounting 8.2)",
+      "course12": "Kyrgyz, Russian, English, German, Chinese, Japanese languages",
+      "course13": "Practical psychology and personality development"
+    },
+    "structureItems": {
+      "title1": "Academic Council",
+      "title2": "Education Quality Management Council",
+      "title3": "State Language Council",
+      "title4": "Educational and Methodological Council",
+      "title5": "Young Scientists Council",
+      "title6": "Department of Education Quality Assurance and Control",
+      "title7": "Academic Affairs Office",
+      "title8": "Institute of Digital Transformation and Programming",
+      "title9": "Institute of Design, Architecture and Textiles",
+      "title10": "Institute of Construction and Innovative Technologies",
+      "title11": "Institute of Energy and Transport",
+      "title12": "Institute of Economics and Management",
+      "title13": "Russian-Kyrgyz Institute of Automation, Management and Business",
+      "title14": "Institute of Intercultural Communication and Psychology",
+      "title15": "Institute of Distance Education",
+      "title16": "Department of Philosophy and Social Sciences",
+      "title17": "Department of Recreation, Physical Culture and Sports",
+      "title18": "Graduate School of Economics and Management",
+      "title19": "School of Creative Industries",
+      "title20": "Center for Professional Development and Continuing Education",
+      "title21": "Technology and Innovation Support Center",
+      "title22": "Youth Center",
+      "title23": "E-Procurement Competence Center",
+      "title24": "Career and Employment Center",
+      "title25": "Student Programming Center",
+      "title26": "Educational, Scientific and Industrial Laboratories",
+      "title27": "Scientific Information Library",
+      "title28": "Medical Station",
+      "title29": "Sports and Wellness Complex"
+    }
+  },
+  "degreePage": {
+    "breadcrumbs": {
+      "home": "Home",
+      "currentPage": "{degreeData.data.title}"
+    },
+    "header": {
+       "students": "For students",
+      "title": "{degreeData.data.title}",
+      "description": "Take a test and find out which field suits you best",
+      "button": "Find a Program",
+      "universityTitle": "INTERNATIONAL UNIVERSITY OF INNOVATIVE TECHNOLOGIES"
+    },
+    "infoBlock": {
+      "tags": ["Graduates", "Bachelor’s"],
+      "stats": {
+        "programCount": "programs",
+        "studyPeriod": "study period",
+        "employment": "Employment",
+        "diploma": "Certificate"
+      }
+    },
+    "programsTitle": "Programs of Study",
+    "opportunities": {
+      "title": "With us, your opportunities are limitless",
+      "availabilityTitle": "Availability of Learning Materials"
+    },
+    "enrollForm": {
+      "title": "Enrollment",
+      "description": "Fill out the form to enroll in our university."
+    },
+    "feedback": {
+      "title": "Student Feedback"
+    }
+  },
+  "news-page": {
+    "otherNews": "Other News",
+    "news": "News"
+  },
+  "paymentsPage": {
+    "code": "Code",
+    "direction": "Program (profiles and specialties)",
+    "studyDuration": "Study duration",
+    "studyCost": "Cost of study",
+    "MUIT": "MUIT",
+    "KOMTEKHNO_KITE": "Graduates of KOMTEKHNO and KIT colleges",
+    "KR": "Graduates of KR colleges"
+  },
+  "enrollPage": {
+    "introCard": {
+      "title": "For Applicants",
+      "description": "Enroll at 'Intuit'. Take a test and find out which field suits you best"
+    },
+    "infoSection": {
+      "title": "Information for Applicants",
+      "text1": "At MUIT, you can apply for budget-funded spots or contract-based education.",
+      "text2": "MUIT offers discounts and benefits for tuition fees for disabled individuals, orphans, and those under guardianship.",
+      "text3": "Admission and enrollment based on current year results are conducted online.",
+      "text4": "The registration and competitive selection process for 2022 is exclusively online on designated portals."
+    },
+    "importantLinks": {
+      "noMedCertificate": "No medical certificate required.",
+      "noDormitory": "MUIT does not provide dormitories.",
+      "programList": "List of specialties for 2024-2025 academic year.",
+      "brochure": "MUIT Brochure"
+    },
+    "documentsSection": {
+      "title": "Documents",
+      "admissionProcedure": "Admission procedure for universities in Kyrgyzstan",
+      "noORTNeeded": "Programs that don’t require test results.",
+      "benefitsDocuments": "Documents for obtaining benefits",
+      "bachelorFees": "Tuition fees for 2024-2025",
+      "masterFees": "Tuition fees for master’s 2024-2025",
+      "internationalFees": "Tuition fees for international students 2024-2025"
+    },
+    "foreignStudentsSection": {
+      "title": "For International Students",
+      "text": "Admission for international students is based on the regulations approved by the government of Kyrgyzstan.",
+      "entranceExams": {
+        "title": "Entrance Exams for International Students",
+        "item1": "All applicants must take an exam in Russian.",
+        "item2": "Some fields require an additional test in math or physics.",
+        "item3": "Applicants must achieve a minimum score for admission.",
+        "item4": "Further details are available on the MUIT website and edugate.edu.gov.kg."
+      },
+      "registration": "Registration for International Students",
+      "documents": "Documents for international student admission"
+    }
+  },
+  "institutPage": {
+    "instituteBanner": {
+      "breadcrumbs": {
+        "home": "Home",
+        "institutes": "Institutes",
+        "current": "Breadcrumbs"
+      },
+      "title": "Institute of Digital Transformation and Programming",
+      "programsCount": "15 Programs"
+    },
+    "opportunitiesList": {
+      "title": "With us, your opportunities are limitless",
+      "opportunities": [
+        {
+          "title": "Availability of Learning Materials",
+          "items": [
+            "All materials are available on the MOODLE system.",
+            "Review and take notes anytime.",
+            "Keep up with your classmates and stay updated."
+          ]
+        },
+        {
+          "title": "Transfer from Another University",
+          "items": [
+            "Contact the admissions office",
+            "Provide a set of documents",
+            "Our staff is ready to answer all your questions and assist with the transfer."
+          ]
+        },
+        {
+          "title": "Online Tuition Payment",
+          "items": [
+            "Online payment verification",
+            "Payment via mobile apps",
+            "Convenient monthly payments using your personal code."
+          ]
+        },
+        {
+          "title": "Employment and Career",
+          "items": [
+            "We'll help you write a resume",
+            "Prepare you for interviews",
+            "Write a recommendation letter."
+          ]
+        }
+      ]
+    }
+  },
+  "specialization": {
+    "professionPhoto": "Photo of the profession",
+    "professionTitle": "Who you will become",
+    "professionDescription": "After completing this specialization, you can become:",
+    "trainingProgram": "Training Program",
+    "courseTitle": "Course",
+    "whatYouWillStudy": "What you will study",
+    "skillsAndTools": "As a result, you will master the following skills and tools",
+    "home": "Home",
+    "level": "Level",
+    "studyDuration": "Study duration",
+    "format": "Format",
+    "result": "Result",
+    "invalidAddress": "Invalid address"
+  },
+  "studentsPage": {
+    "windowTitle": "Single Window",
+    "windowDescription": "Centralized access to all services.",
+    "nibTitle": "SRI",
+    "nibDescription": "Scientific Research Infrastructure.",
+    "moodleTitle": "Moodle",
+    "moodleDescription": "Learning management system.",
+    "makalaboxTitle": "Makalabox",
+    "makalaboxDescription": "A university website organized as a system of topic-based blogs (boxes) with elements of a news portal.",
+    "tabs": {
+      "bachelor": "Bachelor's Degree",
+      "master": "Master's Degree",
+      "postgraduate": "Postgraduate",
+      "phd": "PhD",
+      "course1": "1st year",
+      "course2": "2nd year",
+      "course3": "3rd year",
+      "course4": "4th year",
+      "fifthYear": "5th year"
+    },
+     "schedule": "Schedule",
+      "noAvailableCourses": "No available courses",
+       "forStudents": "For students"
+  },
+  "teapenPage": {
+    "documentTitle1": "Background document for 24th meeting of the Governing Board",
+    "documentTitle2": "Background document for 25th meeting of the Governing Board",
+    "documentTitle3": "Background document for 26th meeting of the Governing Board",
+    "documentTitle4": "Background document for 27th meeting of the Governing Board",
+    "documentTitle5": "Background document for 28th meeting of the Governing Board",
+    "title": " Explore our resources and documents related to the Space Science and Technology Education Centre. Click on the links below to view or download the files."
+  },
+  "vision": {
+    "title": "VISION AND MISSION",
+    "item": "Vision",
+    "text": "IITU is an open-type higher education institution capable of perceiving, accumulating, creating, and disseminating new knowledge and innovative business proposals, providing scientific and educational services using modern technologies, training competitive specialists who meet the requirements and expectations of consumers, society, and the state, demonstrating a commitment to integration into the global educational community and implementing a policy of sustainable innovative development in practice.",
+    "text2": "IITU’s mission",
+    "text3": "Training competitive specialists who meet the requirements and expectations of stakeholders, possess innovative technologies, and are capable of effectively solving engineering and socio-economic problems of modern society.",
+    "goal": "Strategic Goal of IITU",
+    "description": "Modernization of the educational and training complex through the enhancement of the scientific potential of the teaching staff, the introduction of information technologies for learning, and educational programs across a wide range of fields and specialties, meeting the requirements of innovative economic development, modern needs of individuals, society, and the state, through integration into the international scientific and educational space.",
+    "heading": "Tasks of IITU",
+    "primary": "Maintain close cooperation with employers regarding the modernization of curricula, ensuring internship placements, improving the quality of specialist training, evaluating learning outcomes, and facilitating graduate employment.",
+    "primary2": "Develop and implement innovative educational programs and forms of training that are relevant to the labor market, aimed at replenishing the country's production sector with in-demand specialists.",
+    "primary3": "Enhance and deepen scientific activities to develop applied and fundamental research, expand master's programs and postgraduate studies as the foundation for creating an innovative research and educational complex.",
+    "primary4": "Improve the material and technical base of educational and scientific activities, as well as the material infrastructure supporting the social life of students, faculty, and staff.",
+    "primary5": "Explore ways to increase the university's income through educational and innovative activities, including targeted training of specialists, providing consulting and engineering services, technology transfer, and distance learning.",
+    "primary6": "Continue to develop and strengthen long-term relationships between MUIIT and its strategic partners within the country and the international academic, scientific, and business communities in educational and scientific-technical activities.",
+    "primary7": "Create an environment that ensures a high level of information culture within the university community and beyond, establishing a foundation for the information-technology support of educational-scientific and administrative-management activities.",
+    "primary8": "Create a foundation for transitioning to a trilingual (Kyrgyz, Russian, and English) education system, expanding students' opportunities to learn foreign languages, both European and Asian, at a level that meets modern standards.",
+    "primary9": "Improve the system for enhancing the qualifications of faculty members through master's and postgraduate programs, as well as establish a 'Young Teacher's School.'"
+  },
+  "windowPage": {
+    "services": {
+      "leaf": "Exit form",
+      "studyCertificate": "Certificate of Study",
+      "militaryCertificate": "Military Certificate",
+      "academicCertificate": "Academic Certificate",
+      "archiveCertificate": "Archive Certificate"
+    },
+    "time": {
+      "oneDay": "1 working day",
+      "threeDays": "3 working days"
+    },
+    "servicesWindow": "Services in 'Single Window' Mode",
+    "digitalTransformationConcept": "In order to implement the Digital Transformation Concept 'Digital Kyrgyzstan 2019-2023' and ensure high-quality, timely provision of services, the following services have been automated at the MUIT:",
+    "service": "Service",
+    "executionTime": "Execution Time",
+    "readyCertificates": "Ready certificates can be obtained at the 'Single Window' office (Academic Department, Room 346). You must have an ID document with you.",
+    "general": "Contact phones for inquiries: 0312 46-79-15",
+    "fullTime": "For full-time students: +996-707-980-788",
+    "partTime": "For part-time students: +996-709-988-758",
+    "applyForCertificate": "Apply for a certificate",
+    "review": "Review"
+  },
+  "footer": {
+    "fields": {
+      "medical": "Medicine",
+      "psychology": "Psychology",
+      "law": "Law",
+      "programming": "Programming",
+      "gamingEsports": "Gaming Industry and Esports",
+      "design": "Design",
+      "clinicalPsychology": "Clinical Psychology",
+      "pedagogy": "Pedagogy",
+      "management": "Management",
+      "economics": "Economics",
+      "it": "Information Technology",
+      "universityTitle": "INTERNATIONAL UNIVERSITY OF INNOVATIVE  TECHNOLOGIES",
+      "feedback": "Feedback",
+      "address": "Address",
+      "workSchedule": "Working Hours",
+      "workScheduleList": {
+        "weekdays": "Mon-Fri ",
+        "saturday": "Sat Closed",
+        "sunday": "Sun Closed"
+      },
+      "forAllQuestions": "For all inquiries",
+      "admissionsOffice": "Admissions Office",
+      "socialMedia": "We are on social media"
+    }
+  },
+  "reviews": {
+    "studentReviews": "Student Reviews"
+  },
+  "applicantsPage": {
+    "admission": "Admission",
+    "admissionInfo": "At IUIT, you can apply for state-funded places (if your ORT score is over 200 or you have a gold certificate), as well as for paid contract-based education.",
+    "paymentBenefits": "Payment benefits are provided to persons with disabilities of group I and II, orphans, and children under guardianship. The amount and period of the benefits are determined by the IUIT commission.",
+    "registrationAndSelection": "Registration and Selection",
+    "electronicRegistration": "Electronic registration is carried out exclusively in a remote format on the portals.",
+    "documentsForElectronicRegistration": "Documents for electronic registration",
+    "documentsList": [
+      "Scan copy of the passport",
+      "Scan copy of the education document",
+      "Electronic version of the 3x4 cm photo",
+      "Scan copies of documents granting benefits",
+      "Scan copy of the ORT certificate (for citizens of the Kyrgyz Republic)"
+    ],
+     "additionalInfo": "Additional Information",
+    "additionalNotes": "• Medical certificate form No. 086-U is not required.\n• IUIT does not have dormitories.\n• The full list of specialties is available in the IUIT brochure."
+  },
+  "aboutPage": {
+    "links": {
+    "historyTitle": "University History",
+    "historyDescription": "Learn more about the rich history of our university.",
+    "visionTitle": "University Vision",
+    "visionDescription": "Our mission and goals in modern education.",
+    "ratingTitle": "Faculty Rating",
+    "ratingDescription": "See the rating of the university's top lecturers.",
+    "cssteapTitle": "CSSTEAP",
+    "cssteapDescription": "Centre for Space Science and Technology Education in Asia and the Pacific",
+    "headTitle": "Rectorate",
+    "headDescription": "Learn more about our Rectorate"
+  },
+   "go": "Go"
+  },
+  "institutesPage": {
+    "introCard": {
+      "title": "Institutes",
+      "description": "With IUIT University, you receive quality education and professions in demand in the modern world."
+    },
+     "pickProgram": "Choose a program"
+  },
+  "collegesPage": {
+     "after9Or11": "After the 9th or 11th grade, students can enter colleges to receive vocational education. Colleges offer both practical and theoretical knowledge that helps prepare specialists in various fields. It's a great choice for those who want to start a career or continue their education at a university.",
+     "comtehnoCard": {
+      "title": "Bishkek College of Computer Systems and Technologies",
+      "description": "The college offers programs in programming, management, design, and other in-demand professions.",
+      "moreInfo": "More details on the website: https://comtehno.kg/"
+    },
+    "itecCard": {
+      "title": "College of Innovative Technologies and Economics",
+      "description": "This college trains students for professions in economics, design, IT, and management.",
+      "moreInfo": "More details on the website: https://itec.kg/"
+    },
+      "careerOpportunities": "These colleges offer great opportunities to start a career in in-demand fields such as IT, management, economics, and design. You can develop your skills and get a profession that will be in demand in the job market."
+  },
+  "descriptionPage": {
+    "aboutInstitute": "About the Institute",
+     "leadingTeachers": "Leading teachers"
+  },
+  "internationalPage": {
+    "hero": {
+      "department": "IntUIT International Department",
+      "title": "Global Opportunities",
+      "subtitle": "for Future Leaders",
+      "description": "Building strong partnerships with universities, research institutions, and international organizations around the world."
+    },
+    "stats": {
+      "students": "Students",
+      "partners": "International Partners",
+      "countries": "Countries of Cooperation",
+      "founded": "Founded"
+    },
+    "whoWeAre": {
+      "title": "Who We Are",
+      "text1": "The International Department of the International University of Innovation Technologies (IntUIT) is responsible for developing and strengthening the university’s international cooperation.",
+      "text2": "We support international academic mobility, joint educational initiatives, and collaborative research projects, creating opportunities for students and faculty to engage in global experiences."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "quote": "To promote the internationalization of IntUIT by expanding global partnerships and supporting international academic opportunities for students, faculty, and staff.",
+      "description": "We aim to create an international learning environment that encourages cultural exchange, academic collaboration, and innovation through global education initiatives."
+    },
+    "globalEngagement": {
+      "title": "Global Engagement",
+      "description": "IntUIT continuously endeavors to expand its network of partner universities and research institutions worldwide.",
+      "partnership": {
+        "title": "International Partnership",
+        "content": "The university gives high priority to internationalization of education process. At present the university has Memorandum of Understanding with China, German, Korea, Kazakhstan, India, Egypt, Uzbekistan, Russia, etc."
+      },
+      "jointProjects": {
+        "title": "International Joint Projects",
+        "content": "The International Department coordinates joint academic and research projects. These initiatives promote collaborative research, knowledge exchange, and the development of innovative educational programs."
+      },
+      "projectAreas": {
+        "title": "Key Project Areas",
+        "items": [
+          "Development of joint academic programs",
+          "Participation in international grants and projects",
+          "Research collaboration with international institutions",
+          "Organization of international conferences and academic events"
+        ]
+      }
+    },
+    "exchange": {
+      "title": "International",
+      "subtitle": "Exchange & Mobility",
+      "text1": "IntUIT actively promotes international mobility through exchange programs and partnerships with universities worldwide.",
+      "text2": "Participants gain opportunities to study, teach, conduct research, and gain professional experience abroad while developing intercultural competencies and global perspectives.",
+      "items": [
+        "Student exchange programs",
+        "Short-term academic programs and summer schools",
+        "Faculty teaching and research mobility",
+        "Participation in international conferences and workshops",
+        "Academic and professional training programs"
+      ]
+    },
+    "strategicPartners": {
+      "title": "Strategic Partners",
+      "erasmus": {
+        "title": "Erasmus+ Programme",
+        "description": "European Union program supporting education and training. Students and staff can participate in international mobility and joint research initiatives."
+      },
+      "iaeste": {
+        "title": "IAESTE",
+        "description": "Provides professional internship opportunities abroad. Gain practical experience in international companies and research institutions."
+      }
+    },
+    "roles": {
+      "title": "Departmental Roles",
+      "duties": [
+        {
+          "title": "Development and Support of International Partnerships",
+          "items": [
+            "Establishing and maintaining relationships with foreign universities, research centers, and organizations.",
+            "Preparing and signing cooperation agreements, memoranda of understanding, and contracts for joint projects."
+          ]
+        },
+        {
+          "title": "International Academic Mobility",
+          "items": [
+            "Organizing exchange programs for students and faculty (semester-long or short-term programs, summer schools, internships).",
+            "Coordinating application processes, documentation, and providing support for program participants."
+          ]
+        },
+        {
+          "title": "International Joint Projects",
+          "items": [
+            "Developing and managing international research and educational projects.",
+            "Supporting participation of faculty and students in international grants and collaborative initiatives."
+          ]
+        },
+        {
+          "title": "Participant Support for International Programs",
+          "items": [
+            "Advising students and faculty on international opportunities.",
+            "Assisting with visas, documents, certificates, and reporting for participation in programs."
+          ]
+        },
+        {
+          "title": "Monitoring and Reporting",
+          "items": [
+            "Maintaining a database of international agreements and projects.",
+            "Preparing reports for university leadership on the department’s activities and outcomes of international cooperation."
+          ]
+        },
+        {
+          "title": "Promotion and Representation of the University Abroad",
+          "items": [
+            "Participating in international exhibitions, conferences, and education fairs.",
+            "Supporting the university’s international visibility and reputation."
+          ]
+        }
+      ]
+    },
+    "contact": {
+      "title": "Contact Us",
+      "addressLabel": "Address",
+      "addressValue": "Bishkek, Kyrgyz Republic \n Vinogradnaya 1/17, Room 308",
+      "phoneLabel": "Phone",
+      "emailLabel": "Email",
+      "locationLabel": "Location",
+      "locationValue": "Room No: 308, 3rd Floor"
+    },
+    "team": {
+      "name": "Doolotova Zhazgul Kudaibergenovna",
+      "position": "Director of the International Department",
+      "bio": "Leading the university's global integration and supporting academic excellence through international cooperation."
+    },
+    "news": "News"
+  }
+}
