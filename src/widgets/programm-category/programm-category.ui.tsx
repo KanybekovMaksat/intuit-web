@@ -7,6 +7,7 @@ import { degreeQueries } from '~entities/degree'
 import { facultyQueries } from '~entities/faculties'
 import { programQueries } from '~entities/programs'
 import { ProfessionCard } from '~entities/profession'
+import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 import { Title } from '~shared/ui/title'
 
@@ -25,6 +26,14 @@ type RelationItem =
       icon?: string
     }
 
+type SelectSourceItem = {
+  id: number
+  title: string
+  titleRu?: string
+  subtitle?: string
+  icon?: string
+}
+
 type ProgramItem = {
   id?: number
   title: string
@@ -34,7 +43,7 @@ type ProgramItem = {
 }
 
 type ProgramCategoryData = {
-  data: ProgramItem[]
+  data?: unknown
 }
 
 interface ProgramCategoryProps {
@@ -87,14 +96,14 @@ export const ProgramCategory = ({
     isError: isDegreeError,
   } = degreeQueries.useGetDegrees()
 
-  const sortedFaculties: Option[] = [...(facultyData?.data || [])]
+  const sortedFaculties: Option[] = getApiList<SelectSourceItem>(facultyData?.data)
     .sort((a, b) => a.id - b.id)
     .map((faculty) => ({
       value: faculty.id,
       label: faculty.subtitle || faculty.title,
     }))
 
-  const sortedDegrees: Option[] = [...(degreeData?.data || [])]
+  const sortedDegrees: Option[] = getApiList<SelectSourceItem>(degreeData?.data)
     .sort((a, b) => a.id - b.id)
     .map((degree) => ({
       value: degree.id,
@@ -111,9 +120,9 @@ export const ProgramCategory = ({
   const [currentPage, setCurrentPage] = useState(1)
 
   const itemsPerPage = 8
-  const professions = (propdata || serverData) as ProgramCategoryData | undefined
+  const professions = getApiList<ProgramItem>((propdata || serverData)?.data)
 
-  const filteredProfessions = professions?.data?.filter((profession) => {
+  const filteredProfessions = professions.filter((profession) => {
     const educationLevels = profession.educationLevel || []
     const faculties = profession.faculty || []
     const normalizedSearch = searchQuery.trim().toLowerCase()
@@ -132,9 +141,9 @@ export const ProgramCategory = ({
   })
 
   const totalPages = Math.ceil(
-    (filteredProfessions?.length || 0) / itemsPerPage
+    filteredProfessions.length / itemsPerPage
   )
-  const paginatedProfessions = filteredProfessions?.slice(
+  const paginatedProfessions = filteredProfessions.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   )

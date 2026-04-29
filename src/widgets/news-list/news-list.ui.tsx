@@ -8,6 +8,7 @@ import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import { t } from 'i18next'
 import { Title } from '~shared/ui/title'
+import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 
 interface NewsListProps {
@@ -29,9 +30,10 @@ export const NewsList = ({ id = null, category = null, title = null }: NewsListP
   if (isError) return <div>Ошибка при загрузке новостей</div>
   if (!data?.data) return <div>Нет данных</div>
 
-  const totalPages = Math.ceil(data.data.results.length)
+  const news = getApiList<any>(data.data)
+  const totalPages = Math.ceil(news.length)
 
-  if (isSuccess && data.data.results.length > 0) {
+  if (isSuccess && news.length > 0) {
     return (
       <div>
         <Title>{title || t('news-page.news')}</Title>
@@ -54,13 +56,13 @@ export const NewsList = ({ id = null, category = null, title = null }: NewsListP
             },
           }}
         >
-          {data.data.results.map((news) => (
-            <SwiperSlide key={news.slug}>
+          {news.map((item) => (
+            <SwiperSlide key={item.slug}>
               <NewsCard
-                image={news.banner}
-                title={news.title}
-                description={news.description}
-                slug={news.slug}
+                image={item.banner}
+                title={item.title}
+                description={item.description}
+                slug={item.slug}
               />
             </SwiperSlide>
           ))}

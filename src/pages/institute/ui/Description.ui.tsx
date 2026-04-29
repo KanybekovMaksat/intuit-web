@@ -7,7 +7,9 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { t } from 'i18next'
 import { Title } from '~shared/ui/title'
+import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
+import { Staff } from '~entities/staff/staff.types'
 
 interface DescriptionCardProps {
   subtitle: string
@@ -23,6 +25,7 @@ const DescriptionCard: React.FC<DescriptionCardProps> = ({ text, id }) => {
     isError,
     isLoading,
   } = staffQueries.useGetStaffs(id)
+  const staffs = getApiList<Staff>(staffData?.data)
 
   return (
     <div className="my-2 md:flex md:flex-col md:items-center">
@@ -34,7 +37,7 @@ const DescriptionCard: React.FC<DescriptionCardProps> = ({ text, id }) => {
           {isLoading && <Loader />}
           {isError && <div>Произошла ошибка при загрузке данных.</div>}
 
-          {isSuccess && staffData?.data?.length > 0 ? (
+          {isSuccess && staffs.length > 0 ? (
             <Swiper
               className="py-20 px-1 staff-list"
               modules={[Pagination]}
@@ -42,7 +45,7 @@ const DescriptionCard: React.FC<DescriptionCardProps> = ({ text, id }) => {
               slidesPerView={1}
               pagination={{ clickable: true }}
             >
-              {staffData.data.map((staff) => (
+              {staffs.map((staff) => (
                 <SwiperSlide className="flex justify-center" key={staff.id}>
                   <StaffCard {...staff} />
                 </SwiperSlide>

@@ -6,9 +6,11 @@ import HistoryImg from './history.jpg'
 import EducationImg from './education.jpg'
 import { documentQueries, documentTypes } from '~entities/document'
 import { t } from 'i18next'
+import { getApiList } from '~shared/lib/api/getApiList'
 
 export const AboutPage = () => {
   const { data: documentData } = documentQueries.useGetDocuments()
+  const documents = getApiList<documentTypes.DocumentSchema>(documentData?.data)
   console.log(documentData)
 
   const links = [
@@ -143,7 +145,7 @@ export const AboutPage = () => {
             </Box>
           </Box>
         ))}
-        {documentData?.data.map(
+        {documents.map(
           (document: documentTypes.DocumentSchema, i: number) => (
             <Box
               key={i}

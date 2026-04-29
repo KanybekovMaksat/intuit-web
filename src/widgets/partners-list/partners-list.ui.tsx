@@ -2,6 +2,7 @@ import { Box } from '@mui/material'
 import Marquee from 'react-fast-marquee'
 import { PartnerCard, partnersQueries, partnersTypes } from '~entities/partner'
 import { useTranslation } from 'react-i18next'
+import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 
 export const PartnersList = () => {
@@ -21,6 +22,8 @@ export const PartnersList = () => {
     return <div>{t('homepage.loading.error')}</div>
   }
   if (isSuccess) {
+    const partners = getApiList<partnersTypes.Partner>(partnersData?.data)
+
     return (
       <Box className="w-full overflow-hidden my-10">
         <Marquee
@@ -29,8 +32,7 @@ export const PartnersList = () => {
           pauseOnHover={true}
           className="mb-3 "
         >
-          {partnersData &&
-            partnersData.data.map(
+          {partners.map(
               (partner: partnersTypes.Partner, i: number) => {
                 if (i % 2 == 0) {
                   return (
@@ -47,8 +49,7 @@ export const PartnersList = () => {
           pauseOnHover={true}
           className="pb-5"
         >
-          {partnersData &&
-            partnersData.data.map(
+          {partners.map(
               (partner: partnersTypes.Partner, i: number) => {
                 if (i % 2 == 1) {
                   return (

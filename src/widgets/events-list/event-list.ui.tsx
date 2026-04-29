@@ -2,6 +2,7 @@ import { Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { EventCard, eventQueries, eventTypes } from '~entities/events'
+import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -23,8 +24,9 @@ export const EventList = () => {
     </div>
   )
 
-  if (isSuccess && eventsData?.data?.length > 0) {
-    const events = eventsData.data
+  const events = getApiList<eventTypes.Event>(eventsData?.data)
+
+  if (isSuccess && events.length > 0) {
 
     return (
       <section className="py-20 bg-gray-light">

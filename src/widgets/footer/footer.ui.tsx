@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { degreeQueries } from '~entities/degree'
+import { DegreeSchema } from '~entities/degree/degree.types'
+import { getApiList } from '~shared/lib/api/getApiList'
 import { t } from 'i18next'
 import { Loader } from '~shared/ui/loader'
 
@@ -33,6 +35,7 @@ export function Footer() {
   const [data, setData] = useState<ContactInfo>()
 
   const { data: degreeData } = degreeQueries.useGetDegrees()
+  const degrees = getApiList<DegreeSchema>(degreeData?.data)
 
   useEffect(() => {
     axios
@@ -105,7 +108,7 @@ export function Footer() {
           </p>
         </div>
         <ul className="flex justify-between pb-3 border-b border-gray">
-          {degreeData?.data.map((univer, index) => (
+          {degrees.map((univer, index) => (
             <li className="text-white" key={index}>
               <Link to={`/degree/${univer.slug}`}>{univer.title}</Link>
             </li>

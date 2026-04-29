@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { facultyQueries } from '~entities/faculties'
 import { FacultySchema } from '~entities/faculties/faculty.types'
+import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 
 export const FacultyCarousel: React.FC = () => {
@@ -25,11 +26,13 @@ export const FacultyCarousel: React.FC = () => {
     return <div>{t('homepage.loading.error')}</div>
   }
 
+  const faculties = getApiList<FacultySchema>(eventsData?.data)
+
   return (
     <div className="w-full overflow-hidden">
       <Marquee direction="left" speed={100} className="overflow-x-none">
         <div className="flex items-center r-sm:gap-3 r-sm:ml-3 gap-4 ml-4">
-          {eventsData?.data.map((carusel: FacultySchema, i: number) => (
+          {faculties.map((carusel, i) => (
             <Link
               key={i}
               to={`/institutes/${carusel.slug}`}

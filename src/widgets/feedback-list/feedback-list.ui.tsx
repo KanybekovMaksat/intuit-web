@@ -9,6 +9,7 @@ import {
   feedbackTypes,
 } from '~entities/feedback'
 import { t } from 'i18next'
+import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 
 export const FeedbackList = () => {
@@ -26,6 +27,8 @@ export const FeedbackList = () => {
     return <div>{t('loading.error')}</div>
   }
   if (isSuccess) {
+    const feedbacks = getApiList<feedbackTypes.Feedback>(feedbackData?.data)
+
     return (
       <>
         <Swiper
@@ -48,7 +51,7 @@ export const FeedbackList = () => {
             },
           }}
         >
-          {feedbackData?.data.map((feedback: feedbackTypes.Feedback) => {
+          {feedbacks.map((feedback: feedbackTypes.Feedback) => {
             return (
               <SwiperSlide key={feedback.id}>
                 <FeedbackCard {...feedback} />

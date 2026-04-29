@@ -7,6 +7,8 @@ import { OpportunitiesList } from '~widgets/opportunities-list';
 import intro from './img/intro.png';
 import { t } from 'i18next';
 import { Loader } from '~shared/ui/loader';
+import { getApiList } from '~shared/lib/api/getApiList';
+import { FacultySchema } from '~entities/faculties/faculty.types';
 
 export const InstitutesPage = () => {
   const {
@@ -22,6 +24,8 @@ export const InstitutesPage = () => {
     return <div>{t('loading.error')}</div>;
   }
 
+  const faculties = getApiList<FacultySchema>(facultyData?.data);
+
   return (
     <div className="my-5 mb-10">
       <IntroCard
@@ -31,7 +35,7 @@ export const InstitutesPage = () => {
       />
       <div className="my-5 w-full">
         <div className="grid md:grid-cols-1 grid-cols-4 gap-5 my-10 w-full">
-          {facultyData?.data.map((institute, index) => (
+          {faculties.map((institute, index) => (
             <FacultyCard
               key={index}
               slug={institute.slug}

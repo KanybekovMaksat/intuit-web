@@ -22,12 +22,15 @@ import { Title } from '~shared/ui/title'
 import { Loader } from '~shared/ui/loader'
 import { DegreeSchema } from '~entities/degree/degree.types'
 import { API_URL } from '~shared/lib/api/apiClient'
+import { getApiList } from '~shared/lib/api/getApiList'
 
 export const DegreeCategory = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { data: degreeData, isLoading, isError } = degreeQueries.useGetDegrees()
-  const degrees = [...(degreeData?.data || [])].sort((a, b) => a.id - b.id)
+  const degrees = getApiList<DegreeSchema>(degreeData?.data).sort(
+    (a, b) => a.id - b.id
+  )
 
   if (isLoading) {
     return <Loader />

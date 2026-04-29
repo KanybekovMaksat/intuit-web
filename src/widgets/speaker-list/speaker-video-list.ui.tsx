@@ -7,6 +7,7 @@ import 'swiper/css/scrollbar'
 import './index.css'
 import { t } from 'i18next'
 import { Title } from '~shared/ui/title'
+import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 
 interface SpeakerVideoListProps {
@@ -31,10 +32,10 @@ export const SpeakerVideoList: React.FC<SpeakerVideoListProps> = ({
   const isLoading = isFilteredLoading || isAllLoading
   const isError = isFilteredError && isAllError
 
+  const filteredSpeakers = getApiList<any>(filteredSpeakersData?.data)
+  const allSpeakers = getApiList<any>(allSpeakersData?.data)
   const speakersData =
-    filteredSpeakersData?.data?.length > 0
-      ? filteredSpeakersData.data
-      : allSpeakersData?.data
+    filteredSpeakers.length > 0 ? filteredSpeakers : allSpeakers
 
   if (isLoading) {
     return <Loader />

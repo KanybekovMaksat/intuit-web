@@ -9,6 +9,7 @@ import { degreeQueries } from '~entities/degree'
 import { Loader } from '~shared/ui/loader'
 import { FacultyCarousel } from './heroCarousel/FacultyCarousel'
 import { DegreeSchema } from '~entities/degree/degree.types'
+import { getApiList } from '~shared/lib/api/getApiList'
 
 export const HomeHero = () => {
   const { t } = useTranslation()
@@ -25,7 +26,7 @@ export const HomeHero = () => {
     return <div>{t('loading.error')}</div>
   }
 
-  const facultyItems = facultyData?.data.map((item: DegreeSchema, index: number) => (
+  const facultyItems = getApiList<DegreeSchema>(facultyData?.data).map((item, index) => (
     <Link key={index} to={`/degree/${item.slug}/`}>
       <span className="text-[14px] px-4 hover:cursor-pointer py-1 md:py-3 border border-white/50 bg-white rounded-full text-black font-bold whitespace-nowrap">
         {item.title}

@@ -7,6 +7,8 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/effect-fade'
 import { degreeQueries } from '~entities/degree'
+import { DegreeSchema } from '~entities/degree/degree.types'
+import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 
 export const  HomeHero = () => {
@@ -23,6 +25,8 @@ export const  HomeHero = () => {
   if (isError) {
     return <div>{t('loading.error')}</div>
   }
+
+  const degrees = getApiList<DegreeSchema>(facultyData?.data)
 
   return (
     <section className=" r-sm:h-[360px]  rounded-md r-sm:mb-16 mb-20 relative overflow-hidden bg-[url('/bg2.png')] bg-cover bg-top ">
@@ -51,7 +55,7 @@ export const  HomeHero = () => {
               />
             </div>
             <div className="hidden mt-3 flex-wrap max-w-full gap-y-8 gap-1  md:flex">
-              {facultyData?.data.map((item, index) => (
+              {degrees.map((item, index) => (
                 <Link key={index} to={`/degree/${item.slug}/`}>
                   <span className=" text-[14px] px-2 hover:cursor-pointer  py-3 border border-white/50 bg-white rounded-full text-black font-bold">
                     {item.title}

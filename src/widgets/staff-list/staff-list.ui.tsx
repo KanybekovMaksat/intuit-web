@@ -8,6 +8,7 @@ import Button from '@mui/material/Button'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import { Staff } from '~entities/staff/staff.types'
 import { MenuItem, Select } from '@mui/material'
+import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 
 const StaffList = () => {
@@ -34,7 +35,12 @@ const StaffList = () => {
     return <Loader />
   }
 
-  const filterData = staffData?.data
+  const staffs = getApiList<Staff>(staffData?.data)
+  const positions = getApiList<{ id: number; title: string; level: number }>(
+    positionsData?.data
+  )
+
+  const filterData = staffs
     .filter((staff: Staff) => staff.position.id === selectedPosition)
     .sort((a, b) => {
       if (a.id === 35) return -1
@@ -55,7 +61,7 @@ const StaffList = () => {
             variant="contained"
             aria-label="position navigation"
           >
-            {positionsData.data.map(
+            {positions.map(
               (position: { id: number; title: string; level: number }) => (
                 <Button
                   key={position.id}
@@ -79,7 +85,7 @@ const StaffList = () => {
           className="mt-5 hidden lg:block md:max-w-[90%] md:mr-0"
           onChange={(e) => setSelectedPosition(e.target.value)}
         >
-          {positionsData?.data.map(
+          {positions.map(
             (position: { id: number; title: string; level: number }) => (
               <MenuItem key={position.id} value={position.id}>
                 {position.title}
