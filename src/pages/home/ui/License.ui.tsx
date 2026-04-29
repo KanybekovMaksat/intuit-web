@@ -1,6 +1,5 @@
 import Fancybox from './Fancybox'
 import Gerb from '../../../assets/gerb.svg'
-import { Typography } from '@mui/material'
 import { t } from 'i18next'
 import { Title } from '~shared/ui/title'
 
@@ -19,13 +18,10 @@ export const License = () => {
           <div className="max-w-md w-full border border-gray rounded-lg bg-white p-3 shadow hover:shadow-lg transition-shadow duration-300 min-h-[150px]">
             <div className="flex flex-col ">
               <h3 className="text-xl font-bold ">
-                Официальные документы университета
+                {t('homepage.License.officialDocuments')}
               </h3>
               <p className="text-sm text-gray-600 mt-4">
-                Лицензия на право ведения образовательной деятельности в сфере
-                профессионального образования и свидетельство о государственной
-                регистрации Международного Университета Инновационных
-                Технологий.
+                {t('homepage.License.description')}
               </p>
             </div>
           </div>

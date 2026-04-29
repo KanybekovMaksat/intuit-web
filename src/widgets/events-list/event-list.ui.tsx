@@ -1,9 +1,10 @@
-import { Box } from '@mui/material'
-import Marquee from 'react-fast-marquee'
+import { Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { EventCard, eventQueries, eventTypes } from '~entities/events'
 import { Loader } from '~shared/ui/loader'
+import { ArrowRight } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 export const EventList = () => {
   const { t } = useTranslation()
@@ -15,58 +16,55 @@ export const EventList = () => {
     isError,
   } = eventQueries.useGetEvents()
 
-  if (isLoading) {
-    return <Loader />
-  }
-  if (isError) {
-    return <div>{t('homepage.loading.error')}</div>
-  }
-  if (isSuccess) {
+  if (isLoading) return <Loader />
+  if (isError) return (
+    <div className="py-20 text-center bg-gray-light">
+      <Typography variant="h6" className="text-primary">{t('homepage.loading.error')}</Typography>
+    </div>
+  )
+
+  if (isSuccess && eventsData?.data?.length > 0) {
+    const events = eventsData.data
+
     return (
-      <>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: eventsData.data[0].title,
-          }}
-          className="text-center text-2xl font-bold text-[#333] "
-        ></div>
-        <section
-          className="w-full h-[600px] rounded-md bg-cover bg-center bg-no-repeat mt-5 flex justify-end items-end p-10"
-          style={{ backgroundImage: `url(${eventsData.data[0].banner})` }}
-        >
-          {eventsData.data[0].link ? (
-            <Link
-              className="rounded text-white inline-block bg-green p-2 hover:bg-green-600 transition"
-              to={`${eventsData.data[0].link}`}
+      <section className="py-20 bg-gray-light">
+        <div className="container mx-auto">
+          <div className="mb-10 flex items-end justify-between gap-6 border-b border-primary/10 pb-6 md:flex-col md:items-start">
+            <div>
+              <div className="mb-3 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-green">
+                <span className="h-px w-8 bg-green" />
+                {t('homepage.events.upcomingLabel')}
+              </div>
+              <h2 className="text-4xl font-semibold leading-tight text-primary md:text-3xl">
+                {t('homepage.events.otherEvents')}
+              </h2>
+            </div>
+
+            <Link 
+              to="/news" 
+              className="group inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-primary/15 bg-white px-5 text-sm font-semibold text-primary transition-all hover:border-green hover:text-green hover:shadow-md"
             >
-              Узнать больше
+              {t('homepage.buttons.viewButton')}
+              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
-          ) : (
-            <Link
-              className="rounded text-white inline-block bg-green p-2 hover:bg-green-600 transition"
-              to={`/news/event/${eventsData.data[0].slug}`}
-            >
-              Узнать больше
-            </Link>
-          )}
-        </section>
-        <div className="uppercase text-2xl font-bold text-[#333] mt-10">
-          Другие Мероприятия
+          </div>
+
+          <div className="grid grid-cols-4 gap-6 xll:grid-cols-3 lg:grid-cols-2 md:grid-cols-1">
+            {events.slice(0, 4).map((event: eventTypes.Event, idx: number) => (
+              <motion.div 
+                key={event.slug}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="h-full"
+              >
+                <EventCard {...event} />
+              </motion.div>
+            ))}
+          </div>
         </div>
-        <Box className="w-full overflow-hidden my-10">
-          <Marquee
-            direction="right"
-            speed={100}
-            pauseOnHover={true}
-            className="mb-3 "
-          >
-            {eventsData &&
-              eventsData.data.map((event: eventTypes.Event) => (
-                <EventCard key={event.slug} {...event}></EventCard>
-              ))}
-          </Marquee>
-        </Box>
-      </>
+      </section>
     )
   }
+  return null
 }

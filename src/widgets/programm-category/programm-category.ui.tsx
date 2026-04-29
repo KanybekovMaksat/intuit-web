@@ -1,17 +1,74 @@
-import { Button, Pagination, TextField, InputAdornment } from '@mui/material'
-import Select from 'react-select'
-import { ProfessionCard } from '~entities/profession'
+import { Button, InputAdornment, Pagination, TextField } from '@mui/material'
+import Select, { SingleValue, StylesConfig } from 'react-select'
+import { ChangeEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { programQueries } from '~entities/programs'
-import { facultyQueries } from '~entities/faculties'
+import { Search, X } from 'lucide-react'
 import { degreeQueries } from '~entities/degree'
-import { useState } from 'react'
-import { FacultySchema } from '~entities/faculties/faculty.types'
-import { SearchCheck } from 'lucide-react'
-import { Title } from '~shared/ui/title'
+import { facultyQueries } from '~entities/faculties'
+import { programQueries } from '~entities/programs'
+import { ProfessionCard } from '~entities/profession'
 import { Loader } from '~shared/ui/loader'
+import { Title } from '~shared/ui/title'
 
-export const ProgramCategory = ({ data: propdata, degreeId, facultyId }) => {
+type Option = {
+  value: number
+  label: string
+}
+
+type RelationItem =
+  | number
+  | {
+      id: number
+      title?: string
+      titleRu?: string
+      subtitle?: string
+      icon?: string
+    }
+
+type ProgramItem = {
+  id?: number
+  title: string
+  slug: string
+  educationLevel?: RelationItem[]
+  faculty?: RelationItem[]
+}
+
+type ProgramCategoryData = {
+  data: ProgramItem[]
+}
+
+interface ProgramCategoryProps {
+  data?: ProgramCategoryData
+  degreeId?: number
+  facultyId?: number
+}
+
+const getRelationId = (relation: RelationItem) =>
+  typeof relation === 'number' ? relation : relation.id
+
+const getRelationLabel = (
+  relation: RelationItem | undefined,
+  options: Option[],
+  fallback = ''
+) => {
+  if (!relation) return fallback
+  if (typeof relation === 'number') {
+    return options.find((option) => option.value === relation)?.label || fallback
+  }
+
+  return relation.titleRu || relation.subtitle || relation.title || fallback
+}
+
+const getRelationIcon = (relation: RelationItem | undefined) => {
+  if (!relation || typeof relation === 'number') return undefined
+  return relation.icon
+}
+
+export const ProgramCategory = ({
+  data: propdata,
+  degreeId,
+  facultyId,
+}: ProgramCategoryProps) => {
   const { t } = useTranslation()
 
   const {
@@ -30,41 +87,47 @@ export const ProgramCategory = ({ data: propdata, degreeId, facultyId }) => {
     isError: isDegreeError,
   } = degreeQueries.useGetDegrees()
 
-  const sortedFaculties =
-    facultyData?.data
-      .sort((a, b) => a.id - b.id)
-      .map((faculty) => ({
-        value: faculty.id,
-        label: faculty.subtitle || faculty.subtitle,
-      })) || []
+  const sortedFaculties: Option[] = [...(facultyData?.data || [])]
+    .sort((a, b) => a.id - b.id)
+    .map((faculty) => ({
+      value: faculty.id,
+      label: faculty.subtitle || faculty.title,
+    }))
 
-  const sortedDegrees =
-    degreeData?.data
-      .sort((a, b) => a.id - b.id)
-      .map((degree) => ({
-        value: degree.id,
-        label: degree.titleRu || degree.title,
-      })) || []
+  const sortedDegrees: Option[] = [...(degreeData?.data || [])]
+    .sort((a, b) => a.id - b.id)
+    .map((degree) => ({
+      value: degree.id,
+      label: degree.titleRu || degree.title,
+    }))
 
-  const [selectedDegree, setSelectedDegree] = useState(degreeId || null)
-  const [selectedFaculty, setSelectedFaculty] = useState(facultyId || null)
+  const [selectedDegree, setSelectedDegree] = useState<number | null>(
+    degreeId || null
+  )
+  const [selectedFaculty, setSelectedFaculty] = useState<number | null>(
+    facultyId || null
+  )
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
 
   const itemsPerPage = 8
+  const professions = (propdata || serverData) as ProgramCategoryData | undefined
 
-  const professions = propdata || serverData
+  const filteredProfessions = professions?.data?.filter((profession) => {
+    const educationLevels = profession.educationLevel || []
+    const faculties = profession.faculty || []
+    const normalizedSearch = searchQuery.trim().toLowerCase()
 
-  const filteredProfessions = professions?.data.filter((profession) => {
     const matchesDegree = selectedDegree
-      ? profession.educationLevel.some((level) => level.id === selectedDegree)
+      ? educationLevels.some((level) => getRelationId(level) === selectedDegree)
       : true
     const matchesFaculty = selectedFaculty
-      ? profession.faculty.some((faculty) => faculty.id === selectedFaculty)
+      ? faculties.some((faculty) => getRelationId(faculty) === selectedFaculty)
       : true
-    const matchesSearch = profession.title
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
+    const matchesSearch = normalizedSearch
+      ? profession.title.toLowerCase().includes(normalizedSearch)
+      : true
+
     return matchesDegree && matchesFaculty && matchesSearch
   })
 
@@ -76,51 +139,72 @@ export const ProgramCategory = ({ data: propdata, degreeId, facultyId }) => {
     currentPage * itemsPerPage
   )
 
-  const handleDegreeChange = (selectedOption) => {
+  const handleDegreeChange = (selectedOption: SingleValue<Option>) => {
     setSelectedDegree(selectedOption?.value || null)
     setCurrentPage(1)
   }
 
-  const handleFacultyChange = (selectedOption) => {
+  const handleFacultyChange = (selectedOption: SingleValue<Option>) => {
     setSelectedFaculty(selectedOption?.value || null)
     setCurrentPage(1)
   }
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
     setCurrentPage(1)
   }
 
   const handleClearFilters = () => {
-    setSelectedDegree(null)
-    setSelectedFaculty(null)
+    setSelectedDegree(degreeId || null)
+    setSelectedFaculty(facultyId || null)
     setSearchQuery('')
     setCurrentPage(1)
   }
 
-  const handlePageChange = (event, value) => {
+  const handlePageChange = (_event: ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value)
   }
 
-  const customSelectStyles = {
+  const customSelectStyles: StylesConfig<Option, false> = {
     control: (provided) => ({
       ...provided,
-      borderRadius: '10px',
-      borderColor: '#ccc',
+      borderColor: 'rgba(42, 33, 114, 0.14)',
+      borderRadius: '8px',
       boxShadow: 'none',
-      padding: '2px 4px',
-      minHeight: '42px',
+      fontSize: '14px',
+      fontWeight: 600,
+      minHeight: '48px',
+      padding: '2px 6px',
       '&:hover': {
-        borderColor: '#888',
+        borderColor: '#00956F',
       },
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: 'rgba(42, 33, 114, 0.55)',
+    }),
+    indicatorSeparator: (provided) => ({
+      ...provided,
+      backgroundColor: 'rgba(42, 33, 114, 0.1)',
     }),
     menu: (provided) => ({
       ...provided,
-      zIndex: 9999, // чтобы само меню было поверх
+      borderRadius: '8px',
+      overflow: 'hidden',
+      zIndex: 9999,
     }),
     menuPortal: (base) => ({
       ...base,
-      zIndex: 9999, // чтобы портал был поверх всех блоков
+      zIndex: 9999,
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected
+        ? '#2A2172'
+        : state.isFocused
+          ? 'rgba(0, 149, 111, 0.08)'
+          : '#FFFFFF',
+      color: state.isSelected ? '#FFFFFF' : '#2A2172',
     }),
   }
 
@@ -133,108 +217,147 @@ export const ProgramCategory = ({ data: propdata, degreeId, facultyId }) => {
   }
 
   return (
-    <div className="my-20 rounded-lg ">
-      <Title>{t('homepage.degrees.programs')}</Title>
-      <div className="my-5 flex flex-col gap-5">
-        <div className="flex flex-wrap gap-4 items-stretch justify-between md:flex-col">
-          <div className="flex-1 min-w-[250px]">
+    <section className="py-20 bg-gray-light">
+      <div className="container mx-auto">
+        <div className="mb-10 flex items-end justify-between gap-6 border-b border-primary/10 pb-6 md:flex-col md:items-start">
+          <div>
+            <div className="mb-3 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-green">
+              <span className="h-px w-8 bg-green" />
+              {t('homepage.degrees.academicPrograms', {
+                defaultValue: t('homepage.degrees.degreeCategory'),
+              })}
+            </div>
+            <Title className="!m-0 !text-left !text-4xl !font-semibold !leading-tight !text-primary md:!text-3xl">
+              {t('homepage.degrees.programs')}
+            </Title>
+          </div>
+        </div>
+
+        <div className="mb-8 rounded-lg border border-primary/10 bg-white p-4 shadow-sm">
+          <div className="grid grid-cols-[1fr_1fr_auto] items-center gap-4 lg:grid-cols-1">
             <Select
               options={sortedDegrees}
               styles={customSelectStyles}
-              placeholder="Выберите уровень"
+              placeholder={t('homepage.degrees.selectDegreePlaceholder')}
               className="z-50"
               onChange={handleDegreeChange}
-              menuPortalTarget={document.body}
+              menuPortalTarget={
+                typeof document !== 'undefined' ? document.body : undefined
+              }
               value={
                 sortedDegrees.find(
                   (degree) => degree.value === selectedDegree
                 ) || null
               }
             />
-          </div>
-          <div className="flex-1 min-w-[250px]">
+
             <Select
               options={sortedFaculties}
               styles={customSelectStyles}
-              placeholder="Выберите направление"
+              placeholder={t('homepage.degrees.selectDirectionPlaceholder')}
               className="z-50"
               onChange={handleFacultyChange}
+              menuPortalTarget={
+                typeof document !== 'undefined' ? document.body : undefined
+              }
               value={
                 sortedFaculties.find(
-                  (faculty: FacultySchema) => faculty.value === selectedFaculty
+                  (faculty) => faculty.value === selectedFaculty
                 ) || null
               }
             />
-          </div>
-          <div className="min-w-[200px] flex items-center">
+
             <Button
               variant="outlined"
-              className="shadow-none border-blue hover:border-blue bg-blue text-white px-6 w-full"
+              className="h-12 min-w-12 rounded-lg border-primary/15 bg-white px-0 text-primary shadow-none hover:border-green hover:bg-green/5"
               onClick={handleClearFilters}
+              title="Сбросить фильтры"
+              aria-label="Сбросить фильтры"
             >
-              Применить
+              <X size={18} />
             </Button>
           </div>
-        </div>
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Поиск по названию программы"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          sx={{
-            backgroundColor: '#f9f9f9',
-            borderRadius: '8px',
-            '& .MuiOutlinedInput-root': {
-              borderRadius: '8px',
-              '& fieldset': {
-                borderColor: '#ccc',
-              },
-              '&:hover fieldset': {
-                borderColor: '#999',
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: '#00956F',
-                borderWidth: '2px',
-              },
-            },
-          }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchCheck />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </div>
-      <div className="grid grid-cols-4 justify-items-center mt-10 md:grid-cols-1 gap-6 lg:grid-cols-2 xll:grid-cols-2 xl:grid-cols-3">
-        {paginatedProfessions?.map((profession, index) => (
-          <ProfessionCard
-            key={index}
-            degree={profession.educationLevel[0].title}
-            faculties={profession.faculty[0].subtitle}
-            title={profession.title}
-            url={profession.slug}
-            icon={profession.faculty[0].icon}
-          />
-        ))}
-      </div>
-      {totalPages > 1 && (
-        <div className="flex justify-center mt-8">
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
+
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Поиск по названию программы"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="mt-4"
             sx={{
-              '& .MuiPaginationItem-root.Mui-selected': {
-                color: 'white',
-                backgroundColor: '#00956F',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '8px',
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                fontSize: '14px',
+                '& fieldset': {
+                  borderColor: 'rgba(42, 33, 114, 0.14)',
+                },
+                '&:hover fieldset': {
+                  borderColor: '#00956F',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#00956F',
+                  borderWidth: '1px',
+                },
               },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search size={18} className="text-primary/60" />
+                </InputAdornment>
+              ),
             }}
           />
         </div>
-      )}
-    </div>
+
+        <div className="grid grid-cols-4 gap-6 xl:grid-cols-3 xll:grid-cols-2 md:grid-cols-1">
+          {paginatedProfessions?.length ? (
+            paginatedProfessions.map((profession, index) => (
+              <ProfessionCard
+                key={profession.slug || profession.id || index}
+                degree={getRelationLabel(
+                  profession.educationLevel?.[0],
+                  sortedDegrees
+                )}
+                faculties={getRelationLabel(
+                  profession.faculty?.[0],
+                  sortedFaculties
+                )}
+                title={profession.title}
+                url={profession.slug}
+                icon={getRelationIcon(profession.faculty?.[0])}
+                index={(currentPage - 1) * itemsPerPage + index}
+              />
+            ))
+          ) : (
+            <div className="col-span-4 rounded-lg border border-primary/10 bg-white p-8 text-center text-primary/70 md:col-span-1">
+              Программы не найдены
+            </div>
+          )}
+        </div>
+
+        {totalPages > 1 && (
+          <div className="mt-8 flex justify-center">
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              sx={{
+                '& .MuiPaginationItem-root': {
+                  color: '#2A2172',
+                },
+                '& .MuiPaginationItem-root.Mui-selected': {
+                  color: 'white',
+                  backgroundColor: '#00956F',
+                },
+              }}
+            />
+          </div>
+        )}
+      </div>
+    </section>
   )
 }

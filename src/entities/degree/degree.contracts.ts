@@ -9,6 +9,7 @@ export const DegreeSchema = z.object({
   text: z.string(),
   subtext: z.string(),
   programCount: z.string(),
+  facultyCount: z.number().optional(),
   studyPeriod: z.string(),
   employment: z.string(),
   diploma: z.string(),

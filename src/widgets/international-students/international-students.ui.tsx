@@ -466,6 +466,8 @@ export const InternationalStudents = () => {
                   <Award size={100} />
                 </Box>
                 <Avatar
+                  src="/zhazgul.jpeg"
+                  alt={t('internationalPage.team.name')}
                   className="w-40 h-40 border-4 border-white shadow-lg bg-blue-600"
                 >
                   <Users size={60} />

@@ -3,11 +3,21 @@
     "international": "For International Students"
   },
   "homepage": {
+    "hero": {
+      "title": "Choose not just a specialty — choose the future with MUIT",
+      "subtitle": "Education that leads to real work",
+      "helpButton": "Help with choosing"
+    },
     "title": "International University of Innovative Technologies",
     "programs": "programs",
     "studyForms": "Forms of study",
     "resume": "Resume",
     "eventError": "Failed to load event",
+    "events": {
+      "featuredTitle": "Featured Event",
+      "otherEvents": "Events",
+      "upcomingLabel": "Upcoming Experience"
+    },
     "creationDate": "Creation Date",
     "universityBlogArticles": "University Blog Articles",
     "TeachingStaff": "Teaching Staff",
@@ -41,8 +51,9 @@
       "collegesCount": "faculties",
       "colleges": "Colleges",
       "programCount": "programs",
-      "programs": "Programs of Study",
-      "selectDegreePlaceholder": "Select Education Level",
+      "programs": "Academic Programs",
+      "academicPrograms": "Specialization",
+      "selectDegreePlaceholder": "Choose a degree",
       "selectDirectionPlaceholder": "Select Field of Study"
     },
     "loading": {
@@ -125,7 +136,7 @@
       "professorStaff": "Professorial Teaching Staff"
     },
     "diploma": {
-        "yourFutureDiploma": "Your future diploma",
+      "yourFutureDiploma": "Your future diploma",
       "listTitle": "Your Future Diploma",
       "buttonText": "View",
       "bachelor": {
@@ -147,7 +158,8 @@
     },
     "buttons": {
       "viewButton": "View",
-      "applyButton": "Apply"
+      "applyButton": "Apply",
+      "learnMore": "Learn more"
     },
     "enrollment": {
       "title": "Enrollment",
@@ -173,12 +185,12 @@
       "secondText": "In the correspondence course, you study most of the program on your own. Twice a year you come to the University for practice and the closing examination session."
     },
     "License": {
-      "documents": "Documents",
-      "scholarship": "Scholarship places",
-      "content": "The International University of Innovative Technologies has a state license and accreditation, which is why we allocate state-funded places each year in several faculties for the most talented students.",
-      "licenses": "License ",
-      "viewDocument": "Click to view the document",
-      "certificate": "Certificate"
+      "documents": "Official Documents",
+      "officialDocuments": "Official University Documents",
+      "description": "License for the right to conduct educational activities in the field of professional education and the certificate of state registration of the International University of Innovative Technologies.",
+      "licenses": "Licenses",
+      "certificate": "Certificate",
+      "viewDocument": "View document"
     },
     "Stats": {
       "yearOfEstablishment": "Year of Establishment",
@@ -214,71 +226,54 @@
     "code1": "510200",
     "program1": "appliedMath",
     "profile1": "programmingTech",
-
     "code2": "530300",
     "program2": "psychology",
     "profile2": "innovationPsych, educationPsych, servicePsych",
-
     "code3": "531100",
     "program3": "linguistics",
     "profile3": "linguisticsTech, translation",
-
     "code4": "531200",
     "program4": "computationalLinguistics",
     "profile4": "compLing, interculturalCommunication",
-
     "code5": "570400",
     "program5": "design",
     "profile5": "interiorDesign, fashionDesign",
-
     "code6": "570020",
     "program6": "design",
     "profile6": "animationDesign, motionDesign, gameDesign",
-
     "code7": "580100",
     "program7": "economics",
     "profile7": "financeMgmt, financeCredit, accountingAudit, automation1c, businessAnalysis, taxation, economicSecurity, bankingTech",
-
     "code8": "580200",
     "program8": "management",
     "profile8": "innovationMgmt, hotelMgmt",
-
     "code9": "590100",
     "program9": "informationSecurity",
     "profile9": "automatedSecurity, telecomSecurity",
-
     "code10": "640200",
     "program10": "powerEngineering",
     "profile10": "powerSupply, alternativeEnergy",
-
     "code11": "670200",
     "program11": "transportMachines",
     "profile11": "autoService, autoManagement",
-
     "code12": "710200",
     "program12": "informationSystems",
     "profile12": "managementIS, customsIS, bankingIS, constructionIS",
-
     "code13": "710300",
     "program13": "appliedInformatics",
     "profile13": "softwareDev, architectureAI, economicsAI, designAI, trafficSafetyAI",
-
     "code14": "710400",
     "program14": "softwareEngineering",
     "profile14": "softwareSystems",
-
     "code15": "740700",
     "program15": "lightIndustry",
     "profile15": "clothingDesign",
-
     "code16": "750200",
     "program16": "architecturalDesign",
     "profile16": "",
-
     "code17": "750500",
     "program17": "construction",
     "profile17": "civilConstruction, buildingDesign, materialsProduction, bimTech",
-
     "code18": "630004",
     "program18": "physicalMining",
     "profile18": "",
@@ -306,19 +301,15 @@
       "code1": "580100",
       "program1": "Economics",
       "details1": "Innovative enterprise financial management, Accounting, analysis and audit, Tax consulting, International business, International trade, Business valuation and corporate finance, Modern banking and management models, E-business, Business data analytics",
-
       "code2": "580200",
       "program2": "Management",
       "details2": "Management of innovation activities in scientific, technical, and production fields",
-
       "code3": "640200",
       "program3": "Power Engineering and Electrical Engineering",
       "details3": "Optimization of developing power supply systems",
-
       "code4": "710200",
       "program4": "Information Systems and Technologies",
       "details4": "Information technologies in management, Information technologies in accounting",
-
       "code5": "750500",
       "program5": "Construction",
       "details5": "Design, calculation and seismic resistance of buildings and structures, Quality management in construction"
@@ -376,14 +367,17 @@
       "currentPage": "{degreeData.data.title}"
     },
     "header": {
-       "students": "For students",
+      "students": "For students",
       "title": "{degreeData.data.title}",
       "description": "Take a test and find out which field suits you best",
       "button": "Find a Program",
       "universityTitle": "INTERNATIONAL UNIVERSITY OF INNOVATIVE TECHNOLOGIES"
     },
     "infoBlock": {
-      "tags": ["Graduates", "Bachelor’s"],
+      "tags": [
+        "Graduates",
+        "Bachelor’s"
+      ],
       "stats": {
         "programCount": "programs",
         "studyPeriod": "study period",
@@ -541,9 +535,9 @@
       "course4": "4th year",
       "fifthYear": "5th year"
     },
-     "schedule": "Schedule",
-      "noAvailableCourses": "No available courses",
-       "forStudents": "For students"
+    "schedule": "Schedule",
+    "noAvailableCourses": "No available courses",
+    "forStudents": "For students"
   },
   "teapenPage": {
     "documentTitle1": "Background document for 24th meeting of the Governing Board",
@@ -639,34 +633,34 @@
       "Scan copies of documents granting benefits",
       "Scan copy of the ORT certificate (for citizens of the Kyrgyz Republic)"
     ],
-     "additionalInfo": "Additional Information",
+    "additionalInfo": "Additional Information",
     "additionalNotes": "• Medical certificate form No. 086-U is not required.\n• IUIT does not have dormitories.\n• The full list of specialties is available in the IUIT brochure."
   },
   "aboutPage": {
     "links": {
-    "historyTitle": "University History",
-    "historyDescription": "Learn more about the rich history of our university.",
-    "visionTitle": "University Vision",
-    "visionDescription": "Our mission and goals in modern education.",
-    "ratingTitle": "Faculty Rating",
-    "ratingDescription": "See the rating of the university's top lecturers.",
-    "cssteapTitle": "CSSTEAP",
-    "cssteapDescription": "Centre for Space Science and Technology Education in Asia and the Pacific",
-    "headTitle": "Rectorate",
-    "headDescription": "Learn more about our Rectorate"
-  },
-   "go": "Go"
+      "historyTitle": "University History",
+      "historyDescription": "Learn more about the rich history of our university.",
+      "visionTitle": "University Vision",
+      "visionDescription": "Our mission and goals in modern education.",
+      "ratingTitle": "Faculty Rating",
+      "ratingDescription": "See the rating of the university's top lecturers.",
+      "cssteapTitle": "CSSTEAP",
+      "cssteapDescription": "Centre for Space Science and Technology Education in Asia and the Pacific",
+      "headTitle": "Rectorate",
+      "headDescription": "Learn more about our Rectorate"
+    },
+    "go": "Go"
   },
   "institutesPage": {
     "introCard": {
       "title": "Institutes",
       "description": "With IUIT University, you receive quality education and professions in demand in the modern world."
     },
-     "pickProgram": "Choose a program"
+    "pickProgram": "Choose a program"
   },
   "collegesPage": {
-     "after9Or11": "After the 9th or 11th grade, students can enter colleges to receive vocational education. Colleges offer both practical and theoretical knowledge that helps prepare specialists in various fields. It's a great choice for those who want to start a career or continue their education at a university.",
-     "comtehnoCard": {
+    "after9Or11": "After the 9th or 11th grade, students can enter colleges to receive vocational education. Colleges offer both practical and theoretical knowledge that helps prepare specialists in various fields. It's a great choice for those who want to start a career or continue their education at a university.",
+    "comtehnoCard": {
       "title": "Bishkek College of Computer Systems and Technologies",
       "description": "The college offers programs in programming, management, design, and other in-demand professions.",
       "moreInfo": "More details on the website: https://comtehno.kg/"
@@ -676,11 +670,11 @@
       "description": "This college trains students for professions in economics, design, IT, and management.",
       "moreInfo": "More details on the website: https://itec.kg/"
     },
-      "careerOpportunities": "These colleges offer great opportunities to start a career in in-demand fields such as IT, management, economics, and design. You can develop your skills and get a profession that will be in demand in the job market."
+    "careerOpportunities": "These colleges offer great opportunities to start a career in in-demand fields such as IT, management, economics, and design. You can develop your skills and get a profession that will be in demand in the job market."
   },
   "descriptionPage": {
     "aboutInstitute": "About the Institute",
-     "leadingTeachers": "Leading teachers"
+    "leadingTeachers": "Leading teachers"
   },
   "internationalPage": {
     "hero": {

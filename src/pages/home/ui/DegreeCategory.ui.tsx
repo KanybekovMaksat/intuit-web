@@ -1,4 +1,4 @@
-import { Button, Card, CardContent, Typography } from '@mui/material'
+import { Card, CardContent, Typography } from '@mui/material'
 import { degreeQueries } from '~entities/degree'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -10,110 +10,165 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
 import {
+  ArrowRight,
   Book,
   Briefcase,
   Code,
-  ExternalLink,
   Globe,
   GraduationCap,
   University,
 } from 'lucide-react'
 import { Title } from '~shared/ui/title'
 import { Loader } from '~shared/ui/loader'
+import { DegreeSchema } from '~entities/degree/degree.types'
+import { API_URL } from '~shared/lib/api/apiClient'
 
 export const DegreeCategory = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { data: degreeData, isLoading, isError } = degreeQueries.useGetDegrees()
+  const degrees = [...(degreeData?.data || [])].sort((a, b) => a.id - b.id)
 
   if (isLoading) {
     return <Loader />
   }
   if (isError) {
-    return <h1>{t('homepage.loading.error')}</h1>
+    return (
+      <div className="text-center py-20">
+        <Typography variant="h5" className="text-primary">{t('homepage.loading.error')}</Typography>
+      </div>
+    )
   }
 
   const getIconById = (id: number) => {
+    const iconProps = { size: 26, strokeWidth: 1.7, className: "text-green" }
     const icons = [
-      <Code className="text-white" />,
-      <Briefcase className="text-white" />,
-      <Book className="text-white" />,
-      <Globe className="text-white" />,
-      <GraduationCap className="text-white" />,
-      <University className="text-white" />,
+      <Code {...iconProps} />,
+      <Briefcase {...iconProps} />,
+      <Book {...iconProps} />,
+      <Globe {...iconProps} />,
+      <GraduationCap {...iconProps} />,
+      <University {...iconProps} />,
     ]
     return icons[id % icons.length]
   }
 
   return (
-    <div>
-      <Title
-      // className="text-[2.5rem] font-semibold text-[#333] lg:text-[40px] md:!text-[30px]"
-      >
-        {t('homepage.degrees.degreeCategory')}
-      </Title>
-      <div className="relative">
-        <Swiper
-          className="py-10 px-1 degree-list text-left"
-          modules={[Pagination]}
-          slidesPerView={4}
-          pagination={{ clickable: true }}
-          breakpoints={{
-            360: { slidesPerView: 1, centeredSlides: true, spaceBetween: 10 },
-            480: { slidesPerView: 2, spaceBetween: 10 },
-            768: { slidesPerView: 3, spaceBetween: 10 },
-            1024: { slidesPerView: 3.5, spaceBetween: 5 },
-          }}
-        >
-          {degreeData?.data
-            .sort((a, b) => a.id - b.id)
-            .map((degree) => (
-              <SwiperSlide key={degree.id}>
-                <Card
-                  onClick={() => navigate(`degree/${degree.slug}`)}
-                  className={`relative overflow-hidden max-w-[350px] text-left p-4 border-2  bg-green text-white transition 
-                  duration-200 rounded-md hover:cursor-pointer shadow-none bg-cover bg-center md:max-w-full flex flex-col justify-between`}
-                >
-                  <div className="relative z-10 flex flex-col justify-between h-full">
-                    <Typography
-                      variant="h6"
-                      className="font-bold text-lg flex items-center gap-1 "
-                    >
-                      {degree.title}
-                      {getIconById(degree.id)}
-                    </Typography>
-                    <CardContent className="p-0 pt-5 flex items-end justify-between font-medium">
+    <section className="py-20 bg-white">
+      <div className="container mx-auto">
+        <div className="mb-10 flex items-end justify-between gap-6 border-b border-primary/10 pb-6 md:flex-col md:items-start">
+          <div>
+            <div className="mb-3 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-green">
+              <span className="h-px w-8 bg-green" />
+              {t('homepage.degrees.programs')}
+            </div>
+            <Title className="!m-0 !text-left !text-4xl !font-semibold !leading-tight !text-primary md:!text-3xl">
+              {t('homepage.degrees.degreeCategory')}
+            </Title>
+          </div>
+        </div>
+        
+        <div className="relative">
+          <Swiper
+            className="degree-swiper-themed px-1 pb-14"
+            modules={[Pagination]}
+            slidesPerView={4}
+            pagination={{ 
+              clickable: true,
+              dynamicBullets: true 
+            }}
+            spaceBetween={24}
+            breakpoints={{
+              320: { slidesPerView: 1, spaceBetween: 16 },
+              640: { slidesPerView: 2, spaceBetween: 20 },
+              1024: { slidesPerView: 3, spaceBetween: 24 },
+              1280: { slidesPerView: 4, spaceBetween: 24 },
+            }}
+          >
+            {degrees.map((degree: DegreeSchema) => (
+                <SwiperSlide key={degree.id} className="!h-auto">
+                  <Card
+                    onClick={() => navigate(`/degree/${degree.slug}`)}
+                    className="group relative flex h-[360px] cursor-pointer flex-col overflow-hidden rounded-lg border border-primary/10 bg-primary shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-green/40 hover:shadow-[0_20px_50px_rgba(42,33,114,0.14)]"
+                  >
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center opacity-45 transition-transform duration-700 group-hover:scale-105"
+                      style={{ 
+                        backgroundImage: degree.banner ? `url(${degree.banner.startsWith('http') ? degree.banner : API_URL + degree.banner})` : 'none',
+                        backgroundColor: '#2A2172'
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/86 to-primary" />
+                    
+                    <CardContent className="relative z-10 flex h-full flex-col justify-between p-6 text-white">
                       <div>
+                        <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-white/15 bg-white/10 backdrop-blur">
+                          {getIconById(degree.id)}
+                        </div>
                         <Typography
-                          variant="subtitle1"
-                          className="leading-[20px] text-[16px] font-medium"
+                          variant="h4"
+                          className="text-left font-semibold leading-tight"
+                          sx={{ 
+                            fontSize: '1.75rem',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                          }}
                         >
-                          {degree.facultyCount}
-                          {' ' + t('homepage.degrees.collegesCount')}
+                          {degree.title}
                         </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          className="leading-[20px] text-[16px] font-medium"
-                        >
-                          {degree.programCount}
-                          {' ' + t('homepage.degrees.programCount')}
-                        </Typography>
+                        <div className="mt-4 h-[2px] w-10 bg-green transition-all duration-300 group-hover:w-16" />
                       </div>
-                      <div>
-                        <Button className="bg-blue/60 text-white/90 font-semibold text-xs flex items-center gap-1">
-                          <p>Узнать больше</p>
-                          <p>
-                            <ExternalLink size={18} />
-                          </p>
-                        </Button>
+
+                      <div className="space-y-5">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="flex flex-col">
+                            <span className="mb-1 text-[10px] uppercase tracking-[0.14em] text-white/55">
+                              {t('homepage.degrees.collegesCount')}
+                            </span>
+                            <span className="text-2xl font-semibold">
+                              {degree.facultyCount || 0}
+                            </span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="mb-1 text-[10px] uppercase tracking-[0.14em] text-white/55">
+                              {t('homepage.degrees.programCount')}
+                            </span>
+                            <span className="text-2xl font-semibold">
+                              {degree.programCount}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="inline-flex items-center gap-2 text-sm font-semibold text-green">
+                          {t('homepage.buttons.viewButton')}
+                          <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                        </div>
                       </div>
                     </CardContent>
-                  </div>
-                </Card>
-              </SwiperSlide>
-            ))}
-        </Swiper>
+                  </Card>
+                </SwiperSlide>
+              ))}
+          </Swiper>
+        </div>
       </div>
-    </div>
+      
+      <style>{`
+        .degree-swiper-themed .swiper-pagination-bullet {
+          background: #2A2172 !important;
+          opacity: 0.2;
+          width: 8px;
+          height: 8px;
+          border-radius: 10px;
+          transition: all 0.2s;
+        }
+        .degree-swiper-themed .swiper-pagination-bullet-active {
+          opacity: 1;
+          background: #2A2172 !important;
+          width: 24px;
+        }
+      `}</style>
+    </section>
   )
 }

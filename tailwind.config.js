@@ -4,16 +4,17 @@ export default {
   important: "#root",
   theme: {
     fontFamily: {
+      sans: ["Jost", "sans-serif"],
       serif: ["Jost", "serif"],
-      sans: ["Jost", "sans"],
     },
     colors: {
       primary: "#2A2172",
+      blue: "#2A2172", // Consolidated with primary
       green: "#00956F",
-      blue: "#2A2173",
-      white: "white",
-      black: "black",
+      white: "#FFFFFF",
+      black: "#000000",
       gray: "#CFD1DF",
+      "gray-light": "#F9FAFB",
     },
     screens: {
       "xl-max": "1340px",

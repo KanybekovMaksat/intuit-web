@@ -1,15 +1,16 @@
-import { Typography, useMediaQuery, useTheme } from '@mui/material'
-import { ArrowUpRight, MoveUpRight } from 'lucide-react'
+import { Typography, useTheme } from '@mui/material'
+import { ArrowUpRight } from 'lucide-react'
 import Marquee from 'react-fast-marquee'
-import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { facultyQueries } from '~entities/faculties'
+import { FacultySchema } from '~entities/faculties/faculty.types'
 import { Loader } from '~shared/ui/loader'
 
 export const FacultyCarousel: React.FC = () => {
-  const theme = useTheme()
-  const navigate = useNavigate()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  useTheme() // Keep it if intended for future use, otherwise remove. But it was not used.
+  const { t } = useTranslation()
 
   const {
     data: eventsData,
@@ -21,14 +22,14 @@ export const FacultyCarousel: React.FC = () => {
     return <Loader />
   }
   if (isError) {
-    return <div>Ошибка</div>
+    return <div>{t('homepage.loading.error')}</div>
   }
 
   return (
     <div className="w-full overflow-hidden">
       <Marquee direction="left" speed={100} className="overflow-x-none">
         <div className="flex items-center r-sm:gap-3 r-sm:ml-3 gap-4 ml-4">
-          {eventsData.data.map((carusel, i) => (
+          {eventsData?.data.map((carusel: FacultySchema, i: number) => (
             <Link
               key={i}
               to={`/institutes/${carusel.slug}`}
