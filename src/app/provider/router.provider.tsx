@@ -36,6 +36,11 @@ import { internationalPageRoute } from "~pages/international";
 import { scheduleDetailGroupsRoute } from "~pages/students/scheduleDetailsGroups";
 import { scheduleDetailTeacherRoute } from "~pages/students/scheduleTeacherDetails";
 import { timeTablePageRoute } from "~pages/timetable";
+import { dissertationPageRoute } from "~pages/dissertation";
+import {
+  dissertationEditPageRoute,
+  dissertationSubmitPageRoute,
+} from "~pages/dissertation-submit";
 
 function BubbleError() {
   const error = useRouteError();
@@ -80,6 +85,9 @@ const router = createBrowserRouter([
           eventPageRoute,
           expoPageRoute,
           internationalPageRoute,
+          dissertationPageRoute,
+          dissertationSubmitPageRoute,
+          dissertationEditPageRoute,
         ],
       },
       {

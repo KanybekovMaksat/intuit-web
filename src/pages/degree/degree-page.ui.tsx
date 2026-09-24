@@ -17,6 +17,8 @@ import { OpportunitiesList } from '~widgets/opportunities-list'
 import { ProgramCategory } from '~widgets/programm-category'
 import { SpeakerVideoList } from '~widgets/speaker-list'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { DissertationDiscussion } from '~widgets/dissertation-discussion'
+import { dissertationLib } from '~entities/dissertation'
 
 export const DegreePage = () => {
   const slug = useParams()
@@ -339,6 +341,7 @@ export const DegreePage = () => {
           )}
 
           <ProgramCategory degreeId={degreeData?.data.id} />
+          {slug.slug === dissertationLib.PHD_DEGREE_SLUG && <DissertationDiscussion />}
           <OpportunitiesList />
           <EnrollForm />
           <SpeakerVideoList />

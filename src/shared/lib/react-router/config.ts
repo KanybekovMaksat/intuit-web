@@ -93,4 +93,12 @@ export const pathKeys = {
       return pathKeys.root.concat("international/");
     },
   },
+  phd: {
+    dissertation(id: string | number) {
+      return pathKeys.root.concat(`phd/dissertations/${id}/`);
+    },
+    submit(id?: string | number) {
+      return pathKeys.root.concat(id ? `phd/submit/${id}/` : "phd/submit/");
+    },
+  },
 };
