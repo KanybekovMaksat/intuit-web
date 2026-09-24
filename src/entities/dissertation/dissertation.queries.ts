@@ -11,6 +11,7 @@ import {
   readAllNotifications,
   saveSubmission,
   readNotification,
+  UploadOptions,
 } from './dissertation.api'
 import { DissertationFilters } from './dissertation.types'
 
@@ -111,7 +112,8 @@ export function useSubmission(id?: number) {
 export function useSaveSubmission(id?: number) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (data: FormData) => saveSubmission(data, id),
+    mutationFn: ({ data, ...options }: { data: FormData } & UploadOptions) =>
+      saveSubmission(data, id, options),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: dissertationKeys.root() }),
   })
 }

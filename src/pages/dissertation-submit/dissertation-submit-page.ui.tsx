@@ -1,7 +1,7 @@
-import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from 'react'
-import { Alert, Breadcrumbs, Button, TextField, Typography } from '@mui/material'
+import { ChangeEvent, FormEvent, ReactNode, useEffect, useRef, useState } from 'react'
+import { Alert, Breadcrumbs, Button, LinearProgress, TextField, Typography } from '@mui/material'
 import { AxiosError } from 'axios'
-import { CheckCircle2, FileUp, LogIn } from 'lucide-react'
+import { CheckCircle2, FileUp, LogIn, RotateCcw, X } from 'lucide-react'
 import { Link as RouterLink, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { dissertationLib, dissertationQueries } from '~entities/dissertation'
@@ -16,6 +16,11 @@ const formatSize = (bytes: number) =>
   bytes < 1024 * 1024
     ? `${Math.max(1, Math.round(bytes / 1024))} КБ`
     : `${(bytes / 1024 / 1024).toFixed(1)} МБ`
+
+const formatDuration = (seconds: number) =>
+  seconds < 60 ? `${Math.max(1, seconds)} с` : `${Math.floor(seconds / 60)} мин ${seconds % 60} с`
+
+type UploadState = { loaded: number; total: number; startedAt: number }
 
 type FormState = {
   title: string
@@ -47,6 +52,9 @@ const apiFieldMap: Record<string, keyof FormState> = {
 function parseErrors(error: unknown): FieldErrors {
   const response = (error as AxiosError<Record<string, unknown>>)?.response
   if (response?.status === 429) return { common: 'Слишком много попыток. Попробуйте позже.' }
+  if (response?.status === 413) {
+    return { common: 'Сервер не принял файлы: слишком большой размер. Уменьшите PDF и отправьте снова.' }
+  }
   if (!response?.data || typeof response.data !== 'object') {
     return { common: 'Не удалось отправить работу. Попробуйте позже.' }
   }
@@ -58,6 +66,61 @@ function parseErrors(error: unknown): FieldErrors {
     else result.common = [result.common, text].filter(Boolean).join(' ')
   })
   return result
+}
+
+/** Сбои, после которых имеет смысл просто отправить ещё раз (форма и файлы сохраняются) */
+function retryableFailure(error: unknown, sentBytes: number): string | null {
+  const axiosError = error as AxiosError
+  if (axiosError?.code === 'ERR_CANCELED') {
+    return 'Отправка отменена. Заполненные поля и выбранные файлы сохранены.'
+  }
+  if (!axiosError?.response) {
+    const sent = sentBytes ? ` (успели загрузить ${formatSize(sentBytes)})` : ''
+    return `Соединение прервалось${sent}. Проверьте интернет и отправьте повторно — заполненные поля и выбранные файлы сохранены.`
+  }
+  if (axiosError.response.status >= 500) {
+    return 'На сервере произошла ошибка при сохранении. Отправьте повторно через минуту — заполненные поля и выбранные файлы сохранены.'
+  }
+  return null
+}
+
+const UploadProgress = ({ upload, onCancel }: { upload: UploadState; onCancel: () => void }) => {
+  const percent = upload.total ? Math.min(100, Math.round((upload.loaded / upload.total) * 100)) : 0
+  const isSent = percent >= 100
+  const elapsed = (Date.now() - upload.startedAt) / 1000
+  const speed = elapsed > 1 ? upload.loaded / elapsed : 0
+  const secondsLeft = speed ? Math.ceil((upload.total - upload.loaded) / speed) : null
+
+  return (
+    <div
+      className="rounded-lg border border-primary/10 bg-white p-4 shadow-sm"
+      role="status"
+      aria-live="polite"
+    >
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-sm">
+        <span className="font-semibold text-primary">
+          {isSent ? 'Файлы загружены, сервер проверяет документы…' : `Загрузка файлов: ${percent}%`}
+        </span>
+        {!isSent && (
+          <Button size="small" onClick={onCancel} startIcon={<X size={16} />} className="text-primary">
+            Отменить
+          </Button>
+        )}
+      </div>
+      <LinearProgress
+        variant={isSent ? 'indeterminate' : 'determinate'}
+        value={percent}
+        className="h-2 rounded-full"
+      />
+      {!isSent && (
+        <div className="mt-2 text-xs text-black/60">
+          {upload.loaded ? formatSize(upload.loaded) : '0 КБ'} из {formatSize(upload.total)}
+          {speed > 0 && ` · ${formatSize(speed)}/с`}
+          {secondsLeft !== null && ` · осталось ~${formatDuration(secondsLeft)}`}
+        </div>
+      )}
+    </div>
+  )
 }
 
 const statusNotice: Record<string, { text: string; className: string }> = {
@@ -128,10 +191,16 @@ export const DissertationSubmitPage = () => {
   const [form, setForm] = useState<FormState>(emptyForm)
   const [errors, setErrors] = useState<FieldErrors>({})
   const [savedId, setSavedId] = useState<number | null>(null)
+  const [upload, setUpload] = useState<UploadState | null>(null)
+  const [failure, setFailure] = useState<string | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
+  const sentBytesRef = useRef(0)
 
   const { data: submission, isLoading: isSubmissionLoading, isError: isSubmissionError } =
     dissertationQueries.useSubmission(user ? editId : undefined)
   const save = dissertationQueries.useSaveSubmission(editId)
+  // Список своих работ — чтобы после обрыва связи понять, успел ли сервер сохранить новую подачу
+  const myDissertations = dissertationQueries.useMyDissertations(Boolean(user) && !editId)
 
   // Редактирование: заполняем форму сохранёнными данными
   useEffect(() => {
@@ -145,6 +214,15 @@ export const DissertationSubmitPage = () => {
     })
   }, [submission])
 
+  // Пока идёт загрузка — предупреждаем при уходе со страницы, при размонтировании отменяем запрос
+  useEffect(() => {
+    if (!upload) return
+    const warn = (event: BeforeUnloadEvent) => event.preventDefault()
+    window.addEventListener('beforeunload', warn)
+    return () => window.removeEventListener('beforeunload', warn)
+  }, [upload])
+  useEffect(() => () => abortRef.current?.abort(), [])
+
   const set = <K extends keyof FormState>(field: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [field]: value }))
     setErrors((prev) => ({ ...prev, [field]: undefined }))
@@ -153,8 +231,7 @@ export const DissertationSubmitPage = () => {
   const currentDocument = (kind: string) =>
     submission?.documents.find((doc) => doc.kind === kind)?.title
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault()
+  const send = () => {
     const localErrors: FieldErrors = {}
     if (!form.specialty.trim()) localErrors.specialty = 'Укажите специальность.'
     if (!form.supervisor.trim()) localErrors.supervisor = 'Укажите научного руководителя.'
@@ -171,13 +248,60 @@ export const DissertationSubmitPage = () => {
     if (form.document) data.append('document', form.document)
     if (form.abstractDocument) data.append('abstractDocument', form.abstractDocument)
 
-    save.mutate(data, {
-      onSuccess: ({ data: saved }) => {
-        setSavedId(saved.id)
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+    const knownIds = new Set((myDissertations.data ?? []).map((item) => item.id))
+    const title = form.title.trim()
+    const totalBytes = (form.document?.size ?? 0) + (form.abstractDocument?.size ?? 0)
+    const startedAt = Date.now()
+    const controller = new AbortController()
+    abortRef.current = controller
+    sentBytesRef.current = 0
+    setErrors({})
+    setFailure(null)
+    setUpload({ loaded: 0, total: totalBytes, startedAt })
+
+    save.mutate(
+      {
+        data,
+        signal: controller.signal,
+        onUploadProgress: (progress) => {
+          sentBytesRef.current = progress.loaded
+          setUpload({ loaded: progress.loaded, total: progress.total ?? totalBytes, startedAt })
+        },
       },
-      onError: (error) => setErrors(parseErrors(error)),
-    })
+      {
+        onSuccess: ({ data: saved }) => {
+          setSavedId(saved.id)
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        },
+        onError: async (error) => {
+          const retryable = retryableFailure(error, sentBytesRef.current)
+          if (!retryable) {
+            setErrors(parseErrors(error))
+            return
+          }
+          // Ответ мог потеряться уже после сохранения — не создаём дубликат при повторе
+          if (!editId && !(error as AxiosError).response) {
+            const { data: fresh = [] } = await myDissertations.refetch()
+            const created = fresh.find((item) => !knownIds.has(item.id) && item.title === title)
+            if (created) {
+              setSavedId(created.id)
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+              return
+            }
+          }
+          setFailure(retryable)
+        },
+        onSettled: () => {
+          abortRef.current = null
+          setUpload(null)
+        },
+      },
+    )
+  }
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    send()
   }
 
   const phdUrl = pathKeys.degree.bySlug({ slug: dissertationLib.PHD_DEGREE_SLUG })
@@ -352,6 +476,22 @@ export const DissertationSubmitPage = () => {
             />
           </Section>
 
+          {upload && <UploadProgress upload={upload} onCancel={() => abortRef.current?.abort()} />}
+          {failure && !upload && (
+            <Alert severity="warning">
+              <div>{failure}</div>
+              <Button
+                size="small"
+                variant="outlined"
+                color="inherit"
+                startIcon={<RotateCcw size={16} />}
+                onClick={send}
+                className="mt-2"
+              >
+                Отправить повторно
+              </Button>
+            </Alert>
+          )}
           {errors.common && <Alert severity="error">{errors.common}</Alert>}
           <div className="flex justify-end">
             <Button

@@ -1,3 +1,4 @@
+import { AxiosProgressEvent } from 'axios'
 import apiClient from '~shared/lib/api/apiClient'
 import {
   DiscussionMessage,
@@ -34,10 +35,15 @@ export function getSubmission(id: number) {
 }
 
 /** multipart/form-data: поля + PDF. Без id — новая подача, с id — исправление. */
-export function saveSubmission(data: FormData, id?: number) {
+export type UploadOptions = {
+  onUploadProgress?: (event: AxiosProgressEvent) => void
+  signal?: AbortSignal
+}
+
+export function saveSubmission(data: FormData, id?: number, options: UploadOptions = {}) {
   return id
-    ? apiClient.patch<Submission>(`phd/my-dissertations/${id}/`, data)
-    : apiClient.post<Submission>('phd/my-dissertations/', data)
+    ? apiClient.patch<Submission>(`phd/my-dissertations/${id}/`, data, options)
+    : apiClient.post<Submission>('phd/my-dissertations/', data, options)
 }
 
 export function getSpecialties() {
