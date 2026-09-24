@@ -12,13 +12,10 @@ export type DissertationDocument = {
 export type Dissertation = {
   id: number
   title: string
-  abstract: string
   doctoralStudentName: string
   specialty: string
   supervisor: string
   publishedAt: string | null
-  discussionStartAt: string
-  discussionEndAt: string
   discussionStatus: DiscussionStatus
   questionsCount: number
 }
@@ -39,15 +36,12 @@ export type MyDissertation = Dissertation & {
   unansweredCount: number
 }
 
-/** Работа в форме подачи: специальность и руководитель — id */
+/** Работа в форме подачи */
 export type Submission = {
   id: number
   title: string
-  abstract: string
   specialty: string
   supervisor: string
-  discussionStartAt: string
-  discussionEndAt: string
   status: PublicationStatus
   moderatorComment: string
   documents: DissertationDocument[]

@@ -127,11 +127,85 @@ export const DissertationPage = () => {
       )}
 
       <div className="mt-8 grid grid-cols-[1fr_360px] gap-8 lg:grid-cols-1">
-        <section className="self-start rounded-lg border border-primary/10 bg-white p-6 shadow-sm sm:p-4">
-          <h2 className="mb-3 text-2xl font-semibold text-primary">Аннотация</h2>
-          <p className="whitespace-pre-line text-[15px] leading-relaxed text-black/80">
-            {dissertation.abstract}
-          </p>
+        <section className="min-w-0 self-start rounded-lg border border-primary/10 bg-white p-6 shadow-sm sm:p-4">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-semibold text-primary">Общественное обсуждение</h2>
+              <div className="mt-1 text-sm text-black/50">
+                {questionsLabel(dissertation.questionsCount)}
+                {isOwner && dissertation.unansweredCount !== null && (
+                  <> · без вашего ответа: <b className="text-primary">{dissertation.unansweredCount}</b></>
+                )}
+              </div>
+            </div>
+            {user && !isOwner && (
+              <FormControlLabel
+                control={
+                  <Switch checked={onlyMine} onChange={(e) => setOnlyMine(e.target.checked)} />
+                }
+                label="Только мои вопросы"
+              />
+            )}
+          </div>
+
+          {dissertation.discussionStatus === 'finished' && (
+            <div className="mb-6 rounded-lg bg-black/5 p-4 text-sm text-black/70">
+              Обсуждение завершено. Новые вопросы и ответы не принимаются, история обсуждения
+              сохранена.
+            </div>
+          )}
+          {dissertation.discussionStatus === 'upcoming' && (
+            <div className="mb-6 rounded-lg bg-primary/5 p-4 text-sm text-primary">
+              Общественное обсуждение ещё не началось.
+            </div>
+          )}
+
+          {isOpen && !user && (
+            <div className="mb-6 flex items-center justify-between gap-4 rounded-lg bg-green/5 p-4 md:flex-col md:items-start">
+              <span className="text-sm text-black/70">
+                Чтобы задать вопрос докторанту, войдите или зарегистрируйтесь.
+              </span>
+              <Button
+                variant="contained"
+                startIcon={<LogIn size={18} />}
+                onClick={() => setAuthOpen(true)}
+                className="shrink-0 bg-primary shadow-none hover:bg-green"
+              >
+                Войти и задать вопрос
+              </Button>
+            </div>
+          )}
+          {isOpen && user && !isOwner && (
+            <div className="mb-8">
+              <MessageForm
+                dissertationId={dissertation.id}
+                placeholder="Ваш вопрос докторанту по теме исследования"
+                submitLabel="Задать вопрос"
+              />
+            </div>
+          )}
+          {isOpen && isOwner && (
+            <div className="mb-6 rounded-lg bg-green/5 p-4 text-sm text-black/70">
+              Это ваша диссертация. Отвечайте на вопросы в ветках — ответы публикуются открыто.
+            </div>
+          )}
+
+          {threads.length === 0 ? (
+            <p className="py-6 text-center text-black/50">
+              {onlyMine ? 'Вы ещё не задавали вопросов.' : 'Вопросов пока нет.'}
+            </p>
+          ) : (
+            <div className="flex flex-col gap-4">
+              {threads.map((thread) => (
+                <DiscussionThread
+                  key={thread.question.id}
+                  thread={thread}
+                  dissertationId={dissertation.id}
+                  canReply={isOpen && (isOwner || thread.question.isMine)}
+                />
+              ))}
+            </div>
+          )}
         </section>
 
         <aside className="flex flex-col gap-6">
@@ -140,10 +214,6 @@ export const DissertationPage = () => {
             <InfoRow label="Специальность">{dissertation.specialty}</InfoRow>
             <InfoRow label="Научный руководитель">{dissertation.supervisor}</InfoRow>
             <InfoRow label="Дата публикации">{formatDate(dissertation.publishedAt)}</InfoRow>
-            <InfoRow label="Общественное обсуждение">
-              {formatDate(dissertation.discussionStartAt)} —{' '}
-              {formatDate(dissertation.discussionEndAt)}
-            </InfoRow>
           </div>
 
           <div className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm sm:p-4">
@@ -175,87 +245,6 @@ export const DissertationPage = () => {
           </div>
         </aside>
       </div>
-
-      <section className="mt-10 rounded-lg border border-primary/10 bg-white p-6 shadow-sm sm:p-4">
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-semibold text-primary">Общественное обсуждение</h2>
-            <div className="mt-1 text-sm text-black/50">
-              {questionsLabel(dissertation.questionsCount)}
-              {isOwner && dissertation.unansweredCount !== null && (
-                <> · без вашего ответа: <b className="text-primary">{dissertation.unansweredCount}</b></>
-              )}
-            </div>
-          </div>
-          {user && !isOwner && (
-            <FormControlLabel
-              control={
-                <Switch checked={onlyMine} onChange={(e) => setOnlyMine(e.target.checked)} />
-              }
-              label="Только мои вопросы"
-            />
-          )}
-        </div>
-
-        {dissertation.discussionStatus === 'finished' && (
-          <div className="mb-6 rounded-lg bg-black/5 p-4 text-sm text-black/70">
-            Обсуждение завершено {formatDate(dissertation.discussionEndAt)}. Новые вопросы и ответы
-            не принимаются, история обсуждения сохранена.
-          </div>
-        )}
-        {dissertation.discussionStatus === 'upcoming' && (
-          <div className="mb-6 rounded-lg bg-primary/5 p-4 text-sm text-primary">
-            Обсуждение начнётся {formatDate(dissertation.discussionStartAt)}.
-          </div>
-        )}
-
-        {isOpen && !user && (
-          <div className="mb-6 flex items-center justify-between gap-4 rounded-lg bg-green/5 p-4 md:flex-col md:items-start">
-            <span className="text-sm text-black/70">
-              Чтобы задать вопрос докторанту, войдите или зарегистрируйтесь.
-            </span>
-            <Button
-              variant="contained"
-              startIcon={<LogIn size={18} />}
-              onClick={() => setAuthOpen(true)}
-              className="shrink-0 bg-primary shadow-none hover:bg-green"
-            >
-              Войти и задать вопрос
-            </Button>
-          </div>
-        )}
-        {isOpen && user && !isOwner && (
-          <div className="mb-8">
-            <MessageForm
-              dissertationId={dissertation.id}
-              placeholder="Ваш вопрос докторанту по теме исследования"
-              submitLabel="Задать вопрос"
-            />
-          </div>
-        )}
-        {isOpen && isOwner && (
-          <div className="mb-6 rounded-lg bg-green/5 p-4 text-sm text-black/70">
-            Это ваша диссертация. Отвечайте на вопросы в ветках — ответы публикуются открыто.
-          </div>
-        )}
-
-        {threads.length === 0 ? (
-          <p className="py-6 text-center text-black/50">
-            {onlyMine ? 'Вы ещё не задавали вопросов.' : 'Вопросов пока нет.'}
-          </p>
-        ) : (
-          <div className="flex flex-col gap-4">
-            {threads.map((thread) => (
-              <DiscussionThread
-                key={thread.question.id}
-                thread={thread}
-                dissertationId={dissertation.id}
-                canReply={isOpen && (isOwner || thread.question.isMine)}
-              />
-            ))}
-          </div>
-        )}
-      </section>
 
       <DocumentDialog document={openedDocument} onClose={() => setOpenedDocument(null)} />
       <AuthDialog

@@ -10,7 +10,7 @@ import { AuthDialog } from '~features/auth'
 import { pathKeys } from '~shared/lib/react-router'
 import { Loader } from '~shared/ui/loader'
 
-const MAX_FILE_MB = 50
+const MAX_FILE_MB = 15
 
 const formatSize = (bytes: number) =>
   bytes < 1024 * 1024
@@ -19,11 +19,8 @@ const formatSize = (bytes: number) =>
 
 type FormState = {
   title: string
-  abstract: string
   specialty: string
   supervisor: string
-  discussionStart: string
-  discussionEnd: string
   document: File | null
   abstractDocument: File | null
 }
@@ -32,11 +29,8 @@ type FieldErrors = Partial<Record<keyof FormState | 'common', string>>
 
 const emptyForm: FormState = {
   title: '',
-  abstract: '',
   specialty: '',
   supervisor: '',
-  discussionStart: '',
-  discussionEnd: '',
   document: null,
   abstractDocument: null,
 }
@@ -44,11 +38,8 @@ const emptyForm: FormState = {
 // Поля API (camelCase) → поля формы
 const apiFieldMap: Record<string, keyof FormState> = {
   title: 'title',
-  abstract: 'abstract',
   specialty: 'specialty',
   supervisor: 'supervisor',
-  discussionStartAt: 'discussionStart',
-  discussionEndAt: 'discussionEnd',
   document: 'document',
   abstractDocument: 'abstractDocument',
 }
@@ -147,11 +138,8 @@ export const DissertationSubmitPage = () => {
     if (!submission) return
     setForm({
       title: submission.title,
-      abstract: submission.abstract,
       specialty: submission.specialty,
       supervisor: submission.supervisor,
-      discussionStart: submission.discussionStartAt.slice(0, 10),
-      discussionEnd: submission.discussionEndAt.slice(0, 10),
       document: null,
       abstractDocument: null,
     })
@@ -171,9 +159,6 @@ export const DissertationSubmitPage = () => {
     if (!form.specialty.trim()) localErrors.specialty = 'Укажите специальность.'
     if (!form.supervisor.trim()) localErrors.supervisor = 'Укажите научного руководителя.'
     if (!editId && !form.document) localErrors.document = 'Прикрепите текст диссертации в PDF.'
-    if (form.discussionStart && form.discussionEnd && form.discussionEnd <= form.discussionStart) {
-      localErrors.discussionEnd = 'Дата окончания должна быть позже даты начала.'
-    }
     if (Object.keys(localErrors).length) {
       setErrors(localErrors)
       return
@@ -181,12 +166,8 @@ export const DissertationSubmitPage = () => {
 
     const data = new FormData()
     data.append('title', form.title.trim())
-    data.append('abstract', form.abstract.trim())
     data.append('specialty', form.specialty.trim())
     data.append('supervisor', form.supervisor.trim())
-    // Время — по часовому поясу сервера (Бишкек): обсуждение идёт целыми днями
-    data.append('discussionStartAt', `${form.discussionStart}T00:00:00`)
-    data.append('discussionEndAt', `${form.discussionEnd}T23:59:59`)
     if (form.document) data.append('document', form.document)
     if (form.abstractDocument) data.append('abstractDocument', form.abstractDocument)
 
@@ -325,16 +306,6 @@ export const DissertationSubmitPage = () => {
               error={Boolean(errors.title)}
               helperText={errors.title}
             />
-            <TextField
-              label="Аннотация"
-              value={form.abstract}
-              onChange={(e) => set('abstract', e.target.value)}
-              required
-              multiline
-              minRows={5}
-              error={Boolean(errors.abstract)}
-              helperText={errors.abstract}
-            />
             <div className="grid grid-cols-2 gap-4 md:grid-cols-1">
               <TextField
                 label="Специальность"
@@ -353,35 +324,6 @@ export const DissertationSubmitPage = () => {
                 inputProps={{ maxLength: 255 }}
                 error={Boolean(errors.supervisor)}
                 helperText={errors.supervisor || 'ФИО, учёная степень и звание'}
-              />
-            </div>
-          </Section>
-
-          <Section title="Период общественного обсуждения">
-            <p className="-mt-2 text-sm text-black/60">
-              Предлагаемые даты. Модератор может скорректировать их при публикации.
-            </p>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-1">
-              <TextField
-                label="Начало обсуждения"
-                type="date"
-                value={form.discussionStart}
-                onChange={(e) => set('discussionStart', e.target.value)}
-                required
-                InputLabelProps={{ shrink: true }}
-                error={Boolean(errors.discussionStart)}
-                helperText={errors.discussionStart}
-              />
-              <TextField
-                label="Окончание обсуждения"
-                type="date"
-                value={form.discussionEnd}
-                onChange={(e) => set('discussionEnd', e.target.value)}
-                required
-                InputLabelProps={{ shrink: true }}
-                inputProps={{ min: form.discussionStart || undefined }}
-                error={Boolean(errors.discussionEnd)}
-                helperText={errors.discussionEnd}
               />
             </div>
           </Section>
