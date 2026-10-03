@@ -1,7 +1,8 @@
-import { createElement } from "react";
+import { createElement, lazy } from "react";
 import { pathKeys } from "~shared/lib/react-router";
 import { RouteObject } from "react-router-dom";
-import { ScheduleGroupsDetailPage } from "./scheduleGroups-details-page";
+
+const ScheduleGroupsDetailPage = lazy(() => import('./scheduleGroups-details-page').then((m) => ({ default: m.ScheduleGroupsDetailPage })));
 
 export const scheduleDetailGroupsRoute: RouteObject = {
   path: pathKeys.schedule.bySlugGroup(":slug"),

@@ -1,5 +1,5 @@
 import { NewsCard, newsQueries } from '~entities/news'
-import { Pagination } from '@mui/material'
+import { Pagination, useMediaQuery, useTheme } from '@mui/material'
 import { useState, useRef } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination as SwiperPagination } from 'swiper/modules'
@@ -18,6 +18,8 @@ interface NewsListProps {
 }
 
 export const NewsList = ({ id = null, category = null, title = null }: NewsListProps) => {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const { data, isError, isLoading, isSuccess } = id
     ? newsQueries.useGetNewsInstitutes(id as any, null)
     : category
@@ -68,7 +70,7 @@ export const NewsList = ({ id = null, category = null, title = null }: NewsListP
           ))}
         </Swiper>
 
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-4 w-full overflow-x-auto py-1">
           <Pagination
             count={totalPages}
             page={currentPage}
@@ -76,8 +78,15 @@ export const NewsList = ({ id = null, category = null, title = null }: NewsListP
               setCurrentPage(page)
               swiperRef.current?.slideTo(page - 1)
             }}
+            size={isMobile ? 'small' : 'medium'}
+            siblingCount={isMobile ? 0 : 1}
+            boundaryCount={1}
             className="rounded-lg shadow-md p-2"
             sx={{
+              '& .MuiPagination-ul': {
+                flexWrap: 'nowrap',
+                justifyContent: 'center',
+              },
               '& .MuiPaginationItem-root.Mui-selected': {
                 color: 'white',
                 backgroundColor: '#00956F',

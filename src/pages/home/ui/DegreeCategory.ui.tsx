@@ -57,8 +57,8 @@ export const DegreeCategory = () => {
   }
 
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto">
+    <section className="py-12 bg-white">
+      <div className="w-full">
         <div className="mb-10 flex items-end justify-between gap-6 border-b border-primary/10 pb-6 md:flex-col md:items-start">
           <div>
             <div className="mb-3 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-green">

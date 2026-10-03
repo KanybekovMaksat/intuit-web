@@ -1,6 +1,7 @@
-import { createElement } from 'react';
+import { createElement, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
-import { DocumentsPage } from './documents-page.ui';
+
+const DocumentsPage = lazy(() => import('./documents-page.ui').then((m) => ({ default: m.DocumentsPage })));
 
 export const documentsPageRoute: RouteObject = {
   path: `documents/`,

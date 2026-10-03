@@ -1,15 +1,6 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /tanda/login/
+Disallow: /tanda/result/
 
-
-Disallow: /register
-Disallow: /login
-Disallow: /verify
-Disallow: /sandbox
-Disallow: /edit
-
-Sitemap: https://www.makalabox.com/sitemap.xml
-
-
-Allow: /*.css$
-Allow: /*.js$
+Sitemap: https://www.intuit.kg/sitemap.xml

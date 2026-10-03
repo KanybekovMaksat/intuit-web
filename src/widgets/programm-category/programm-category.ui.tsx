@@ -1,4 +1,4 @@
-import { Button, InputAdornment, Pagination, TextField } from '@mui/material'
+import { Button, InputAdornment, Pagination, TextField, useMediaQuery, useTheme } from '@mui/material'
 import Select, { SingleValue, StylesConfig } from 'react-select'
 import { ChangeEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -79,6 +79,8 @@ export const ProgramCategory = ({
   facultyId,
 }: ProgramCategoryProps) => {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const {
     data: serverData,
@@ -226,8 +228,8 @@ export const ProgramCategory = ({
   }
 
   return (
-    <section className="py-20 bg-gray-light">
-      <div className="container mx-auto">
+    <section className="py-12 px-6 sm:px-4 bg-gray-light rounded-2xl my-8">
+      <div className="w-full">
         <div className="mb-10 flex items-end justify-between gap-6 border-b border-primary/10 pb-6 md:flex-col md:items-start">
           <div>
             <div className="mb-3 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-green">
@@ -349,18 +351,30 @@ export const ProgramCategory = ({
         </div>
 
         {totalPages > 1 && (
-          <div className="mt-8 flex justify-center">
+          <div className="mt-8 flex justify-center w-full overflow-x-auto py-1">
             <Pagination
               count={totalPages}
               page={currentPage}
               onChange={handlePageChange}
+              size={isMobile ? 'small' : 'medium'}
+              siblingCount={isMobile ? 0 : 1}
+              boundaryCount={1}
               sx={{
+                '& .MuiPagination-ul': {
+                  flexWrap: 'nowrap',
+                  justifyContent: 'center',
+                },
                 '& .MuiPaginationItem-root': {
                   color: '#2A2172',
+                  minWidth: isMobile ? '28px' : '32px',
+                  height: isMobile ? '28px' : '32px',
+                  padding: isMobile ? '0 2px' : '0 6px',
+                  margin: isMobile ? '0 1px' : '0 3px',
+                  fontSize: isMobile ? '12px' : '14px',
                 },
                 '& .MuiPaginationItem-root.Mui-selected': {
                   color: 'white',
-                  backgroundColor: '#00956F',
+                  backgroundColor: '#00956F !important',
                 },
               }}
             />

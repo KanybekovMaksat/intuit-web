@@ -110,7 +110,7 @@ export const InternationalStudents = () => {
     <Box className="bg-slate-50 min-h-screen">
       {/* Hero Section */}
       <Box 
-        className="relative py-24 rounded-lg overflow-hidden" 
+        className="relative py-20 px-12 md:px-6 sm:px-4 rounded-2xl overflow-hidden shadow-lg" 
         style={{ 
           background: 'linear-gradient(135deg, #00956F 0%, #00956F 50%, #00956F 100%)' 
         }}
@@ -118,7 +118,7 @@ export const InternationalStudents = () => {
         <Box className="absolute inset-0 opacity-10">
           <Globe className="absolute -right-20 -top-20 w-96 h-96 text-white rotate-12" />
         </Box>
-        <Container maxWidth="lg" className="relative z-10">
+        <div className="relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -134,7 +134,7 @@ export const InternationalStudents = () => {
               variant="h2"
               className="text-white font-black mb-6 leading-tight"
               style={{ 
-                fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
+                fontSize: 'clamp(1.75rem, 6vw, 4.25rem)',
                 textShadow: '0 2px 10px rgba(0,0,0,0.2)'
               }}
             >
@@ -148,11 +148,11 @@ export const InternationalStudents = () => {
               {t('internationalPage.hero.description')}
             </Typography>
           </motion.div>
-        </Container>
+        </div>
       </Box>
 
       {/* Facts & Figures */}
-      <Container maxWidth="lg" className="-mt-16 mb-20 relative z-20">
+      <div className="-mt-16 mb-20 relative z-20 px-12 md:px-6 sm:px-4">
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
             <StatCard icon={Users} value={1500} suffix="+" label={t('internationalPage.stats.students')} />
@@ -167,10 +167,10 @@ export const InternationalStudents = () => {
             <StatCard icon={Calendar} value={2006} label={t('internationalPage.stats.founded')} />
           </Grid>
         </Grid>
-      </Container>
+      </div>
 
       {/* Who We Are & Mission */}
-      <Container maxWidth="lg" className="mb-24">
+      <div className="mb-24 px-12 md:px-6 sm:px-4">
         <Grid container spacing={8} alignItems="center">
           <Grid item xs={12} md={6}>
             <motion.div
@@ -201,7 +201,7 @@ export const InternationalStudents = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-white p-8 rounded-3xl shadow-xl border border-blue-50 relative overflow-hidden"
+              className="bg-white p-8 sm:p-5 rounded-3xl shadow-xl border border-blue-50 relative overflow-hidden"
             >
               <Box className="absolute top-0 right-0 p-4 opacity-5">
                 <Target size={120} />
@@ -223,9 +223,9 @@ export const InternationalStudents = () => {
             </motion.div>
           </Grid>
         </Grid>
-      </Container>
-      <Box className="bg-gray-100 py-24 mb-24">
-        <Container maxWidth="lg">
+      </div>
+      <Box className="bg-gray-100 py-20 mb-24 px-12 md:px-6 sm:px-4 rounded-2xl">
+        <div className="w-full">
           <Typography variant="h3" className="font-bold text-center mb-4 text-gray-900">
             {t('internationalPage.globalEngagement.title')}
           </Typography>
@@ -250,7 +250,7 @@ export const InternationalStudents = () => {
             </Grid>
           </Grid>
 
-          <Box className="mt-12 bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+          <Box className="mt-12 bg-white p-8 sm:p-5 rounded-2xl shadow-sm border border-gray-200">
             <Typography variant="h5" className="font-bold mb-6 flex items-center">
               <CheckCircle2 className="text-green-500 mr-2" /> {t('internationalPage.globalEngagement.projectAreas.title')}
             </Typography>
@@ -269,11 +269,11 @@ export const InternationalStudents = () => {
               ))}
             </Grid>
           </Box>
-        </Container>
+        </div>
       </Box>
 
       {/* Exchange & Mobility */}
-      <Container maxWidth="lg" className="mb-24">
+      <div className="mb-24 px-12 md:px-6 sm:px-4">
         <Grid container spacing={8} alignItems="stretch">
           <Grid item xs={12} lg={7}>
             <Box className="h-full flex flex-col justify-center">
@@ -304,7 +304,7 @@ export const InternationalStudents = () => {
           </Grid>
           <Grid item xs={12} lg={5}>
             <Box className="rounded-3xl shadow-2xl overflow-hidden h-full flex flex-col" style={{ background: 'linear-gradient(135deg, #00956F 0%, #00956F 100%)' }}>
-              <Box className="p-8">
+              <Box className="p-8 sm:p-5">
                 <Typography variant="h5" className="font-bold mb-6 flex items-center text-white">
                   <Award className="mr-2" /> {t('internationalPage.strategicPartners.title')}
                 </Typography>
@@ -357,11 +357,11 @@ export const InternationalStudents = () => {
             </Box>
           </Grid>
         </Grid>
-      </Container>
+      </div>
 
       {/* Roles & Responsibilities */}
-      <Box className="bg-white py-24 border-y border-gray-100">
-        <Container maxWidth="lg">
+      <Box className="bg-white py-20 border-y border-gray-100 px-12 md:px-6 sm:px-4 rounded-2xl">
+        <div className="w-full">
           <Typography variant="h3" className="font-bold text-center mb-16 text-gray-900">
             {t('internationalPage.roles.title')}
           </Typography>
@@ -400,11 +400,11 @@ export const InternationalStudents = () => {
               </Grid>
             ))}
           </Grid>
-        </Container>
+        </div>
       </Box>
 
       {/* Team & Contact Section */}
-      <Container maxWidth="lg" className="py-24">
+      <div className="w-full py-20 px-12 md:px-6 sm:px-4">
         <Grid container spacing={6}>
           <Grid item xs={12} md={7}>
             <Box className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
@@ -413,7 +413,7 @@ export const InternationalStudents = () => {
                   <Mail className="mr-2" /> {t('internationalPage.contact.title')}
                 </Typography>
               </Box>
-              <Box className="p-8">
+              <Box className="p-8 sm:p-5">
                 <Grid container spacing={4}>
                   <Grid item xs={12} sm={6}>
                     <Box className="flex items-start mb-6">
@@ -473,7 +473,7 @@ export const InternationalStudents = () => {
                   <Users size={60} />
                 </Avatar>
               </Box>
-              <CardContent className="text-center p-8">
+              <CardContent className="text-center p-8 sm:p-5">
                 <Typography variant="h5" className="font-black text-gray-900 mb-1">
                   {t('internationalPage.team.name')}
                 </Typography>
@@ -488,7 +488,7 @@ export const InternationalStudents = () => {
             </Card>
           </Grid>
         </Grid>
-      </Container>
+      </div>
     </Box>
   )
 }

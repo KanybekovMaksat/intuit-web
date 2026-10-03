@@ -12,7 +12,7 @@ import {
 export const CardMentor: FC = () => {
   return (
     <section className="mb-6">
-      <div className="container mx-auto px-4">
+      <div className="w-full">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-4 text-[#2C2C2C]">
             Наши Менторы
@@ -42,7 +42,7 @@ export const CardMentor: FC = () => {
           </CarouselContent>
 
           {/* Кнопки навигации */}
-          <div className="hidden sm:block">
+          <div className="block sm:hidden">
             <CarouselPrevious
               className="absolute top-1/2 -translate-y-1/2 left-4"
               variant="ghost"

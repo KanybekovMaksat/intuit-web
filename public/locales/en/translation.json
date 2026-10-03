@@ -1,6 +1,7 @@
 {
   "header": {
-    "international": "For International Students"
+    "international": "For International Students",
+    "phd": "PhD / Dissertations"
   },
   "homepage": {
     "hero": {
@@ -168,20 +169,28 @@
       "formError": "Please fill out all fields correctly."
     },
     "enrollForm": {
-      "title": "Submit your application for training",
+      "title": "Have questions? We will help you choose!",
+      "description": "If you want to learn more about IUIT or are not sure which study program to choose, submit an application and our admissions advisor will contact you.",
       "placeholders": {
-        "name": "Name",
+        "name": "Your name *",
         "phone": "Phone number",
-        "email": "Email"
+        "email": "Email (optional)"
       },
       "buttons": {
-        "submit": "Submit application"
+        "submit": "Submit Application",
+        "submitting": "Submitting..."
+      },
+      "successMessage": "Application submitted successfully! We will contact you shortly.",
+      "errorMessage": "Failed to submit application. Please try again later.",
+      "errors": {
+        "nameRequired": "Please enter your name",
+        "phoneRequired": "Please enter your contact phone number"
       }
     },
     "education-form": {
       "title": "Full-time",
       "text": "You will attend lectures and seminars during the day 5-6 times a week, take tests and exams. The academic year begins on September 1 and is divided into 2 semesters.",
-      "secondTitle": "Сorrespondence",
+      "secondTitle": "Correspondence",
       "secondText": "In the correspondence course, you study most of the program on your own. Twice a year you come to the University for practice and the closing examination session."
     },
     "License": {
@@ -220,7 +229,7 @@
     "funding": "Funding and Faculty",
     "title": "The university has planned income and expenditure budgets that are adjusted annually. Currently, the IUIT faculty consists of 120 members.",
     "contact": "Contact Information",
-    "location2": "Address: 720048, Kyrgyz Republic, Bishkek, Ankarа Street, 1/17 Phone: +996 (312) 590-599",
+    "location2": "Address: 720048, Kyrgyz Republic, Bishkek, Ankara Street, 1/17 Phone: +996 (312) 590-599",
     "code": "Code",
     "bachelor2": "Bachelor's Programs",
     "code1": "510200",
@@ -359,7 +368,8 @@
       "title27": "Scientific Information Library",
       "title28": "Medical Station",
       "title29": "Sports and Wellness Complex"
-    }
+    },
+    "Specialty": "Specialty"
   },
   "degreePage": {
     "breadcrumbs": {
@@ -414,7 +424,11 @@
   "enrollPage": {
     "introCard": {
       "title": "For Applicants",
-      "description": "Enroll at 'Intuit'. Take a test and find out which field suits you best"
+      "description": "Apply to the International University of Innovative Technologies. Take our career test to discover the ideal path for your future.",
+      "secondTitle": "For Students",
+      "secondDescription": "Class schedules, study materials, digital library, and access to the AVN academic portal.",
+      "thirdTitle": "For Faculty",
+      "thirdDescription": "Curriculum resources, consultation schedules, research publications, and dissertation council updates."
     },
     "infoSection": {
       "title": "Information for Applicants",
@@ -602,7 +616,7 @@
       "management": "Management",
       "economics": "Economics",
       "it": "Information Technology",
-      "universityTitle": "INTERNATIONAL UNIVERSITY OF INNOVATIVE  TECHNOLOGIES",
+      "universityTitle": "INTERNATIONAL UNIVERSITY OF INNOVATIVE TECHNOLOGIES",
       "feedback": "Feedback",
       "address": "Address",
       "workSchedule": "Working Hours",
@@ -806,5 +820,12 @@
       "bio": "Leading the university's global integration and supporting academic excellence through international cooperation."
     },
     "news": "News"
+  },
+  "errors": {
+    "pageNotFound": "Page Not Found",
+    "pageNotFoundDesc": "Sorry, the page you requested has been moved or does not exist. Please check the URL or use the links below.",
+    "goHome": "Home Page",
+    "colleges": "Programs",
+    "schedule": "Schedule"
   }
 }

@@ -1,6 +1,7 @@
-import { createElement } from 'react'
+import { createElement, lazy } from 'react'
 import { RouteObject } from 'react-router-dom'
-import { EventPage } from './event-page.ui'
+
+const EventPage = lazy(() => import('./event-page.ui').then((m) => ({ default: m.EventPage })));
 
 export const eventPageRoute: RouteObject = {
   path: 'news/event/:slug',

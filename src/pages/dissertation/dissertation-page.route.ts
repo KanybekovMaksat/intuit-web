@@ -1,6 +1,7 @@
 import { RouteObject } from 'react-router-dom'
-import { createElement } from 'react'
-import { DissertationPage } from './dissertation-page.ui'
+import { createElement, lazy } from 'react'
+
+const DissertationPage = lazy(() => import('./dissertation-page.ui').then((m) => ({ default: m.DissertationPage })));
 
 export const dissertationPageRoute: RouteObject = {
   path: 'phd/dissertations/:id/',

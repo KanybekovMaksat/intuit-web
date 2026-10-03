@@ -1,6 +1,7 @@
 import { RouteObject } from 'react-router-dom'
-import { createElement } from 'react'
-import { DissertationSubmitPage } from './dissertation-submit-page.ui'
+import { createElement, lazy } from 'react'
+
+const DissertationSubmitPage = lazy(() => import('./dissertation-submit-page.ui').then((m) => ({ default: m.DissertationSubmitPage })));
 
 export const dissertationSubmitPageRoute: RouteObject = {
   path: 'phd/submit/',

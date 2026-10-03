@@ -30,7 +30,7 @@ const DescriptionCard: React.FC<DescriptionCardProps> = ({ text, id }) => {
   return (
     <div className="my-2 md:flex md:flex-col md:items-center">
       {/* Блок с преподавателями (справа) */}
-      <div className="w-[550px] bg-[#e0e1e5] p-5 rounded-xl float-right ml-5 lg:w-full items-center ">
+      <div className="w-[550px] bg-[#e0e1e5] p-5 sm:p-4 rounded-xl float-right ml-5 lg:float-none lg:ml-0 lg:w-full items-center">
         <Title>{t('descriptionPage.leadingTeachers')}</Title>
 
         <div className="flex justify-center ">

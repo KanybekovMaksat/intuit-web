@@ -86,10 +86,10 @@ export const Schedule = () => {
   };
 
   return (
-    <Container maxWidth="lg" className="p-0 ">
+    <div className="w-full p-0">
       <div className="flex mb-14 flex-wrap justify-center gap-12 r-md:gap-8 r-md:flex-col r-md:justify-center">
         {/* Левая колонка */}
-        <div className="w-[460px] sm:w-full">
+        <div className="w-[460px] max-w-full sm:w-full">
           <div className="flex items-center justify-between mb-8 r-md:mb-4">
             <div className="flex items-center gap-3">
               <CalendarMonth className="text-indigo-600" fontSize="large" />
@@ -236,7 +236,7 @@ export const Schedule = () => {
         </div>
 
         {/* Правая колонка */}
-        <div className="w-96 r-sm:w-full border p-6 rounded-xl shadow r-md:mx-auto">
+        <div className="w-96 max-w-full sm:w-full md:w-full border p-6 sm:p-4 rounded-xl shadow md:mx-auto">
           {activeTab === 0 ? (
             <>
               <h3 className="text-2xl font-semibold mb-6">Группы:</h3>
@@ -296,6 +296,6 @@ export const Schedule = () => {
           )}
         </div>
       </div>
-    </Container>
+    </div>
   );
 };

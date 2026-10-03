@@ -1,7 +1,8 @@
-import { createElement } from 'react';
+import { createElement, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
-import { PaymentsPage } from './payments-page.ui';
 import { pathKeys } from '~shared/lib/react-router';
+
+const PaymentsPage = lazy(() => import('./payments-page.ui').then((m) => ({ default: m.PaymentsPage })));
 
 export const paymentsPageRoute: RouteObject = {
   path: pathKeys.enroll.payments(),

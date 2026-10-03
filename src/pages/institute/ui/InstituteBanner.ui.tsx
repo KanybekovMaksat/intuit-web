@@ -18,7 +18,7 @@ export const InstituteBanner: React.FC<FacultyPageType> = ({
 }) => {
   return (
     <div
-      className="bg-[#f5f5f5] p-7 rounded-2xl flex md:flex-col bg-no-repeat  bg-cover bg-center text-white"
+      className="bg-[#f5f5f5] p-7 sm:p-4 rounded-2xl flex md:flex-col bg-no-repeat bg-cover bg-center text-white"
       style={{ backgroundImage: `url(/bg2.png)` }}
     >
       <div className="flex relative justify-between w-full md:flex-col-reverse">

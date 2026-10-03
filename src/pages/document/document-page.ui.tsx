@@ -37,12 +37,12 @@ export const DocumentPage = () => {
     return (
       <>
         <InternationalStudents />
-        <Container maxWidth="lg" className="pb-20">
+        <div className="w-full pb-20 px-12 md:px-6 sm:px-4">
           <NewsList 
             category={23 as any} 
             title={t('internationalPage.news')} 
           />
-        </Container>
+        </div>
       </>
     )
   }
@@ -50,7 +50,7 @@ export const DocumentPage = () => {
   if (!slug || !documentData) return null
 
   return (
-    <Container maxWidth="lg" className="py-10">
+    <div className="w-full py-10">
       <Typography
         variant="h4"
         className="font-bold text-center mb-8 text-gray-800"
@@ -95,6 +95,6 @@ export const DocumentPage = () => {
           </Accordion>
         ))}
       </Fancybox>
-    </Container>
+    </div>
   )
 }

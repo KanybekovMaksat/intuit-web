@@ -1,6 +1,7 @@
-import { createElement } from 'react';
+import { createElement, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
-import { TeapunPage } from './teapun-page.ui';
+
+const TeapunPage = lazy(() => import('./teapun-page.ui').then((m) => ({ default: m.TeapunPage })));
 
 export const teapunPageRoute: RouteObject = {
   path: `cssteapun/`,

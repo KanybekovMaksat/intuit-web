@@ -38,8 +38,8 @@ const professions = [
 
 const ProgramCategory = () => {
   return (
-    <section className="py-24 bg-white">
-      <div className="container mx-auto px-6">
+    <section className="py-12 bg-white">
+      <div className="w-full">
         <div className="mb-20">
             <span className="text-green font-black tracking-[0.4em] uppercase text-[10px] mb-4 block">
                 SPECIALIZATION

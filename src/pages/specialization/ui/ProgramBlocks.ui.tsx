@@ -12,7 +12,7 @@ export default function ProgramBlocks({ skills }) {
         {t("specialization.whatYouWillStudy")}
       </Typography>
       <div className="flex justify-between ">
-        <Card className="min-w-[350px] max-w-[350px] hover:shadow-2xl transition-shadow duration-300 border border-gray">
+        <Card className="min-w-[350px] sm:min-w-0 max-w-[350px] sm:max-w-full sm:w-full hover:shadow-2xl transition-shadow duration-300 border border-gray">
           <CardContent>
             <Typography variant="h5" className="font-bold mb-4">
               Front-End

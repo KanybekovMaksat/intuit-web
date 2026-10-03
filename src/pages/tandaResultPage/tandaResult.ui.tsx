@@ -3,8 +3,6 @@ import { ResultChart } from "~features/tandaResults";
 import { StrongSection } from "~widgets/tandaStrongSection";
 
 export const TandaResult: React.FC = () => {
-  const [isTestCompleted, setIsTestCompleted] = useState(false);
-
   const [results, setResults] = useState({
     Frontend: 0,
     Backend: 0,
@@ -15,10 +13,16 @@ export const TandaResult: React.FC = () => {
   });
 
   useEffect(() => {
-    const savedResults = JSON.parse(localStorage.getItem("quizResults"));
-    if (savedResults) {
-      setResults(savedResults);
-      setIsTestCompleted(true);
+    try {
+      const raw = localStorage.getItem("quizResults");
+      if (raw) {
+        const savedResults = JSON.parse(raw);
+        if (savedResults && typeof savedResults === 'object') {
+          setResults((prev) => ({ ...prev, ...savedResults }));
+        }
+      }
+    } catch (err) {
+      console.warn("Could not read quizResults from localStorage", err);
     }
   }, []);
   return (

@@ -28,10 +28,13 @@ export const DiplomList = () => {
           modules={[Pagination]}
           pagination={{ clickable: true }}
           breakpoints={{
-            480: {
+            0: {
               slidesPerView: 1,
-              centeredSlides: true,
-              spaceBetween: 10,
+              spaceBetween: 12,
+            },
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 16,
             },
             1024: {
               slidesPerView: 4,
@@ -44,7 +47,7 @@ export const DiplomList = () => {
               data-fancybox="gallery"
               href="https://intuit.kg/documents/bakalavr.pdf"
             >
-              <Card className="group transition duration-300 max-w-[420px]  bg-white p-5 flex  gap-5 rounded-xs border border-gray   hover:bg-blue/5 min-h-[190px]">
+              <Card className="group transition duration-300 max-w-[420px] w-full bg-white p-5 sm:p-3.5 flex gap-5 sm:gap-2.5 rounded-xl border border-gray hover:bg-blue/5 min-h-[190px]">
                 <div className="flex flex-col justify-between h-full text-left">
                   <div>
                     <Typography
@@ -66,7 +69,7 @@ export const DiplomList = () => {
                 <img
                   src={Gerb}
                   alt="Diploma Icon"
-                  className="w-[100px] md:w-[120px] transition duration-300 group-hover:scale-105"
+                  className="w-[100px] sm:w-[70px] self-center flex-shrink-0 transition duration-300 group-hover:scale-105"
                 />
               </Card>
             </a>
@@ -76,7 +79,7 @@ export const DiplomList = () => {
               data-fancybox="gallery-2"
               href="https://intuit.kg/documents/diploms/magistratura.pdf"
             >
-              <Card className="group transition duration-300 max-w-[420px]  bg-white p-5 flex  gap-5 rounded-xs border border-gray   hover:bg-blue/5 min-h-[190px]">
+              <Card className="group transition duration-300 max-w-[420px] w-full bg-white p-5 sm:p-3.5 flex gap-5 sm:gap-2.5 rounded-xl border border-gray hover:bg-blue/5 min-h-[190px]">
                 <div className="flex flex-col justify-between text-left">
                   <div>
                     <Typography
@@ -96,7 +99,7 @@ export const DiplomList = () => {
                 <img
                   src={Gerb}
                   alt="Diploma Icon"
-                  className="w-[100px] md:w-[120px] transition duration-300 group-hover:scale-105"
+                  className="w-[100px] sm:w-[70px] self-center flex-shrink-0 transition duration-300 group-hover:scale-105"
                 />
               </Card>
             </a>
@@ -106,7 +109,7 @@ export const DiplomList = () => {
               data-fancybox="gallery-3"
               href="https://intuit.kg/documents/diploms/magistratura.pdf"
             >
-              <Card className="group transition duration-300 max-w-[420px]  bg-white p-5 flex  gap-5 rounded-xs border border-gray   hover:bg-blue/5 min-h-[190px]">
+              <Card className="group transition duration-300 max-w-[420px] w-full bg-white p-5 sm:p-3.5 flex gap-5 sm:gap-2.5 rounded-xl border border-gray hover:bg-blue/5 min-h-[190px]">
                 <div className="flex flex-col justify-between text-left">
                   <div>
                     <Typography
@@ -126,7 +129,7 @@ export const DiplomList = () => {
                 <img
                   src={Gerb}
                   alt="Diploma Icon"
-                  className="w-[100px] md:w-[120px] transition duration-300 group-hover:scale-105"
+                  className="w-[100px] sm:w-[70px] self-center flex-shrink-0 transition duration-300 group-hover:scale-105"
                 />
               </Card>
             </a>
@@ -136,7 +139,7 @@ export const DiplomList = () => {
               data-fancybox="gallery-4"
               href="https://intuit.kg/documents/diploms/diplom_en.pdf"
             >
-              <Card className="group transition duration-300 max-w-[420px]  bg-white p-5 flex  gap-5 rounded-xs border border-gray   hover:bg-blue/5 min-h-[190px]">
+              <Card className="group transition duration-300 max-w-[420px] w-full bg-white p-5 sm:p-3.5 flex gap-5 sm:gap-2.5 rounded-xl border border-gray hover:bg-blue/5 min-h-[190px]">
                 <div className="flex flex-col justify-between items-center text-left">
                   <div>
                     <Typography
@@ -150,9 +153,7 @@ export const DiplomList = () => {
                     </Typography>
                   </div>
                   <Button
-                    className="self-start mt-3 shadow-none bg-blue text-white p-1 rounded px-4 font-medium 
-                 
-                  "
+                    className="self-start mt-3 shadow-none bg-blue text-white p-1 rounded px-4 font-medium"
                   >
                     {t('homepage.diploma.buttonText')}
                   </Button>
@@ -160,7 +161,7 @@ export const DiplomList = () => {
                 <img
                   src={EGerb}
                   alt="Diploma Icon"
-                  className="w-[100px] md:w-[120px] transition duration-300 group-hover:scale-105"
+                  className="w-[100px] sm:w-[70px] self-center flex-shrink-0 transition duration-300 group-hover:scale-105"
                 />
               </Card>
             </a>

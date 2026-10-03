@@ -82,7 +82,7 @@ export const ResultChart: FC<ResultChartProps> = ({ results }) => {
         axisName: {
           color: "#000",
           fontSize: 14,
-          fontFamily: "Jost",
+          fontFamily: "Inter",
           fontWeight: 500,
           borderRadius: 100,
           padding: [3, 3] as [number, number],

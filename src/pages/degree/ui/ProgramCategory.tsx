@@ -49,8 +49,8 @@ export const ProgramCategory = () => {
   const { t } = useTranslation() 
 
   return (
-    <section className="py-24 bg-white overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section className="py-12 bg-white overflow-hidden">
+      <div className="w-full">
         {/* Section Header */}
         <div className="mb-20 flex flex-col lg:flex-row lg:items-end justify-between gap-12">
           <div className="max-w-xl">

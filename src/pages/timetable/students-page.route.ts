@@ -1,7 +1,8 @@
-import { createElement } from "react";
+import { createElement, lazy } from "react";
 import { RouteObject } from "react-router-dom";
 import { pathKeys } from "~shared/lib/react-router";
-import { timeTablePage } from "./students-page.ui";
+
+const timeTablePage = lazy(() => import('./students-page.ui').then((m) => ({ default: m.timeTablePage })));
 
 export const timeTablePageRoute: RouteObject = {
   path: pathKeys.schedule.timeTable(),

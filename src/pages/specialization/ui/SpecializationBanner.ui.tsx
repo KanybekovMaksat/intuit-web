@@ -16,7 +16,7 @@ export const SpecializationBanner = ({
     <div className="relative min-h-[400px] flex rounded-2xl overflow-hidden md:flex-col-reverse">
       {/* Левая часть с градиентом */}
       <div
-        className="w-1/2 p-10 flex flex-col justify-between relative z-10 md:w-full"
+        className="w-1/2 p-10 md:p-6 sm:p-4 flex flex-col justify-between relative z-10 md:w-full"
         style={{
           background:
             'linear-gradient(175deg, rgba(42,33,115,1) 0%, rgba(0,149,111,1) 100%)',
@@ -32,34 +32,34 @@ export const SpecializationBanner = ({
           <Typography
             variant="h1"
             component="h1"
-            className="max-w-[600px] text-[40px] font-medium mt-3 text-white"
+            className="max-w-[600px] text-[40px] md:text-2xl sm:text-xl font-medium mt-3 text-white"
           >
             {title}
           </Typography>
         </div>
 
-        <div className="flex gap-5 flex-wrap mt-10">
-          <Card className="shadow-none p-5 rounded-2xl bg-white/90">
+        <div className="flex gap-5 sm:gap-3 flex-wrap mt-10 sm:mt-6">
+          <Card className="shadow-none p-5 sm:p-3.5 sm:w-full rounded-2xl bg-white/90">
             <p>{t('specialization.level')}</p>
-            <Typography variant="h6" className="font-semibold">
+            <Typography variant="h6" className="font-semibold sm:text-base">
               {educationLevel[0]}
             </Typography>
           </Card>
-          <Card className="shadow-none p-5 rounded-2xl bg-white/90">
+          <Card className="shadow-none p-5 sm:p-3.5 sm:w-full rounded-2xl bg-white/90">
             <p>{t('specialization.studyDuration')}</p>
-            <Typography variant="h6" className="font-semibold">
+            <Typography variant="h6" className="font-semibold sm:text-base">
               {studyPeriod}
             </Typography>
           </Card>
-          <Card className="shadow-none p-5 rounded-2xl bg-white/90">
+          <Card className="shadow-none p-5 sm:p-3.5 sm:w-full rounded-2xl bg-white/90">
             <p>{t('specialization.format')}</p>
-            <Typography variant="h6" className="font-semibold">
+            <Typography variant="h6" className="font-semibold sm:text-base">
               {trainingForm}
             </Typography>
           </Card>
-          <Card className="shadow-none p-5 rounded-2xl bg-white/90">
+          <Card className="shadow-none p-5 sm:p-3.5 sm:w-full rounded-2xl bg-white/90">
             <p>{t('specialization.result')}</p>
-            <Typography variant="h6" className="font-semibold">
+            <Typography variant="h6" className="font-semibold sm:text-base">
               {diploma}
             </Typography>
           </Card>

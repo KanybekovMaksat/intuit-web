@@ -82,7 +82,7 @@ const StaffList = () => {
       <div>
         <Select
           value={selectedPosition}
-          className="mt-5 hidden lg:block md:max-w-[90%] md:mr-0"
+          className="mt-5 hidden lg:block w-full"
           onChange={(e) => setSelectedPosition(e.target.value)}
         >
           {positions.map(

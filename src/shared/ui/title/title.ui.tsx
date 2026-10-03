@@ -4,7 +4,7 @@ interface TitleProps extends React.PropsWithChildren {
 
 export const Title = ({ children, className }: TitleProps) => {
   return (
-    <h2 className={`mt-[80px] mb-[30px] text-[2.5rem] font-semibold text-[#333] lg:text-[40px] md:!text-[30px] ${className || ''}`}>
+    <h2 className={`mt-[80px] mb-[30px] text-[2.5rem] font-semibold text-[#333] lg:text-[40px] md:!text-[28px] sm:!text-[22px] sm:mt-8 sm:mb-4 leading-tight break-words ${className || ''}`}>
       {children}
     </h2>
   )

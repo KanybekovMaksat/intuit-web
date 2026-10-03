@@ -4,8 +4,8 @@ export default {
   important: "#root",
   theme: {
     fontFamily: {
-      sans: ["Jost", "sans-serif"],
-      serif: ["Jost", "serif"],
+      sans: ["Inter", "sans-serif"],
+      serif: ["Inter", "serif"],
     },
     colors: {
       primary: "#2A2172",

@@ -17,7 +17,7 @@ export const CareerBlock = ({
       <div className="flex mt-5 flex-wrap gap-10 justify-center">
         {professions.map((prof, i) => {
           return (
-            <Card className=" w-[400px] rounded-xl flex flex-col items-center justify-start p-8 shadow-none bg-[#f5f5f5] ">
+            <Card key={i} className="w-[400px] max-w-full sm:w-full rounded-xl flex flex-col items-center justify-start p-8 sm:p-5 shadow-none bg-[#f5f5f5]">
               <Avatar className="h-[90px] w-[90px]" src={prof.photo} />
               <Typography variant="h6" className="font-medium">
                 {prof.name}

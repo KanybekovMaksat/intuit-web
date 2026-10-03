@@ -1,6 +1,7 @@
-import { createElement } from 'react';
+import { createElement, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
-import { AboutPage } from './about-page.ui';
+
+const AboutPage = lazy(() => import('./about-page.ui').then((m) => ({ default: m.AboutPage })));
 
 export const aboutPageRoute: RouteObject = {
   path: `about/`,

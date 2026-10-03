@@ -11,7 +11,7 @@ import 'swiper/css/pagination'
 export const ArticleList = () => {
   const { t } = useTranslation()
   const { data: articles, isSuccess } = articleQueries.useGetArticles()
-  const latestArticles = articles?.data.results.slice(0, 4)
+  const latestArticles = articles?.data.results?.slice(0, 4)
 
   const [isMobile, setIsMobile] = useState(false)
 

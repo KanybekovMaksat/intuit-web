@@ -53,12 +53,12 @@ const StatsCard: React.FC<StatsCardProps> = ({
           </Typography>
           <Typography
             variant="subtitle1"
-            className="md:w-[90px] md:text-xs text-sm"
+            className="text-sm md:text-xs leading-tight text-white/90 mt-1"
           >
             {label}
           </Typography>
         </div>
-        <div className="bg-blue p-2 rounded-full">{iconMap[iconKey]}</div>
+        <div className="bg-blue p-2 sm:p-1.5 rounded-full flex-shrink-0 flex items-center justify-center">{iconMap[iconKey]}</div>
       </CardContent>
     </Card>
   );
@@ -66,7 +66,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
 
 export const Stats = () => {
   return (
-    <div className="flex justify-between md:grid md:grid-cols-2 gap-5 mt-4 ">
+    <div className="flex justify-between md:grid md:grid-cols-2 gap-5 sm:gap-3 mt-6 sm:mt-4">
       <StatsCard
         count={2006}
         label={t('homepage.Stats.yearOfEstablishment')}

@@ -68,8 +68,8 @@ const components = [
 
 const ComponentsSection: React.FC = () => {
   return (
-    <section id="components" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
+    <section id="components" className="py-12 bg-gray-50">
+      <div className="w-full">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
           Компоненты системы
         </h2>

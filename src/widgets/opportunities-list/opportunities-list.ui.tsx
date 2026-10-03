@@ -1,6 +1,6 @@
 import { Card, Typography } from '@mui/material'
 import BoltRoundedIcon from '@mui/icons-material/BoltRounded'
-import { useTranslation } from 'react-i18next' // импортируем хук
+import { useTranslation } from 'react-i18next'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
 
@@ -9,246 +9,134 @@ import 'swiper/css/pagination'
 import 'swiper/css/effect-fade'
 import { Title } from '~shared/ui/title'
 
-export const OpportunitiesList = () => {
-  const { t } = useTranslation() // инициализируем перевод
+interface OpportunityItem {
+  id: string
+  titleKey: string
+  bullets: string[]
+}
+
+const opportunities: OpportunityItem[] = [
+  {
+    id: 'materials',
+    titleKey: 'homepage.opportunities.materials.title',
+    bullets: [
+      'homepage.opportunities.materials.moodle',
+      'homepage.opportunities.materials.review',
+      'homepage.opportunities.materials.keepUp',
+    ],
+  },
+  {
+    id: 'transfer',
+    titleKey: 'homepage.opportunities.transfer.title',
+    bullets: [
+      'homepage.opportunities.transfer.contact',
+      'homepage.opportunities.transfer.documents',
+      'homepage.opportunities.transfer.assistance',
+    ],
+  },
+  {
+    id: 'payment',
+    titleKey: 'homepage.opportunities.payment.title',
+    bullets: [
+      'homepage.opportunities.payment.onlineCheck',
+      'homepage.opportunities.payment.mobileApps',
+      'homepage.opportunities.payment.monthly',
+    ],
+  },
+  {
+    id: 'career',
+    titleKey: 'homepage.opportunities.career.title',
+    bullets: [
+      'homepage.opportunities.career.resumeHelp',
+      'homepage.opportunities.career.interviewPrep',
+      'homepage.opportunities.career.referenceLetter',
+    ],
+  },
+]
+
+const OpportunityCard = ({ item }: { item: OpportunityItem }) => {
+  const { t } = useTranslation()
 
   return (
-    <div className="my-10">
+    <Card
+      className="rounded-2xl w-full h-full min-h-[260px] p-6 sm:p-5 pb-6 bg-[#F9FAFB] border border-[#2A2172]/10 shadow-sm hover:shadow-md hover:border-[#00956F]/40 transition-all duration-300 flex flex-col justify-start text-left"
+      sx={{
+        backgroundColor: '#F9FAFB',
+        borderRadius: '16px',
+        border: '1px solid rgba(42, 33, 114, 0.1)',
+        boxShadow: '0 2px 12px rgba(42, 33, 114, 0.05)',
+        textAlign: 'left',
+      }}
+    >
+      <Typography
+        variant="h6"
+        component="h3"
+        className="text-[#2A2172] font-bold text-lg sm:text-[16px] leading-snug text-left"
+        sx={{
+          fontWeight: 700,
+          color: '#2A2172',
+          textAlign: 'left',
+          fontFamily: 'Inter, sans-serif',
+        }}
+      >
+        {t(item.titleKey)}
+      </Typography>
+
+      <ul className="mt-4 flex flex-col gap-3 flex-1 text-left list-none p-0 m-0">
+        {item.bullets.map((bulletKey) => (
+          <li
+            key={bulletKey}
+            className="flex items-start gap-2.5 text-left text-sm sm:text-[13px] leading-relaxed text-[#2A2172]/85 font-normal"
+          >
+            <BoltRoundedIcon
+              className="flex-shrink-0 mt-0.5 text-[#00956F]"
+              fontSize="small"
+              sx={{ color: '#00956F', fontSize: '18px' }}
+            />
+            <span className="flex-1 text-left leading-snug">{t(bulletKey)}</span>
+          </li>
+        ))}
+      </ul>
+    </Card>
+  )
+}
+
+export const OpportunitiesList = () => {
+  const { t } = useTranslation()
+
+  return (
+    <div className="my-12 sm:my-6">
       <Title>{t('homepage.opportunities.title')}</Title>
-      <div className="flex gap-5 justify-between mt-4 flex-wrap lg:gap-10 lg:justify-center md:hidden">
-        <Card className=" rounded-md max-w-[350px] md:w-full p-5 shadow-green bg-[#f5f5f5] transition-all duration-200 ">
-          <Typography
-            variant="h6"
-            component="div"
-            className="leading-5 font-bold"
-          >
-            {t('homepage.opportunities.materials.title')}{' '}
-            {/* Доступность учебных материалов */}
-          </Typography>
-          <ul className="mt-4 flex flex-col gap-2">
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.materials.moodle')}{' '}
-              {/* Все материалы доступны в системе MOODLE. */}
-            </li>
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.materials.review')}{' '}
-              {/* Повторяйте материал и конспектируйте в любое время. */}
-            </li>
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.materials.keepUp')}{' '}
-              {/* Догоняйте сокурсников и будьте в курсе. */}
-            </li>
-          </ul>
-        </Card>
-        <Card className=" rounded-md max-w-[350px] md:w-full p-5 shadow-green bg-[#f5f5f5]  transition-all duration-200">
-          <Typography
-            variant="h6"
-            component="div"
-            className="leading-5 font-bold"
-          >
-            {t('homepage.opportunities.transfer.title')}{' '}
-            {/* Перевод из другого вуза */}
-          </Typography>
-          <ul className="mt-4 flex flex-col gap-2">
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.transfer.contact')}{' '}
-              {/* Обратитесь в приемную комиссию */}
-            </li>
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.transfer.documents')}{' '}
-              {/* Предоставьте пакет документов */}
-            </li>
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.transfer.assistance')}{' '}
-              {/* Наши сотрудники готовы ответить на все ваши вопросы и оказать содействие в переводе */}
-            </li>
-          </ul>
-        </Card>
-        <Card className=" rounded-md max-w-[350px] md:w-full p-5 shadow-green bg-[#f5f5f5]  transition-all duration-200">
-          <Typography
-            variant="h6"
-            component="div"
-            className="leading-5 font-bold"
-          >
-            {t('homepage.opportunities.payment.title')}{' '}
-            {/* Оплата обучения онлайн */}
-          </Typography>
-          <ul className="mt-4 flex flex-col gap-2">
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.payment.onlineCheck')}{' '}
-              {/* Онлайн проверка оплаты */}
-            </li>
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.payment.mobileApps')}{' '}
-              {/* Оплата по мобильным приложениям */}
-            </li>
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.payment.monthly')}{' '}
-              {/* Удобная, в т.ч. помесячная оплата по личному шифру */}
-            </li>
-          </ul>
-        </Card>
-        <Card className=" rounded-md max-w-[350px] md:w-full p-5 shadow-green bg-[#f5f5f5]  transition-all duration-200">
-          <Typography
-            variant="h6"
-            component="div"
-            className="leading-5 font-bold"
-          >
-            {t('homepage.opportunities.career.title')}{' '}
-            {/* Трудоустройство и карьера */}
-          </Typography>
-          <ul className="mt-4 flex flex-col gap-2">
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.career.resumeHelp')}{' '}
-              {/* Поможем составить резюме */}
-            </li>
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.career.interviewPrep')}{' '}
-              {/* Подготовят к собеседованию */}
-            </li>
-            <li>
-              <BoltRoundedIcon className="text-green" />
-              {t('homepage.opportunities.career.referenceLetter')}{' '}
-              {/* Напишем рекомендательное письмо */}
-            </li>
-          </ul>
-        </Card>
+
+      {/* Desktop grid (>= 1024px) */}
+      <div className="grid grid-cols-4 gap-5 mt-6 xll:grid-cols-2 lg:hidden items-stretch">
+        {opportunities.map((item) => (
+          <div key={item.id} className="h-full">
+            <OpportunityCard item={item} />
+          </div>
+        ))}
       </div>
-      <div className="hidden lg:block">
+
+      {/* Mobile & Tablet Carousel (< 1024px) */}
+      <div className="hidden lg:block mt-6">
         <Swiper
-          className="py-10 px-1 diplom-list"
+          className="pb-12 pt-2 px-1 diplom-list"
           modules={[Pagination]}
           pagination={{ clickable: true }}
-          spaceBetween={10}
+          spaceBetween={16}
+          slidesPerView={1}
+          breakpoints={{
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 16,
+            },
+          }}
         >
-          <SwiperSlide>
-            <Card className=" rounded-md max-w-[350px] md:min-h-[250px] md:max-h-[250px] md:max-w-full md:min-w-full md:w-full p-5 shadow-green bg-[#f5f5f5] transition-all duration-200 ">
-              <Typography
-                variant="h6"
-                component="div"
-                className="leading-5 font-bold"
-              >
-                {t('homepage.opportunities.materials.title')}{' '}
-                {/* Доступность учебных материалов */}
-              </Typography>
-              <ul className="mt-4 flex flex-col items-left gap-2">
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.materials.moodle')}{' '}
-                  {/* Все материалы доступны в системе MOODLE. */}
-                </li>
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.materials.review')}{' '}
-                  {/* Повторяйте материал и конспектируйте в любое время. */}
-                </li>
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.materials.keepUp')}{' '}
-                  {/* Догоняйте сокурсников и будьте в курсе. */}
-                </li>
-              </ul>
-            </Card>
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <Card className=" rounded-md max-w-[350px] md:min-h-[250px] md:max-h-[250px] md:max-w-full md:min-w-full md:w-full p-5 shadow-green bg-[#f5f5f5]  transition-all duration-200">
-              <Typography
-                variant="h6"
-                component="div"
-                className="leading-5 font-bold"
-              >
-                {t('homepage.opportunities.transfer.title')}{' '}
-                {/* Перевод из другого вуза */}
-              </Typography>
-              <ul className="mt-4 flex flex-col items-left gap-2">
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.transfer.contact')}{' '}
-                  {/* Обратитесь в приемную комиссию */}
-                </li>
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.transfer.documents')}{' '}
-                  {/* Предоставьте пакет документов */}
-                </li>
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.transfer.assistance')}{' '}
-                  {/* Наши сотрудники готовы ответить на все ваши вопросы и оказать содействие в переводе */}
-                </li>
-              </ul>
-            </Card>
-          </SwiperSlide>
-          <SwiperSlide>
-            <Card className=" rounded-md max-w-[350px] md:min-h-[250px] md:max-h-[250px] md:max-w-full md:min-w-full md:w-full p-5 shadow-green bg-[#f5f5f5]  transition-all duration-200">
-              <Typography
-                variant="h6"
-                component="div"
-                className="leading-5 font-bold"
-              >
-                {t('homepage.opportunities.payment.title')}{' '}
-                {/* Оплата обучения онлайн */}
-              </Typography>
-              <ul className="mt-4 flex flex-col items-left gap-2">
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.payment.onlineCheck')}{' '}
-                  {/* Онлайн проверка оплаты */}
-                </li>
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.payment.mobileApps')}{' '}
-                  {/* Оплата по мобильным приложениям */}
-                </li>
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.payment.monthly')}{' '}
-                  {/* Удобная, в т.ч. помесячная оплата по личному шифру */}
-                </li>
-              </ul>
-            </Card>
-          </SwiperSlide>
-          <SwiperSlide>
-            <Card className=" rounded-md max-w-[350px] md:min-h-[250px] md:max-h-[250px] md:max-w-full md:min-w-full md:w-full p-5 shadow-green bg-[#f5f5f5]  transition-all duration-200">
-              <Typography
-                variant="h6"
-                component="div"
-                className="leading-5 font-bold"
-              >
-                {t('homepage.opportunities.career.title')}{' '}
-                {/* Трудоустройство и карьера */}
-              </Typography>
-              <ul className="mt-4 flex flex-col items-left gap-2">
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.career.resumeHelp')}{' '}
-                  {/* Поможем составить резюме */}
-                </li>
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.career.interviewPrep')}{' '}
-                  {/* Подготовят к собеседованию */}
-                </li>
-                <li>
-                  <BoltRoundedIcon className="text-green" />
-                  {t('homepage.opportunities.career.referenceLetter')}{' '}
-                  {/* Напишем рекомендательное письмо */}
-                </li>
-              </ul>
-            </Card>
-          </SwiperSlide>
+          {opportunities.map((item) => (
+            <SwiperSlide key={item.id} className="!h-auto !flex items-stretch">
+              <OpportunityCard item={item} />
+            </SwiperSlide>
+          ))}
         </Swiper>
       </div>
     </div>

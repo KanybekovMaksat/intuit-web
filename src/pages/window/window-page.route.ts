@@ -1,6 +1,7 @@
-import { createElement } from 'react';
+import { createElement, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
-import { WindowPage } from './window-page.ui';
+
+const WindowPage = lazy(() => import('./window-page.ui').then((m) => ({ default: m.WindowPage })));
 
 export const windowPageRoute: RouteObject = {
   path: `window/`,

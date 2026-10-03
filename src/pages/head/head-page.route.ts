@@ -1,6 +1,7 @@
-import { createElement } from 'react';
+import { createElement, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
-import { HeadPage} from './head-page.ui';
+
+const HeadPage = lazy(() => import('./head-page.ui').then((m) => ({ default: m.HeadPage })));
 
 export const headPageRoute: RouteObject = {
   path: `head/`,

@@ -23,7 +23,7 @@ export const WindowPage = () => {
   ];
 
   return (
-    <Container maxWidth="lg" className="py-10 px-4">
+    <div className="w-full py-10">
       <Typography variant="h4" className="font-semibold text-gray-700 mb-6">
      {t("windowPage.servicesWindow")}
       </Typography>
@@ -76,6 +76,6 @@ export const WindowPage = () => {
          {t(".windowPage.applyForCertificate")}
         </a>
       </div>
-    </Container>
+    </div>
   );
 };

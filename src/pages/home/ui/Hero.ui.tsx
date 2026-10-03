@@ -27,35 +27,50 @@ export const HomeHero = () => {
   }
 
   const facultyItems = getApiList<DegreeSchema>(facultyData?.data).map((item, index) => (
-    <Link key={index} to={`/degree/${item.slug}/`}>
-      <span className="text-[14px] px-4 hover:cursor-pointer py-1 md:py-3 border border-white/50 bg-white rounded-full text-black font-bold whitespace-nowrap">
+    <Link key={index} to={`/degree/${item.slug}/`} className="inline-flex">
+      <span className="inline-flex items-center justify-center text-[13px] sm:text-xs px-3.5 sm:px-3 py-1.5 border border-white/50 bg-white rounded-full text-black font-semibold hover:bg-white/90 hover:scale-105 transition-all shadow-sm">
         {item.title}
       </span>
     </Link>
   ))
 
   return (
-    <section className="r-sm:h-[360px] rounded-md r-sm:mb-16 mb-20 relative overflow-hidden bg-[url('/bg2.png')] bg-cover bg-top">
-      <div className="relative py-5 r-md:py-6 px-4">
+    <section className="rounded-md mb-20 relative overflow-hidden bg-[url('/bg2.png')] bg-cover bg-top">
+      <div className="relative py-5 px-4 sm:px-3">
         <div className="z-[100px] md:p-0">
           <div className="flex justify-between items-end md:flex-col mb-[30px]">
-            <div className="mb-10 md:mb-0 r-md:mb-2 r-md:max-w-2xl max-w-4xl">
+            <div className="mb-10 md:mb-0 max-w-4xl">
               <Typography
                 variant="h1"
-                className="mt-4 md:mb-4 md:text-2xl w-full md:w-full text-white font-[900] text-5xl"
+                className="mt-4 md:mb-3 text-5xl md:text-2xl sm:text-[22px] sm:leading-snug w-full text-white font-[900]"
               >
-                {t('homepage.hero.title')}
+                {t('homepage.hero.title', 'Выбирай не просто специальность — выбирай будущее с МУИТ')}
               </Typography>
-              <p className="mb-20 md:mb-0 text-xl md:text-sm text-white mt-2 italic">
-                {t('homepage.hero.subtitle')}
+              <p className="mb-20 md:mb-0 text-xl md:text-sm sm:text-xs text-white mt-2 italic">
+                {t('homepage.hero.subtitle', 'Образование, которое ведёт к реальной работе')}
               </p>
               
               {/* Desktop & Mobile Faculty list */}
-              <div className="flex flex-wrap max-w-[450px] md:max-w-full gap-2 gap-y-4 mt-10 md:mt-5">
+              <div className="flex flex-wrap max-w-[450px] md:max-w-full gap-2 gap-y-2.5 mt-8 md:mt-4 items-center">
                 {facultyItems}
-                <button className="text-[14px] px-4 hover:cursor-pointer py-1 md:py-3 bg-blue border border-blue rounded-full text-white font-bold transition-colors hover:bg-blue/80">
-                  {t('homepage.hero.helpButton')}
-                </button>
+                <a
+                  href="#enroll-form"
+                  className="inline-flex"
+                  onClick={(e) => {
+                    const el = document.getElementById('enroll-form')
+                    if (el) {
+                      e.preventDefault()
+                      el.scrollIntoView({ behavior: 'smooth' })
+                    }
+                  }}
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center justify-center text-[13px] sm:text-xs px-4 py-1.5 bg-[#00956F] border border-[#00956F] hover:bg-[#007f5e] rounded-full text-white font-bold transition-all shadow-md hover:scale-105 active:scale-95"
+                  >
+                    {t('homepage.hero.helpButton', 'Помочь с выбором')}
+                  </button>
+                </a>
               </div>
             </div>
 

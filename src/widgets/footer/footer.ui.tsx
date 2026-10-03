@@ -6,13 +6,13 @@ import InstagramIcon from '@mui/icons-material/Instagram'
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded'
 import TelegramIcon from '@mui/icons-material/Telegram'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { degreeQueries } from '~entities/degree'
 import { DegreeSchema } from '~entities/degree/degree.types'
 import { getApiList } from '~shared/lib/api/getApiList'
-import { t } from 'i18next'
-import { Loader } from '~shared/ui/loader'
+import { useTranslation } from 'react-i18next'
+import { API_URL } from '~shared/lib/api/apiClient'
+import axios from 'axios'
 
 interface ContactInfo {
   address: string
@@ -29,161 +29,223 @@ interface ContactInfo {
   youtube: string
 }
 
-// const studentResources = ['Расписание', 'AVN', 'Moodle', 'Оплата обучения'];
+const defaultContactInfo: ContactInfo = {
+  address: 'г. Бишкек, ул. Горького 1/17',
+  admissionOfficePhone: '+996 (312) 54-32-10',
+  facebook: 'https://www.facebook.com/intuit.kg',
+  hoursSaturday: '09:00 - 15:00',
+  hoursSunday: 'Выходной',
+  hoursWeekdays: ' 08:30 - 17:30',
+  id: 1,
+  instagram: 'https://www.instagram.com/intuit.kg',
+  receptionPhone: '+996 (312) 54-32-11',
+  telegram: 'https://t.me/intuit_kg',
+  whatsapp: 'https://wa.me/996555123456',
+  youtube: 'https://www.youtube.com/@intuit',
+}
 
 export function Footer() {
-  const [data, setData] = useState<ContactInfo>()
+  const { t } = useTranslation()
+  const [data, setData] = useState<ContactInfo>(defaultContactInfo)
 
   const { data: degreeData } = degreeQueries.useGetDegrees()
   const degrees = getApiList<DegreeSchema>(degreeData?.data)
 
   useEffect(() => {
-    axios
-      .get('https://intuit.makalabox.com/api/university/university-info/1/')
-      .then((res) => setData(res.data))
+    const fetchInfo = async () => {
+      try {
+        const url = API_URL
+          ? `${API_URL}/api/university/university-info/1/`
+          : 'https://intuit.makalabox.com/api/university/university-info/1/'
+        const res = await axios.get(url)
+        if (res.data) {
+          setData(res.data)
+        }
+      } catch (err) {
+        // Keep default contact info on network error
+      }
+    }
+    fetchInfo()
   }, [])
 
-  if (!data) {
-    return <Loader />
-  }
-  console.log(data.hoursWeekdays)
-
   return (
-    <footer className="bg-[#0d1140] text-white py-5 ">
-      <div className=" max-w-[95%] mx-auto hidden lg:block">
-        <div className="flex items-center gap-1 mb-5">
-          <img src={IntuitLogo} alt="Intuit" className="h-[58px]" />
-          <p className="text-xs font-semibold leading-3 max-w-[100px]">
-            {t('footer.fields.universityTitle')}
+    <footer className="bg-[#0d1140] text-white py-8 mt-12">
+      {/* Mobile Footer */}
+      <div className="w-full px-4 hidden lg:block">
+        <div className="flex items-center gap-2 mb-5">
+          <img src={IntuitLogo} alt="Intuit" className="h-[50px] w-auto" />
+          <p className="text-xs font-semibold leading-4 max-w-[150px]">
+            {t('footer.fields.universityTitle', 'Международный Университет Инновационных Технологий')}
           </p>
         </div>
-        <Button
-          variant="outlined"
-          className="w-full my-3 duration-300  font-bold text-white bg-green hover:border-green"
-        >
-          {t('footer.fields.feedback')}
-        </Button>
-        <div className="flex justify-between">
-          <Link
-            className=" border border-white rounded px-3"
-            to={data.facebook}
+        <a href="#enroll-form">
+          <Button
+            variant="outlined"
+            className="w-full my-3 duration-300 font-bold !text-white !bg-[#00956F] hover:!bg-[#007f5e] !border-none"
           >
-            <IconButton className="text-white">
-              <FacebookRoundedIcon />
-            </IconButton>
-          </Link>
-          <Link
-            className=" border border-white rounded px-3"
-            to={data.whatsapp}
-          >
-            <IconButton className="text-white">
-              <WhatsAppIcon />
-            </IconButton>
-          </Link>
-          <Link
-            className=" border border-white rounded px-3"
-            to={data.instagram}
-          >
-            <IconButton className="text-white">
-              <InstagramIcon />
-            </IconButton>
-          </Link>
-
-          <Link
-            className=" border border-white rounded px-3"
-            to={data.telegram}
-          >
-            <IconButton className="text-white">
-              <TelegramIcon />
-            </IconButton>
-          </Link>
+            {t('footer.fields.feedback', 'Оставить заявку')}
+          </Button>
+        </a>
+        <div className="flex justify-center gap-4 my-4">
+          {data.facebook && (
+            <a
+              className="border border-white/30 rounded-lg p-1 hover:border-white transition-colors"
+              href={data.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
+              <IconButton className="!text-white">
+                <FacebookRoundedIcon />
+              </IconButton>
+            </a>
+          )}
+          {data.whatsapp && (
+            <a
+              className="border border-white/30 rounded-lg p-1 hover:border-white transition-colors"
+              href={data.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+            >
+              <IconButton className="!text-white">
+                <WhatsAppIcon />
+              </IconButton>
+            </a>
+          )}
+          {data.instagram && (
+            <a
+              className="border border-white/30 rounded-lg p-1 hover:border-white transition-colors"
+              href={data.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <IconButton className="!text-white">
+                <InstagramIcon />
+              </IconButton>
+            </a>
+          )}
+          {data.telegram && (
+            <a
+              className="border border-white/30 rounded-lg p-1 hover:border-white transition-colors"
+              href={data.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Telegram"
+            >
+              <IconButton className="!text-white">
+                <TelegramIcon />
+              </IconButton>
+            </a>
+          )}
         </div>
-        <p className="my-3 text-center">&copy; 2024 Intuit</p>
+        <p className="my-3 text-center text-xs text-gray-400">
+          &copy; {new Date().getFullYear()} МУИТ / INTUIT. Все права защищены.
+        </p>
       </div>
-      <div className=" container mx-auto lg:hidden">
-        <div className="flex items-center gap-1 mb-5">
-          <img src={IntuitLogo} alt="Intuit" className="h-[58px]" />
-          <p className="text-xs font-semibold leading-3">
-            {t('footer.fields.universityTitle')}
+
+      {/* Desktop Footer */}
+      <div className="w-full px-6 md:px-3 lg:hidden">
+        <div className="flex items-center gap-3 mb-6">
+          <img src={IntuitLogo} alt="Intuit" className="h-[58px] w-auto" />
+          <p className="text-sm font-semibold leading-4 max-w-[220px]">
+            {t('footer.fields.universityTitle', 'Международный Университет Инновационных Технологий')}
           </p>
         </div>
-        <ul className="flex justify-between pb-3 border-b border-gray">
-          {degrees.map((univer, index) => (
-            <li className="text-white" key={index}>
-              <Link to={`/degree/${univer.slug}`}>{univer.title}</Link>
-            </li>
-          ))}
-        </ul>
-        <div className="flex justify-between mt-6">
-          <ul>
-            <h5 className="font-bold mt-5">{t('footer.fields.address')}</h5>
-            <li>{data.address}</li>
-          </ul>
-          <ul>
-            <h5 className="font-bold mt-5">
-              {t('footer.fields.workSchedule')}
-            </h5>
-            <li>
-              {t('footer.fields.workScheduleList.weekdays')}
-              {data.hoursWeekdays}
-            </li>
-            <li>{t('footer.fields.workScheduleList.saturday')}</li>
-            <li>{t('footer.fields.workScheduleList.sunday')}</li>
-          </ul>
-          <div>
-            <h5 className="font-bold mt-5">
-              {t('footer.fields.forAllQuestions')}
-            </h5>
-            <Button
-              className="text-white"
-              startIcon={<LocalPhoneRoundedIcon />}
-            >
-              {data.admissionOfficePhone}
-            </Button>
-            <h5 className="font-bold mt-5">
-              {t('footer.fields.admissionsOffice')}
-            </h5>
-            <Button
-              className="text-white"
-              startIcon={<LocalPhoneRoundedIcon />}
-            >
-              {data.receptionPhone}
-            </Button>
-          </div>
-          <div>
-            <Button
-              variant="outlined"
-              className="w-full mb-3 duration-300  font-bold text-white border-white hover:bg-green hover:border-green"
-            >
-              {t('footer.fields.feedback')}
-            </Button>
-            <div className="flex items-center">
-              <p>{t('footer.fields.socialMedia')}</p>
-              <div>
-                <Link to={data.facebook}>
-                  <IconButton className="text-white">
-                    <FacebookRoundedIcon />
-                  </IconButton>
-                </Link>
-                <Link to={data.whatsapp}>
-                  <IconButton className="text-white">
-                    <WhatsAppIcon />
-                  </IconButton>
-                </Link>
-                <Link to={data.instagram}>
-                  <IconButton className="text-white">
-                    <InstagramIcon />
-                  </IconButton>
-                </Link>
 
-                <Link to={data.telegram}>
-                  <IconButton className="text-white">
-                    <TelegramIcon />
-                  </IconButton>
-                </Link>
+        {degrees.length > 0 && (
+          <ul className="flex flex-wrap gap-6 pb-4 border-b border-white/10 text-sm">
+            {degrees.map((univer, index) => (
+              <li className="text-white hover:text-[#00956F] transition-colors" key={index}>
+                <Link to={`/degree/${univer.slug}`}>{univer.title}</Link>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className="grid grid-cols-4 gap-8 mt-6">
+          <div>
+            <h5 className="font-bold text-sm mb-2 text-[#00956F]">{t('footer.fields.address', 'Адрес')}</h5>
+            <p className="text-xs text-gray-300 leading-5">{data.address}</p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-sm mb-2 text-[#00956F]">
+              {t('footer.fields.workSchedule', 'График работы')}
+            </h5>
+            <p className="text-xs text-gray-300 leading-5">
+              {t('footer.fields.workScheduleList.weekdays', 'Пн-Пт:')} {data.hoursWeekdays}
+            </p>
+            <p className="text-xs text-gray-300 leading-5">
+              {t('footer.fields.workScheduleList.saturday', 'Сб: 09:00 - 15:00')}
+            </p>
+            <p className="text-xs text-gray-300 leading-5">
+              {t('footer.fields.workScheduleList.sunday', 'Вс: Выходной')}
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-sm mb-2 text-[#00956F]">
+              {t('footer.fields.forAllQuestions', 'Контакты')}
+            </h5>
+            <p className="text-xs text-gray-300 flex items-center gap-1.5 mb-1">
+              <LocalPhoneRoundedIcon fontSize="small" />
+              <span>{data.admissionOfficePhone}</span>
+            </p>
+            <p className="text-xs text-gray-300 flex items-center gap-1.5">
+              <LocalPhoneRoundedIcon fontSize="small" />
+              <span>{data.receptionPhone}</span>
+            </p>
+          </div>
+
+          <div>
+            <a href="#enroll-form">
+              <Button
+                variant="outlined"
+                className="w-full mb-4 duration-300 font-bold !text-white !border-white/50 hover:!bg-[#00956F] hover:!border-transparent"
+              >
+                {t('footer.fields.feedback', 'Подать заявку')}
+              </Button>
+            </a>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-300 mr-1">{t('footer.fields.socialMedia', 'Мы в соцсетях:')}</span>
+              <div className="flex gap-1">
+                {data.facebook && (
+                  <a href={data.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                    <IconButton className="!text-white hover:!text-[#00956F]">
+                      <FacebookRoundedIcon fontSize="small" />
+                    </IconButton>
+                  </a>
+                )}
+                {data.whatsapp && (
+                  <a href={data.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                    <IconButton className="!text-white hover:!text-[#00956F]">
+                      <WhatsAppIcon fontSize="small" />
+                    </IconButton>
+                  </a>
+                )}
+                {data.instagram && (
+                  <a href={data.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <IconButton className="!text-white hover:!text-[#00956F]">
+                      <InstagramIcon fontSize="small" />
+                    </IconButton>
+                  </a>
+                )}
+                {data.telegram && (
+                  <a href={data.telegram} target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+                    <IconButton className="!text-white hover:!text-[#00956F]">
+                      <TelegramIcon fontSize="small" />
+                    </IconButton>
+                  </a>
+                )}
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="border-t border-white/10 mt-8 pt-4 text-center text-xs text-gray-400">
+          &copy; {new Date().getFullYear()} Международный Университет Инновационных Технологий (МУИТ). Все права защищены.
         </div>
       </div>
     </footer>

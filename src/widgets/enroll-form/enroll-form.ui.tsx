@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import 'react-phone-input-2/lib/style.css'
 import PhoneInput from 'react-phone-input-2'
+import { API_URL } from '~shared/lib/api/apiClient'
 
 export const EnrollForm = () => {
   const { t } = useTranslation()
@@ -23,101 +24,107 @@ export const EnrollForm = () => {
   }
 
   const handleSubmit = async () => {
+    if (!formData.name.trim()) {
+      toast.warning(t('homepage.enrollForm.errors.nameRequired', 'Пожалуйста, укажите ваше имя'))
+      return
+    }
+    if (!formData.phone.trim() || formData.phone.length < 8) {
+      toast.warning(t('homepage.enrollForm.errors.phoneRequired', 'Пожалуйста, укажите контактный телефон'))
+      return
+    }
+
     setIsSubmitting(true)
     try {
-      await axios.post(
-        'https://intuit.makalabox.com/api/university/user-application/',
-        {
-          user: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          slug: window.location.href,
-        }
-      )
-      toast.success(t('homepage.enrollForm.successMessage'))
+      const endpoint = API_URL
+        ? `${API_URL}/api/university/user-application/`
+        : 'https://intuit.makalabox.com/api/university/user-application/'
+
+      await axios.post(endpoint, {
+        user: formData.name.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        slug: window.location.pathname,
+      })
+      toast.success(t('homepage.enrollForm.successMessage', 'Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.'))
       setFormData({ name: '', phone: '', email: '' })
     } catch (error) {
-      toast.error(t('homepage.enrollForm.errorMessage'))
+      toast.error(t('homepage.enrollForm.errorMessage', 'Не удалось отправить заявку. Пожалуйста, попробуйте позже.'))
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <div className="bg-blue p-5 rounded-lg w-full mt-5 ">
-      <div className="flex items-center gap-5 md:flex-col">
-        <div>
+    <div id="enroll-form" className="bg-[#2A2172] p-8 md:p-5 rounded-2xl w-full my-8 text-white shadow-xl">
+      <div className="flex items-center gap-8 lg:flex-col lg:items-stretch">
+        <div className="flex-1">
           <Typography
             variant="h3"
             component="h3"
-            className="text-[2.5rem] font-semibold text-[white] lg:text-[40px] md:!text-[30px] mb-10"
+            className="text-[2.25rem] font-bold text-white lg:text-[32px] md:!text-[24px] mb-4"
           >
-            {t('homepage.enrollForm.title')}
+            {t('homepage.enrollForm.title', 'Остались вопросы? Поможем с выбором!')}
           </Typography>
-          <span className="text-[white] text-base">
-            Если вы хотите больше узнать о МУИТ или не знаете, какую программу
-            обучения подобрать, оставьте заявку - и мы перезвоним
+          <span className="text-white/80 text-sm md:text-base leading-relaxed block max-w-xl">
+            {t(
+              'homepage.enrollForm.description',
+              'Если вы хотите больше узнать о МУИТ или не знаете, какую программу обучения подобрать, оставьте заявку — и наш специалист свяжется с вами для консультации.'
+            )}
           </span>
         </div>
-        <div>
-          <div className="flex flex-col">
-            <div className="flex gap-3 md:flex-col">
-              <fieldset className="my-5">
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  placeholder={t('homepage.enrollForm.placeholders.name')}
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="text-base py-3 px-3 w-[320px] rounded outline-none placeholder:text-base lg:w-full md:w-full"
-                />
-              </fieldset>
-              <fieldset className="my-5 w-[320px] md:w-full">
-                <PhoneInput
-                  country={'kg'}
-                  value={formData.phone}
-                  onChange={(phone) =>
-                    setFormData((prev) => ({ ...prev, phone }))
-                  }
-                  inputStyle={{
-                    width: '100%',
-                    height: '51px',
-                    borderRadius: '8px',
-                    paddingLeft: '48px',
-                    fontSize: '16px',
-                  }}
-                  containerStyle={{ width: '100%' }}
-                  inputClass="outline-none"
-                  buttonStyle={{ border: 'none', background: 'transparent' }}
-                />
-              </fieldset>
+        <div className="w-full max-w-md">
+          <div className="flex flex-col space-y-3">
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder={t('homepage.enrollForm.placeholders.name', 'Ваше имя *')}
+              value={formData.name}
+              onChange={handleChange}
+              className="text-sm py-3 px-4 w-full rounded-lg text-gray-900 bg-white border border-transparent focus:border-[#00956F] outline-none placeholder:text-gray-400"
+            />
+
+            <div className="w-full">
+              <PhoneInput
+                country={'kg'}
+                value={formData.phone}
+                onChange={(phone) => setFormData((prev) => ({ ...prev, phone }))}
+                inputStyle={{
+                  width: '100%',
+                  height: '46px',
+                  borderRadius: '8px',
+                  paddingLeft: '48px',
+                  fontSize: '14px',
+                  color: '#111827',
+                }}
+                containerStyle={{ width: '100%' }}
+                inputClass="outline-none"
+                buttonStyle={{ border: 'none', background: 'transparent' }}
+              />
             </div>
 
-            <fieldset className="my-5">
-              <input
-                type="text"
-                id="email"
-                name="email"
-                required
-                placeholder={t('homepage.enrollForm.placeholders.email')}
-                value={formData.email}
-                onChange={handleChange}
-                className="text-base py-3 px-3  rounded outline-none placeholder:text-base w-full"
-              />
-            </fieldset>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder={t('homepage.enrollForm.placeholders.email', 'Email (необязательно)')}
+              value={formData.email}
+              onChange={handleChange}
+              className="text-sm py-3 px-4 w-full rounded-lg text-gray-900 bg-white border border-transparent focus:border-[#00956F] outline-none placeholder:text-gray-400"
+            />
+
+            <Button
+              variant="contained"
+              className="!shadow-none !h-[48px] !w-full !bg-[#00956F] hover:!bg-[#007f5e] !text-white !font-bold !rounded-lg !capitalize !mt-2"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting
+                ? t('homepage.enrollForm.buttons.submitting', 'Отправка...')
+                : t('homepage.enrollForm.buttons.submit', 'Оставить заявку')}
+            </Button>
           </div>
-          <Button
-            variant="contained"
-            className="shadow-none h-[51px] w-full bg-green"
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-          >
-            {isSubmitting
-              ? t('homepage.enrollForm.buttons.submitting')
-              : t('homepage.enrollForm.buttons.submit')}
-          </Button>
         </div>
       </div>
     </div>

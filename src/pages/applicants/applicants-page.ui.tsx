@@ -11,7 +11,7 @@ import { t } from 'i18next'
 
 export const ApplicantsPage = () => {
   return (
-    <Container maxWidth="lg" className="py-10 px-4">
+    <div className="w-full py-10">
       <Typography
         variant="h4"
         className="font-bold text-center mb-8 text-gray-800"
@@ -98,6 +98,6 @@ export const ApplicantsPage = () => {
           </Box>
         </Grid>
       </Grid>
-    </Container>
+    </div>
   )
 }

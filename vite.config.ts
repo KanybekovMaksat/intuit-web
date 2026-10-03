@@ -16,4 +16,30 @@ export default defineConfig({
       '~widgets': path.resolve('src/widgets'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@mui') || id.includes('@emotion')) {
+              return 'vendor-mui';
+            }
+            if (id.includes('echarts') || id.includes('zrender')) {
+              return 'vendor-echarts';
+            }
+            if (id.includes('framer-motion')) {
+              return 'vendor-motion';
+            }
+            if (id.includes('swiper')) {
+              return 'vendor-swiper';
+            }
+            if (id.includes('react-dom') || id.includes('react-router-dom') || id.includes('react/')) {
+              return 'vendor-react';
+            }
+          }
+        },
+      },
+    },
+    chunkSizeWarningLimit: 700,
+  },
 });

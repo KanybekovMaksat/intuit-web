@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { Button, InputAdornment, MenuItem, Pagination, TextField } from '@mui/material'
+import { Button, InputAdornment, MenuItem, Pagination, TextField, useMediaQuery, useTheme } from '@mui/material'
 import { Search, X } from 'lucide-react'
 import { DissertationCard, dissertationQueries, dissertationTypes } from '~entities/dissertation'
 import { Loader } from '~shared/ui/loader'
@@ -28,6 +28,8 @@ const initialFilters: dissertationTypes.DissertationFilters = {
 }
 
 export const DissertationDiscussion = () => {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [filters, setFilters] = useState(initialFilters)
   const [searchInput, setSearchInput] = useState('')
   const { data, isLoading, isError, isFetching } = dissertationQueries.useDissertations(filters)
@@ -54,8 +56,8 @@ export const DissertationDiscussion = () => {
   const totalPages = data ? Math.ceil(data.count / PAGE_SIZE) : 0
 
   return (
-    <section id="dissertations" className="py-20 bg-gray-light">
-      <div className="container mx-auto">
+    <section id="dissertations" className="py-12 px-6 sm:px-4 bg-gray-light rounded-2xl my-8">
+      <div className="w-full">
         <div className="mb-10 border-b border-primary/10 pb-6">
           <div className="mb-3 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-green">
             <span className="h-px w-8 bg-green" />
@@ -158,12 +160,19 @@ export const DissertationDiscussion = () => {
         )}
 
         {totalPages > 1 && (
-          <div className="mt-8 flex justify-center">
+          <div className="mt-8 flex justify-center w-full overflow-x-auto py-1">
             <Pagination
               count={totalPages}
               page={filters.page}
               onChange={(_event, page) => setFilters((prev) => ({ ...prev, page }))}
+              size={isMobile ? 'small' : 'medium'}
+              siblingCount={isMobile ? 0 : 1}
+              boundaryCount={1}
               sx={{
+                '& .MuiPagination-ul': {
+                  flexWrap: 'nowrap',
+                  justifyContent: 'center',
+                },
                 '& .MuiPaginationItem-root': { color: '#2A2172' },
                 '& .MuiPaginationItem-root.Mui-selected': {
                   color: 'white',

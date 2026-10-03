@@ -1,7 +1,8 @@
-import { createElement } from 'react'
+import { createElement, lazy } from 'react'
 import { RouteObject } from 'react-router-dom'
-import { TeacherPage } from './teacher-page.ui'
-import { TeacherCv } from './teacher-cv/teacher-cv'
+
+const TeacherPage = lazy(() => import('./teacher-page.ui').then((m) => ({ default: m.TeacherPage })));
+const TeacherCv = lazy(() => import('./teacher-cv/teacher-cv').then((m) => ({ default: m.TeacherCv })));
 
 export const teacherPageRoute: RouteObject = {
   path: `teachers/:slug`,

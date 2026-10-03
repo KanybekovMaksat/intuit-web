@@ -50,7 +50,7 @@ export const StudentsPage = () => {
   ];
 
   return (
-    <Container maxWidth="lg" className="py-10 px-4">
+    <div className="w-full py-10">
       <Schedule />
       <Typography
         variant="h4"
@@ -145,6 +145,6 @@ export const StudentsPage = () => {
         ))}
       </Box>
       {/* <FirstSlider /> */}
-    </Container>
+    </div>
   );
 };

@@ -1,7 +1,8 @@
 import { RouteObject } from 'react-router-dom';
-import { createElement } from 'react';
+import { createElement, lazy } from 'react';
 import { pathKeys } from '~shared/lib/react-router';
-import { EnrollPage } from './enroll-page.ui';
+
+const EnrollPage = lazy(() => import('./enroll-page.ui').then((m) => ({ default: m.EnrollPage })));
 
 export const enrollPageRoute: RouteObject = {
   path: pathKeys.enroll.root(),

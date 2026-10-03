@@ -2,7 +2,9 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { getCookie, removeCookie, setCookie } from 'typescript-cookie';
 
-export const API_URL = import.meta.env.VITE_API_URL;
+const envUrl = (import.meta.env.VITE_API_URL as string | undefined) || 'https://intuit.makalabox.com';
+export const API_URL = envUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
+export const API_BASE_URL = `${API_URL}/api/`;
 
 const AUTH_TOKEN_COOKIE = 'auth_token';
 
@@ -30,7 +32,8 @@ export function clearAuthToken() {
 
 // Создаем экземпляр Axios с настройками по умолчанию
 const apiClient: AxiosInstance = axios.create({
-  baseURL: API_URL,
+  baseURL: API_BASE_URL,
+  timeout: 15000,
 });
 
 // Добавляем перехватчик, который добавляет язык и токен пользователя ко всем запросам

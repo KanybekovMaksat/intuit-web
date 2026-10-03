@@ -12,11 +12,12 @@ import { License } from './ui/License.ui'
 import { NewsList } from '~widgets/news-list'
 
 import { HomeHero } from './ui/Hero.ui'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 import { Title } from '~shared/ui/title'
 import { EventList } from '~widgets/events-list'
 
 export function HomePage() {
+  const { t } = useTranslation()
   return (
     <div>
       <HomeHero />
