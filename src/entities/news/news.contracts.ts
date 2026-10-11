@@ -9,6 +9,7 @@ export const NewsSchema = z.object({
   status: z.string(),
   banner: z.string(),
   category: z.array(z.number()),
+  categories: z.array(z.object({ id: z.number(), slug: z.string(), title: z.string() })).optional(),
   images: z.array(z.number()),
   files: z.array(z.number())
 });

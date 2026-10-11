@@ -16,7 +16,7 @@ export const EventCard = ({ banner, title, slug, createdAt, status }: eventTypes
 
   return (
     <Card
-      className="group relative flex h-full min-h-[420px] w-full cursor-pointer flex-col overflow-hidden rounded-lg border border-primary/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-green/40 hover:shadow-[0_20px_50px_rgba(42,33,114,0.12)]"
+      className="group relative flex h-full min-h-[420px] w-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-none transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_20px_40px_-16px_rgba(42,33,114,0.28)]"
     >
       <Link to={`/news/event/${slug}`} className="absolute inset-0 z-20" />
 
@@ -35,13 +35,13 @@ export const EventCard = ({ banner, title, slug, createdAt, status }: eventTypes
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" />
 
-        <div className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-lg border border-white/40 bg-white/90 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-primary shadow-sm backdrop-blur">
+        <div className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-primary">
           <Calendar size={14} className="text-green" />
           <span>{formattedDate}</span>
         </div>
 
-        {status && (
-          <div className="absolute right-4 top-4 z-10 rounded-lg bg-green px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-lg shadow-green/20">
+        {status && !['active', 'published', 'enabled'].includes(status.trim().toLowerCase()) && (
+          <div className="absolute right-4 top-4 z-10 rounded-full bg-green-dark px-3 py-1 text-xs font-semibold text-white">
             {status}
           </div>
         )}
@@ -50,7 +50,7 @@ export const EventCard = ({ banner, title, slug, createdAt, status }: eventTypes
       <CardContent className="flex flex-grow flex-col p-6">
         <Typography
           variant="h4"
-          className="mb-5 text-left font-semibold leading-tight text-primary transition-colors duration-300 group-hover:text-green"
+          className="mb-5 text-left font-semibold leading-tight text-ink transition-colors duration-300 group-hover:text-primary"
           sx={{ 
             fontSize: '1.25rem',
             display: '-webkit-box',
@@ -62,9 +62,7 @@ export const EventCard = ({ banner, title, slug, createdAt, status }: eventTypes
           {title}
         </Typography>
 
-        <div className="mb-6 h-[2px] w-10 bg-green transition-all duration-300 group-hover:w-16" />
-
-        <div className="mt-auto flex items-center justify-between border-t border-primary/10 pt-5">
+        <div className="mt-auto flex items-center justify-between border-t border-line pt-5">
           <div className="flex items-center gap-2 text-sm font-semibold text-primary/65 transition-all group-hover:text-primary">
             {t('homepage.buttons.viewButton')}
             <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />

@@ -1,57 +1,45 @@
-import { Box, Button, Typography } from '@mui/material'
-import { t } from 'i18next'
-import { BadgeHelp, BookCopy, BookOpen, Compass } from 'lucide-react'
-import { useState } from 'react'
+import { ArrowRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { PageHero, type Crumb } from '~shared/ui/page'
 
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 650,
-  height: 500,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
+interface IntroCardProps {
+  title?: string
+  description?: string
+  crumbs?: Crumb[]
+  /** Show the "help me choose" button that scrolls to the application form. */
+  withAction?: boolean
+  /** Kept for existing call sites; the hero no longer uses a background photo. */
+  img?: string
 }
 
-export const IntroCard = ({ img, description }) => {
+export const IntroCard = ({ title, description, crumbs, withAction }: IntroCardProps) => {
+  const { t } = useTranslation()
+
+  const goToForm = (event: React.MouseEvent) => {
+    const form = document.getElementById('enroll-form')
+    if (form) {
+      event.preventDefault()
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
 
   return (
-    <>
-      <section
-        className=" sm:p-3 border border-[gray] sm:py-6 h-[350px] w-full bg-no-repeat  bg-cover rounded-xl flex  sm:flex-col justify-between p-10 md:bg-right text-left bg-center  "
-        style={{ backgroundImage: `url(${img})` }}
-      >
-        <Box className="flex flex-col justify-between h-[100%]">
-          <div>
-          <Typography
-            variant="body1"
-            className="text-white text-4xl sm:text-2xl mb-4 max-w-[550px] font-bold md:text-center"
+    <PageHero
+      title={title}
+      subtitle={description}
+      crumbs={crumbs}
+      actions={
+        withAction ? (
+          <a
+            href="#enroll-form"
+            onClick={goToForm}
+            className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-white px-6 text-[15px] font-semibold text-primary transition-all duration-200 hover:bg-white/90 active:scale-[0.98]"
           >
-            Институты университета
-          </Typography>
-          <Typography
-            className="text-white  text-md max-w-[550px] font-bold md:text-center"
-          >
-           Откройте для себя все академические направления и выберите то, что подходит именно вам
-          </Typography>
-          </div>
-          <Button
-            variant="contained"
-            size="large"
-            className="bg-blue flex items-center gap-1 shadow-none self-start md:mx-auto"
-          >
-           Помочь с выбором
-           <BadgeHelp />
-          </Button>
-        </Box>
-
-        <BookCopy color='white' size={300} className='sm:hidden opacity-75 relative bottom-[-20px] right-[-80px]' />
-
-
-      </section>
-    </>
+            {t('homepage.hero.helpButton', 'Помочь с выбором')}
+            <ArrowRight size={18} aria-hidden />
+          </a>
+        ) : undefined
+      }
+    />
   )
 }

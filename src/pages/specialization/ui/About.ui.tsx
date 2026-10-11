@@ -1,57 +1,24 @@
-import { Typography, Box } from '@mui/material'
 import { t } from 'i18next'
 import { specializationTypes } from '~entities/specialization'
 import { Title } from '~shared/ui/title'
 
-export const About = ({
-  text,
-  subtext,
-  textPhoto,
-}: specializationTypes.Specialization) => {
+export const About = ({ text, subtext, textPhoto }: specializationTypes.Specialization) => {
   return (
-    <Box
-      className="flex gap-10 my-12 lg:flex-col lg:items-center justify-between"
-      component="section"
-      sx={{
-        alignItems: 'center',
-      }}
-    >
-      <Box
-        sx={{
-          maxWidth: '750px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-        }}
-      >
+    <section className="grid grid-cols-[minmax(0,1fr)_minmax(0,0.7fr)] items-center gap-10 lg:grid-cols-1">
+      <div>
         <Title>{text}</Title>
-        <Typography
-          variant="body1"
-          sx={{
-            fontSize: '1.125rem',
-            color: 'text.secondary',
-            lineHeight: 1.75,
-            textAlign: { xs: 'justify', lg: 'left' },
-          }}
-        >
-          <div dangerouslySetInnerHTML={{ __html: subtext }} />
-        </Typography>
-      </Box>
-      <Box
-        component="img"
-        src={textPhoto}
-        alt={t('specialization.professionPhoto')}
-        sx={{
-          maxWidth: '450px',
-          borderRadius: '16px',
-          maxHeight: '300px',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-          transition: 'transform 0.3s ease',
-          '&:hover': {
-            transform: 'scale(1.05)',
-          },
-        }}
-      />
-    </Box>
+        {subtext && (
+          <div className="prose-muit prose-wide" dangerouslySetInnerHTML={{ __html: subtext }} />
+        )}
+      </div>
+      {textPhoto && (
+        <img
+          src={textPhoto}
+          alt={t('specialization.professionPhoto')}
+          loading="lazy"
+          className="mt-14 w-full rounded-3xl bg-mist object-cover lg:mt-0 lg:max-h-[360px]"
+        />
+      )}
+    </section>
   )
 }

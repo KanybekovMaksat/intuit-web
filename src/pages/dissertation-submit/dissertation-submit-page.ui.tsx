@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, ReactNode, useEffect, useRef, useState } from 'react'
-import { Alert, Breadcrumbs, Button, LinearProgress, TextField, Typography } from '@mui/material'
+import { Alert, Button, LinearProgress, TextField } from '@mui/material'
 import { AxiosError } from 'axios'
 import { CheckCircle2, FileUp, LogIn, RotateCcw, X } from 'lucide-react'
 import { Link as RouterLink, useParams } from 'react-router-dom'
@@ -9,6 +9,7 @@ import { sessionQueries } from '~entities/session'
 import { AuthDialog } from '~features/auth'
 import { pathKeys } from '~shared/lib/react-router'
 import { Loader } from '~shared/ui/loader'
+import { PageHero } from '~shared/ui/page'
 
 const MAX_FILE_MB = 15
 
@@ -76,10 +77,10 @@ function retryableFailure(error: unknown, sentBytes: number): string | null {
   }
   if (!axiosError?.response) {
     const sent = sentBytes ? ` (успели загрузить ${formatSize(sentBytes)})` : ''
-    return `Соединение прервалось${sent}. Проверьте интернет и отправьте повторно — заполненные поля и выбранные файлы сохранены.`
+    return `Соединение прервалось${sent}. Проверьте интернет и отправьте повторно: заполненные поля и выбранные файлы сохранены.`
   }
   if (axiosError.response.status >= 500) {
-    return 'На сервере произошла ошибка при сохранении. Отправьте повторно через минуту — заполненные поля и выбранные файлы сохранены.'
+    return 'На сервере произошла ошибка при сохранении. Отправьте повторно через минуту: заполненные поля и выбранные файлы сохранены.'
   }
   return null
 }
@@ -93,16 +94,16 @@ const UploadProgress = ({ upload, onCancel }: { upload: UploadState; onCancel: (
 
   return (
     <div
-      className="rounded-lg border border-primary/10 bg-white p-4 shadow-sm"
+      className="rounded-2xl border border-line bg-white p-4"
       role="status"
       aria-live="polite"
     >
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-sm">
-        <span className="font-semibold text-primary">
+        <span className="font-semibold text-ink">
           {isSent ? 'Файлы загружены, сервер проверяет документы…' : `Загрузка файлов: ${percent}%`}
         </span>
         {!isSent && (
-          <Button size="small" onClick={onCancel} startIcon={<X size={16} />} className="text-primary">
+          <Button size="small" onClick={onCancel} startIcon={<X size={16} />} className="text-ink-soft">
             Отменить
           </Button>
         )}
@@ -113,7 +114,7 @@ const UploadProgress = ({ upload, onCancel }: { upload: UploadState; onCancel: (
         className="h-2 rounded-full"
       />
       {!isSent && (
-        <div className="mt-2 text-xs text-black/60">
+        <div className="mt-2 text-xs text-ink-soft">
           {upload.loaded ? formatSize(upload.loaded) : '0 КБ'} из {formatSize(upload.total)}
           {speed > 0 && ` · ${formatSize(speed)}/с`}
           {secondsLeft !== null && ` · осталось ~${formatDuration(secondsLeft)}`}
@@ -124,13 +125,13 @@ const UploadProgress = ({ upload, onCancel }: { upload: UploadState; onCancel: (
 }
 
 const statusNotice: Record<string, { text: string; className: string }> = {
-  pending: { text: 'Работа на проверке у модератора.', className: 'bg-primary/5 text-primary' },
+  pending: { text: 'Работа на проверке у модератора.', className: 'bg-gray-light text-ink' },
   draft: { text: 'Работа возвращена на доработку.', className: 'bg-[#fff4e5] text-[#8a4b00]' },
 }
 
 const Section = ({ title, children }: { title: string; children: ReactNode }) => (
-  <section className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm sm:p-4">
-    <h2 className="mb-4 text-lg font-semibold text-primary">{title}</h2>
+  <section className="rounded-3xl border border-line bg-white p-6 sm:p-4">
+    <h2 className="mb-4 text-lg font-semibold text-ink">{title}</h2>
     <div className="flex flex-col gap-4">{children}</div>
   </section>
 )
@@ -152,7 +153,7 @@ const FileField = ({ label, file, current, error, required, onChange }: FileFiel
     if (!selected.name.toLowerCase().endsWith('.pdf')) {
       onChange(null, 'Загрузите файл в формате PDF.')
     } else if (selected.size > MAX_FILE_MB * 1024 * 1024) {
-      onChange(null, `Максимальный размер файла — ${MAX_FILE_MB} МБ.`)
+      onChange(null, `Максимальный размер файла: ${MAX_FILE_MB} МБ.`)
     } else {
       onChange(selected)
     }
@@ -160,16 +161,16 @@ const FileField = ({ label, file, current, error, required, onChange }: FileFiel
 
   return (
     <div>
-      <div className="mb-1 text-sm font-semibold text-black/70">
+      <div className="mb-1 text-sm font-semibold text-ink">
         {label} {required && <span className="text-[#d32f2f]">*</span>}
       </div>
       <label
-        className={`flex cursor-pointer items-center gap-3 rounded-lg border border-dashed p-4 transition-colors hover:border-green hover:bg-green/5 ${
-          error ? 'border-[#d32f2f]' : 'border-primary/25'
+        className={`flex cursor-pointer items-center gap-3 rounded-2xl border border-dashed p-4 transition-colors hover:border-primary hover:bg-gray-light ${
+          error ? 'border-[#d32f2f]' : 'border-gray'
         }`}
       >
-        <FileUp size={22} className="shrink-0 text-green" />
-        <span className="min-w-0 flex-1 truncate text-sm text-black/70">
+        <FileUp size={22} className="shrink-0 text-green-dark" />
+        <span className="min-w-0 flex-1 truncate text-sm text-ink-soft">
           {file
             ? `${file.name} (${formatSize(file.size)})`
             : current
@@ -308,39 +309,22 @@ export const DissertationSubmitPage = () => {
   const pageTitle = editId ? 'Исправление диссертации' : 'Размещение диссертации'
 
   const header = (
-    <div
-      className="rounded-2xl p-5 flex flex-col gap-4"
-      style={{
-        background: 'linear-gradient(200deg, rgba(42,33,115,1) 0%, rgba(0,149,111,1) 100%)',
-      }}
-    >
-      <Breadcrumbs aria-label="breadcrumb" className="text-[white]">
-        <RouterLink to="/" className="text-white hover:underline">
-          Главная
-        </RouterLink>
-        <RouterLink to={`${phdUrl}#dissertations`} className="text-white hover:underline">
-          Общественное обсуждение
-        </RouterLink>
-      </Breadcrumbs>
-      <Typography variant="h1" className="text-[white] font-semibold text-[36px] md:text-[26px]">
-        {pageTitle}
-      </Typography>
-      <p className="max-w-[720px] text-white/80">
-        После отправки работу проверит модератор Высшей школы докторантуры. Опубликованная
-        диссертация появится в разделе общественного обсуждения. Документы на сайте доступны
-        только для просмотра.
-      </p>
-    </div>
+    <PageHero
+      compact
+      title={pageTitle}
+      subtitle="После отправки работу проверит модератор Высшей школы докторантуры. Опубликованная диссертация появится в разделе общественного обсуждения. Документы на сайте доступны только для просмотра."
+      crumbs={[{ label: 'Общественное обсуждение', to: `${phdUrl}#dissertations` }]}
+    />
   )
 
   if (isUserLoading) return <Loader />
 
   if (!user) {
     return (
-      <div className="my-10">
+      <div className="mb-20">
         {header}
-        <div className="mt-8 flex items-center justify-between gap-4 rounded-lg border border-primary/10 bg-white p-6 shadow-sm md:flex-col md:items-start">
-          <p className="text-black/70">
+        <div className="mt-8 flex items-center justify-between gap-4 rounded-3xl border border-line bg-white p-6 md:flex-col md:items-start">
+          <p className="text-ink-soft">
             Чтобы разместить диссертацию, войдите или зарегистрируйтесь на сайте. ФИО докторанта
             будет взято из вашего профиля.
           </p>
@@ -348,7 +332,7 @@ export const DissertationSubmitPage = () => {
             variant="contained"
             startIcon={<LogIn size={18} />}
             onClick={() => setAuthOpen(true)}
-            className="shrink-0 bg-primary shadow-none hover:bg-green"
+            className="shrink-0 bg-green-dark shadow-none hover:bg-primary"
           >
             Войти или зарегистрироваться
           </Button>
@@ -360,12 +344,12 @@ export const DissertationSubmitPage = () => {
 
   if (savedId) {
     return (
-      <div className="my-10">
+      <div className="mb-20">
         {header}
-        <div className="mt-8 flex flex-col items-start gap-4 rounded-lg border border-green/30 bg-white p-6 shadow-sm">
-          <CheckCircle2 size={40} className="text-green" />
-          <h2 className="text-2xl font-semibold text-primary">Работа отправлена на проверку</h2>
-          <p className="text-black/70">
+        <div className="mt-8 flex flex-col items-start gap-4 rounded-3xl border border-green/30 bg-white p-6">
+          <CheckCircle2 size={40} className="text-green-dark" />
+          <h2 className="text-2xl font-semibold text-ink">Работа отправлена на проверку</h2>
+          <p className="text-ink-soft">
             Статус и комментарии модератора видны в блоке «Мои диссертации» на странице
             докторантуры. После публикации начнётся общественное обсуждение.
           </p>
@@ -374,7 +358,7 @@ export const DissertationSubmitPage = () => {
               component={RouterLink}
               to={`${phdUrl}#dissertations`}
               variant="contained"
-              className="bg-primary shadow-none hover:bg-green"
+              className="bg-green-dark shadow-none hover:bg-primary"
             >
               К разделу докторантуры
             </Button>
@@ -389,19 +373,19 @@ export const DissertationSubmitPage = () => {
 
   if (editId && isSubmissionLoading) return <Loader />
   if (editId && isSubmissionError) {
-    return <div className="my-20 text-center text-primary/70">Работа не найдена.</div>
+    return <div className="my-20 text-center text-ink-soft">Работа не найдена.</div>
   }
   const isLocked = submission && !['draft', 'pending'].includes(submission.status)
 
   return (
-    <div className="my-10">
+    <div className="mb-20">
       <Helmet>
         <title>{pageTitle}</title>
       </Helmet>
       {header}
 
       {submission && statusNotice[submission.status] && (
-        <div className={`mt-6 rounded-lg p-4 ${statusNotice[submission.status].className}`}>
+        <div className={`mt-6 rounded-2xl p-4 ${statusNotice[submission.status].className}`}>
           <div className="font-semibold">{statusNotice[submission.status].text}</div>
           {submission.moderatorComment && (
             <p className="mt-1 whitespace-pre-line text-sm">
@@ -412,14 +396,14 @@ export const DissertationSubmitPage = () => {
       )}
 
       {isLocked ? (
-        <div className="mt-8 rounded-lg bg-black/5 p-6 text-black/70">
+        <div className="mt-8 rounded-3xl bg-gray-light p-6 text-ink-soft">
           Работа уже опубликована. Изменения вносит администратор.
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-6" noValidate>
           <Section title="Сведения о диссертации">
-            <div className="text-sm text-black/60">
-              Докторант: <b className="text-primary">{user.fullName}</b> (из профиля)
+            <div className="text-sm text-ink-soft">
+              Докторант: <b className="text-ink">{user.fullName}</b> (из профиля)
             </div>
             <TextField
               label="Тема диссертации"
@@ -499,7 +483,7 @@ export const DissertationSubmitPage = () => {
               variant="contained"
               size="large"
               disabled={save.isPending}
-              className="bg-primary shadow-none hover:bg-green disabled:bg-primary/40 disabled:text-white"
+              className="bg-green-dark shadow-none hover:bg-primary disabled:bg-primary/40 disabled:text-white"
             >
               {save.isPending
                 ? 'Отправка…'

@@ -1,1 +1,1 @@
-export { Title } from './title.ui'
+export { Title, SectionHeader } from './title.ui'

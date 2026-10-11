@@ -29,7 +29,7 @@ export const ArticleList = () => {
         <>
           {isMobile ? (
             <Swiper
-              className="py-10 px-1 diplom-list"
+              className="px-1 pb-12 pt-4 diplom-list"
               modules={[Pagination]}
               pagination={{ clickable: true }}
               breakpoints={{
@@ -48,13 +48,13 @@ export const ArticleList = () => {
               }}
             >
               {latestArticles.map((article) => (
-                <SwiperSlide key={article.id}>
+                <SwiperSlide key={article.id} className="!h-auto !items-stretch !bg-transparent">
                   <ArticleCard article={article} />
                 </SwiperSlide>
               ))}
             </Swiper>
           ) : (
-            <div className="flex justify-between gap-5">
+            <div className="grid grid-cols-4 gap-5 xll:grid-cols-2">
               {latestArticles.map((article) => (
                 <ArticleCard article={article} key={article.id} />
               ))}

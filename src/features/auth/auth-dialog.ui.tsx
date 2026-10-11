@@ -70,21 +70,22 @@ export const AuthDialog = ({ open, onClose, description }: AuthDialogProps) => {
       maxWidth="xs"
       container={() => document.getElementById('root')}
       // Выше фиксированной шапки сайта (z-index 90000)
-      sx={{ zIndex: 100000 }}
+      sx={{ zIndex: 100000, '& .MuiDialog-paper': { borderRadius: '24px' } }}
     >
-      <DialogTitle className="flex items-center justify-between pb-0 font-semibold text-primary">
+      <DialogTitle className="flex items-center justify-between pb-0 font-semibold text-ink">
         {mode === 'login' ? 'Вход' : 'Регистрация'}
         <IconButton onClick={onClose} aria-label="Закрыть">
           <X size={20} />
         </IconButton>
       </DialogTitle>
       <DialogContent>
-        {description && <p className="mb-2 text-sm text-black/60">{description}</p>}
+        {description && <p className="mb-2 text-sm text-ink-soft">{description}</p>}
         <Tabs
           value={mode}
           onChange={(_, value: Mode) => switchMode(value)}
           variant="fullWidth"
           className="mb-4"
+          TabIndicatorProps={{ style: { backgroundColor: '#2A2172' } }}
         >
           <Tab value="login" label="Вход" />
           <Tab value="register" label="Регистрация" />
@@ -132,7 +133,7 @@ export const AuthDialog = ({ open, onClose, description }: AuthDialogProps) => {
             variant="contained"
             size="large"
             disabled={mutation.isPending}
-            className="bg-primary shadow-none hover:bg-green disabled:bg-primary/40 disabled:text-white"
+            className="bg-green-dark shadow-none hover:bg-primary disabled:bg-primary/40 disabled:text-white"
           >
             {mode === 'login' ? 'Войти' : 'Зарегистрироваться'}
           </Button>

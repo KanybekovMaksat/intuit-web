@@ -2,12 +2,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { setLanguage, getLanguage } from '~shared/lib/i18n/i18nHelper'
 import IntuitLogo from '../../assets/intuit-logo.png'
-import { Link, useLocation } from 'react-router-dom'
-import { IconButton } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
-import CloseIcon from '@mui/icons-material/Close'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDownIcon } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence, LayoutGroup, useReducedMotion } from 'framer-motion'
+import { ChevronDownIcon, ChevronRight, Menu, X, ArrowRight } from 'lucide-react'
 import { FlagEn, FlagRu, FlagKg } from './flags'
 
 const languageMap = {
@@ -16,11 +13,21 @@ const languageMap = {
   kg: { shortLabel: 'KG', label: 'Кыргызча', flag: <FlagKg /> },
 }
 
+/** A section stays highlighted on its nested routes (/institutes/slug keeps "Институты" active). */
+const isPathActive = (pathname: string, link: string) => {
+  const base = link.replace(/\/+$/, '')
+  return pathname === link || pathname === base || pathname.startsWith(`${base}/`)
+}
+
 export const Header: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [hovered, setHovered] = useState<number | null>(null)
+  const [scrolled, setScrolled] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const location = useLocation()
+  const navigate = useNavigate()
+  const reduce = useReducedMotion()
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
@@ -30,7 +37,7 @@ export const Header: React.FC = () => {
     }
   }, [i18n])
 
-  // Close dropdown when clicking outside
+  // Close language dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -40,6 +47,56 @@ export const Header: React.FC = () => {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  // Scrolled state via IntersectionObserver on a 1px sentinel (no scroll listener)
+  useEffect(() => {
+    const sentinel = document.createElement('div')
+    sentinel.setAttribute('aria-hidden', 'true')
+    sentinel.style.cssText =
+      'position:absolute;top:0;left:0;width:1px;height:8px;pointer-events:none;visibility:hidden'
+    document.body.prepend(sentinel)
+    const observer = new IntersectionObserver(([entry]) => setScrolled(!entry.isIntersecting))
+    observer.observe(sentinel)
+    return () => {
+      observer.disconnect()
+      sentinel.remove()
+    }
+  }, [])
+
+  // Route change closes the mobile sheet
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+    setIsDropdownOpen(false)
+  }, [location.pathname])
+
+  // Mobile sheet: Escape closes, page does not scroll behind it
+  useEffect(() => {
+    if (!isMobileMenuOpen) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsMobileMenuOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = previous
+    }
+  }, [isMobileMenuOpen])
+
+  // Apply: scroll to the form when this page has one, otherwise go home and scroll there
+  const goToApply = (event: React.MouseEvent) => {
+    event.preventDefault()
+    setIsMobileMenuOpen(false)
+    const form = document.getElementById('enroll-form')
+    if (form) {
+      form.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' })
+    } else {
+      navigate('/', { state: { scrollTo: 'enroll-form' } })
+    }
+  }
+
+  const applyLabel = t('header.apply', 'Подать заявку')
 
   const handleLanguageChange = (lng: string) => {
     setLanguage(lng)
@@ -71,19 +128,24 @@ export const Header: React.FC = () => {
     },
   ]
 
+  const activeIndex = headerItems.findIndex((item) => isPathActive(location.pathname, item.link))
+  const pillIndex = hovered ?? activeIndex
+
   const LanguageSelector = ({ isMobile = false }: { isMobile?: boolean }) => (
-    <div className="relative border py-1 rounded-full border-gray px-3">
+    <div className="relative">
       <button
         type="button"
-        className="flex items-center text-black text-sm font-medium hover:text-gray-600 focus:outline-none"
+        className="flex h-10 items-center gap-1.5 rounded-full border border-line bg-white px-3 text-sm font-medium text-ink transition-colors hover:border-primary/40"
         onClick={() => setIsDropdownOpen((prev) => !prev)}
         aria-label="Выбрать язык"
+        aria-expanded={isDropdownOpen}
+        aria-haspopup="listbox"
       >
-        <span className="mr-1.5 flex items-center">{currentLanguage.flag}</span>
+        <span className="flex items-center">{currentLanguage.flag}</span>
         <span>{isMobile ? currentLanguage.shortLabel : currentLanguage.label}</span>
         <ChevronDownIcon
           size={16}
-          className={`ml-1.5 text-black/60 transition-transform duration-200 ${
+          className={`text-ink-soft transition-transform duration-200 ${
             isDropdownOpen ? 'rotate-180' : ''
           }`}
         />
@@ -91,21 +153,19 @@ export const Header: React.FC = () => {
       <AnimatePresence>
         {isDropdownOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
+            initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
+            exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 border border-gray-200 top-full mt-2 min-w-[130px] bg-white text-gray-800 rounded-lg shadow-xl z-[99999] p-1.5"
+            className="absolute right-0 top-full z-[1010] mt-2 min-w-[150px] rounded-2xl border border-line bg-white p-1.5 shadow-[0_16px_40px_-12px_rgba(42,33,114,0.25)]"
           >
-            <ul className="space-y-1">
+            <ul className="space-y-0.5" role="listbox">
               {Object.entries(languageMap).map(([key, { label, shortLabel, flag }]) => (
-                <li key={key}>
+                <li key={key} role="option" aria-selected={i18n.language === key}>
                   <button
                     type="button"
-                    className={`flex items-center gap-2 w-full px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
-                      i18n.language === key
-                        ? 'bg-[#00956F] text-white'
-                        : 'text-gray-700 hover:bg-gray-100'
+                    className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
+                      i18n.language === key ? 'bg-primary text-white' : 'text-ink hover:bg-mist'
                     }`}
                     onClick={() => handleLanguageChange(key)}
                   >
@@ -122,94 +182,154 @@ export const Header: React.FC = () => {
   )
 
   return (
-    <header className="bg-white/95 backdrop-blur-sm fixed top-0 left-0 w-full z-[9000] border-b border-gray/50 transition-all">
-      <div className="w-full px-6 md:px-3 py-2.5">
-        <nav className="flex items-center justify-between gap-3">
-          {/* Logo & Brand */}
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center gap-2 mr-4 group">
-              <img
-                src={IntuitLogo}
-                alt="МУИТ Логотип"
-                className="h-[46px] w-auto transition-transform group-hover:scale-105"
-              />
-              <p className="text-[11px] font-bold leading-[13px] max-w-[110px] text-[#2A2172]">
-                {t('degreePage.header.universityTitle', 'Международный Университет Инновационных Технологий')}
-              </p>
-            </Link>
+    <header
+      className={`fixed left-0 top-0 z-[1000] w-full border-b bg-white/90 backdrop-blur-md transition-[box-shadow,border-color] duration-300 ${
+        scrolled
+          ? 'border-line shadow-[0_10px_30px_-20px_rgba(42,33,114,0.4)]'
+          : 'border-transparent'
+      }`}
+    >
+      <div className="mx-auto flex h-16 w-full max-w-[1600px] items-center justify-between gap-4 px-6 md:px-3">
+        <nav className="flex min-w-0 items-center gap-6" aria-label="Main">
+          <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="МУИТ, главная">
+            <img src={IntuitLogo} alt="" className="h-10 w-auto" />
+            <span className="max-w-[120px] text-[11px] font-semibold leading-[13px] text-primary lg:max-w-[150px] md:hidden">
+              {t('degreePage.header.universityTitle', 'Международный Университет Инновационных Технологий')}
+            </span>
+          </Link>
 
-            {/* Desktop Navigation Links */}
-            <div className="hidden xl-max:flex lg:hidden gap-1.5 items-center">
+          {/* Desktop links: one highlight pill slides to the hovered or current item */}
+          <LayoutGroup id="header-nav">
+            <ul
+              className="hidden items-center gap-0.5 xl-max:flex lg:hidden"
+              onMouseLeave={() => setHovered(null)}
+            >
               {headerItems.map((item, index) => {
-                const isActive = location.pathname === item.link
+                const isActive = index === activeIndex
                 return (
-                  <Link
-                    key={index}
-                    to={item.link}
-                    className={`text-xs font-medium rounded-full px-3 py-1.5 transition-all duration-200 ${
-                      isActive
-                        ? 'bg-[#2A2172] text-white shadow-sm'
-                        : 'text-gray-700 hover:bg-[#00956F] hover:text-white border border-transparent hover:border-transparent'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
+                  <li key={item.link} className="relative">
+                    <Link
+                      to={item.link}
+                      aria-current={isActive ? 'page' : undefined}
+                      onMouseEnter={() => setHovered(index)}
+                      onFocus={() => setHovered(index)}
+                      onBlur={() => setHovered(null)}
+                      className={`relative block whitespace-nowrap rounded-full px-3 py-2 text-[13px] font-medium transition-colors duration-200 ${
+                        isActive || hovered === index ? 'text-primary' : 'text-ink-soft'
+                      }`}
+                    >
+                      {pillIndex === index && (
+                        <motion.span
+                          layoutId="header-pill"
+                          aria-hidden
+                          className={`absolute inset-0 rounded-full ${
+                            isActive && hovered === null ? 'bg-primary/[0.09]' : 'bg-mist'
+                          }`}
+                          transition={
+                            reduce
+                              ? { duration: 0 }
+                              : { type: 'spring', stiffness: 420, damping: 36 }
+                          }
+                        />
+                      )}
+                      <span className="relative">{item.label}</span>
+                    </Link>
+                  </li>
                 )
               })}
-            </div>
-          </div>
-
-          {/* Right Controls: Language & Mobile Toggle */}
-          <div className="flex items-center gap-3" ref={dropdownRef}>
-            {/* Desktop Language Selector */}
-            <div className="hidden lg:block">
-              <LanguageSelector isMobile={true} />
-            </div>
-            <div className="lg:hidden">
-              <LanguageSelector isMobile={false} />
-            </div>
-
-            {/* Mobile Hamburger Button */}
-            <div className="hidden lg:block">
-              <IconButton
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Меню"
-                className="!text-[#2A2172]"
-              >
-                {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
-              </IconButton>
-            </div>
-          </div>
+            </ul>
+          </LayoutGroup>
         </nav>
+
+        <div className="flex shrink-0 items-center gap-2" ref={dropdownRef}>
+          <a
+            href="/#enroll-form"
+            onClick={goToApply}
+            className="group hidden h-10 items-center gap-1.5 whitespace-nowrap rounded-full bg-primary px-5 text-sm font-semibold text-white transition-all duration-200 hover:bg-ink active:scale-[0.98] xl-max:inline-flex"
+          >
+            {applyLabel}
+            <ArrowRight
+              size={16}
+              className="transition-transform duration-200 group-hover:translate-x-0.5"
+            />
+          </a>
+          <div className="hidden lg:block">
+            <LanguageSelector isMobile={true} />
+          </div>
+          <div className="lg:hidden">
+            <LanguageSelector isMobile={false} />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
+            className="hidden h-10 w-10 items-center justify-center rounded-full border border-line bg-white text-primary transition-colors hover:border-primary/40 lg:flex"
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Drawer Navigation */}
+      {/* Mobile and tablet sheet */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="hidden lg:block bg-white border-t border-gray/40 shadow-lg px-4 py-4"
-          >
-            <div className="flex flex-col space-y-2">
-              {headerItems.map((item, index) => (
-                <Link
-                  key={index}
-                  to={item.link}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`text-sm font-medium py-2 px-3 rounded-lg transition-colors ${
-                    location.pathname === item.link
-                      ? 'bg-[#2A2172] text-white'
-                      : 'text-gray-800 hover:bg-gray-100'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </motion.div>
+          <>
+            <motion.button
+              type="button"
+              aria-label="Закрыть меню"
+              onClick={() => setIsMobileMenuOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-x-0 bottom-0 top-16 hidden cursor-default bg-ink/45 backdrop-blur-[2px] lg:block"
+            />
+            <motion.nav
+              id="mobile-menu"
+              aria-label="Mobile"
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="relative hidden max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-white px-4 pb-6 pt-3 shadow-[0_24px_40px_-24px_rgba(42,33,114,0.4)] lg:block"
+            >
+              <ul className="flex flex-col">
+                {headerItems.map((item, index) => {
+                  const isActive = index === activeIndex
+                  return (
+                    <li key={item.link} className="border-b border-line last:border-b-0">
+                      <Link
+                        to={item.link}
+                        aria-current={isActive ? 'page' : undefined}
+                        className={`flex min-h-[52px] items-center justify-between gap-3 rounded-xl px-3 text-base font-medium transition-colors active:bg-mist ${
+                          isActive ? 'text-primary' : 'text-ink'
+                        }`}
+                      >
+                        <span className="flex items-center gap-3">
+                          {isActive && (
+                            <span aria-hidden className="h-5 w-1 rounded-full bg-green" />
+                          )}
+                          {item.label}
+                        </span>
+                        <ChevronRight size={18} className="text-ink-soft" />
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+              <a
+                href="/#enroll-form"
+                onClick={goToApply}
+                className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary text-[15px] font-semibold text-white transition-all active:scale-[0.98]"
+              >
+                {applyLabel}
+                <ArrowRight size={18} />
+              </a>
+            </motion.nav>
+          </>
         )}
       </AnimatePresence>
     </header>

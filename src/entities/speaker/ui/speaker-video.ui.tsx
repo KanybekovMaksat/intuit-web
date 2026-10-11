@@ -1,72 +1,42 @@
-import { Box, Button, Typography } from '@mui/material'
-import { PlayCircleFilledRounded } from '@mui/icons-material/'
+import { Play } from 'lucide-react'
 import { MaterialModal } from '~shared/ui/modal'
 import { useState } from 'react'
 
-export const SpeakerVideo = ({ name, description, preview, videoUrl }) => {
+export const SpeakerVideo = ({ name, description, preview, videoUrl }: any) => {
   const [open, setOpen] = useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+
   return (
     <>
-      <Box
-        className="flex flex-col justify-between bg-cover bg-no-repeat bg-center rounded-2xl "
-        sx={{
-          backgroundImage: `url("${preview}")`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '281px', // Высота соответствует соотношению 16:9
-          cursor: 'pointer',
-          position: 'relative',
-        }}
-        onClick={handleOpen} // Используем handleOpen из пропсов
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-label={name}
+        className="group relative block h-[320px] w-full overflow-hidden rounded-2xl bg-primary text-left"
       >
-        <Button
-          onClick={(e) => {
-            e.stopPropagation()
-            handleOpen() // Используем handleOpen из пропсов
-          }}
-          sx={{
-            position: 'absolute',
-            top: 8,
-            right: 8,
-            backgroundColor: 'rgba(255, 255, 255, 0.8)',
-            borderRadius: '50%',
-          }}
-        >
-          <PlayCircleFilledRounded className="text-green" fontSize="large" />
-        </Button>
-        <Box
-          className="backdrop-blur-md p-3"
-          sx={{
-            backgroundColor: 'rgba(255, 255, 255, 0.3)',
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-          }}
-        >
-          <Typography
-            variant="body1"
-            className="font-bold"
-            sx={{ color: 'black' }}
-          >
-            {name}
-          </Typography>
-          <Typography
-            variant="body2"
-            className="font-medium"
-            sx={{ color: 'black' }}
-          >
-            {description}
-          </Typography>
-        </Box>
-      </Box>
+        <img
+          src={preview}
+          alt=""
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
+
+        <span className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full bg-white text-primary transition-transform duration-200 group-hover:scale-110">
+          <Play size={18} fill="currentColor" />
+        </span>
+
+        <div className="absolute inset-x-0 bottom-0 p-4">
+          <p className="text-[15px] font-semibold leading-snug text-white">{name}</p>
+          <p className="mt-1 text-[13px] text-white/80">{description}</p>
+        </div>
+      </button>
       <MaterialModal
         videoUrl={videoUrl}
-        handleClose={handleClose}
+        handleClose={() => setOpen(false)}
         open={open}
-      ></MaterialModal>
+        title={name}
+        subtitle={description}
+      />
     </>
   )
 }

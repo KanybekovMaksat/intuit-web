@@ -1,76 +1,56 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Button, Typography } from '@mui/material';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
-import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { ArrowRight, GraduationCap, CalendarDays } from 'lucide-react'
 
 export const NotFoundPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4 py-16">
-      <div className="relative mb-6">
-        <span className="text-[120px] md:text-[80px] font-black text-[#2A2172]/10 leading-none select-none">
-          404
-        </span>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-5xl md:text-3xl font-extrabold text-[#2A2172]">
-            404
-          </span>
-        </div>
-      </div>
-
-      <Typography
-        variant="h4"
-        component="h1"
-        className="font-bold text-[#2A2172] text-2xl md:text-xl mb-3"
+    <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 py-16 text-center">
+      <p
+        aria-hidden
+        className="select-none text-[9rem] font-semibold leading-none tracking-tighter text-primary/15 md:text-[6rem]"
       >
+        404
+      </p>
+
+      <h1 className="-mt-4 text-3xl font-semibold tracking-tight text-ink md:text-2xl">
         {t('errors.pageNotFound', 'Страница не найдена')}
-      </Typography>
+      </h1>
 
-      <Typography
-        variant="body1"
-        className="text-gray-600 max-w-[500px] mb-8 text-sm md:text-base leading-relaxed"
-      >
+      <p className="mt-4 max-w-[48ch] text-base leading-relaxed text-ink-soft">
         {t(
           'errors.pageNotFoundDesc',
           'К сожалению, запрашиваемая страница перемещена или не существует. Проверьте правильность адреса или воспользуйтесь разделами ниже.'
         )}
-      </Typography>
+      </p>
 
-      <div className="flex flex-wrap gap-3 justify-center mb-10">
-        <Link to="/">
-          <Button
-            variant="contained"
-            startIcon={<HomeRoundedIcon />}
-            className="!bg-[#00956F] hover:!bg-[#007f5e] !text-white !font-semibold !px-6 !py-2.5 !rounded-lg !capitalize"
-          >
-            {t('errors.goHome', 'На главную')}
-          </Button>
+      <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <Link
+          to="/"
+          className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-green-dark px-6 text-[15px] font-semibold text-white transition-all duration-200 hover:bg-primary active:scale-[0.98]"
+        >
+          {t('errors.goHome', 'На главную')}
+          <ArrowRight size={18} aria-hidden />
         </Link>
-        <Link to="/colleges">
-          <Button
-            variant="outlined"
-            startIcon={<SchoolRoundedIcon />}
-            className="!border-[#2A2172] !text-[#2A2172] hover:!bg-[#2A2172]/5 !font-semibold !px-6 !py-2.5 !rounded-lg !capitalize"
-          >
-            {t('errors.colleges', 'Направления')}
-          </Button>
+        <Link
+          to="/colleges"
+          className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border border-line bg-white px-6 text-[15px] font-semibold text-ink transition-colors duration-200 hover:border-primary/40"
+        >
+          <GraduationCap size={18} aria-hidden />
+          {t('errors.colleges', 'Направления')}
         </Link>
-        <Link to="/schedule">
-          <Button
-            variant="outlined"
-            startIcon={<CalendarMonthRoundedIcon />}
-            className="!border-[#2A2172] !text-[#2A2172] hover:!bg-[#2A2172]/5 !font-semibold !px-6 !py-2.5 !rounded-lg !capitalize"
-          >
-            {t('errors.schedule', 'Расписание')}
-          </Button>
+        <Link
+          to="/schedule"
+          className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border border-line bg-white px-6 text-[15px] font-semibold text-ink transition-colors duration-200 hover:border-primary/40"
+        >
+          <CalendarDays size={18} aria-hidden />
+          {t('errors.schedule', 'Расписание')}
         </Link>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NotFoundPage;
+export default NotFoundPage

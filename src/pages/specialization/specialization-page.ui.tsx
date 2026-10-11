@@ -15,40 +15,39 @@ type RouteObject = {
 
 export const SpecializationPage = () => {
   const { slug } = useParams<RouteObject>()
-
-  if (!slug) {
-    return (
-      <div>
-        {t('specialization.invalidAddress')} {slug}
-      </div>
-    )
-  }
   const {
     data: specializationData,
     isLoading,
     isSuccess,
     isError,
-  } = specializationQueries.useGetSpecialization(slug)
+  } = specializationQueries.useGetSpecialization(slug || '')
+
+  if (!slug) {
+    return (
+      <div className="py-20 text-center text-ink-soft">
+        {t('specialization.invalidAddress')}
+      </div>
+    )
+  }
 
   if (isLoading) {
     return <Loader />
   }
 
   if (isError) {
-    return <div>{t('loading.error')}</div>
+    return <div className="py-20 text-center text-ink-soft">{t('loading.error')}</div>
   }
-  if (isSuccess) {
-    return (
-      <div className="my-5">
-        <SpecializationBanner {...specializationData.data} />
-        <About {...specializationData.data} />
-        {/* <ProgramBlocks {...specializationData.data} /> */}
-        <SkillsBlock {...specializationData.data} />
-        {/* <ProgramAccordion {...specializationData.data} /> */}
-        <CareerBlock {...specializationData.data} />
-        <EducationForm />
-        <EnrollForm />
-      </div>
-    )
-  }
+
+  if (!isSuccess) return null
+
+  return (
+    <div className="mb-10">
+      <SpecializationBanner {...specializationData.data} />
+      <About {...specializationData.data} />
+      <SkillsBlock {...specializationData.data} />
+      <CareerBlock {...specializationData.data} />
+      <EducationForm />
+      <EnrollForm />
+    </div>
+  )
 }

@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material'
 import { speakerQueries, SpeakerVideo } from '~entities/speaker'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Scrollbar } from 'swiper/modules'
@@ -6,7 +5,9 @@ import 'swiper/css'
 import 'swiper/css/scrollbar'
 import './index.css'
 import { t } from 'i18next'
-import { Title } from '~shared/ui/title'
+import { SectionHeader } from '~shared/ui/title'
+import { Link } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
 import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 
@@ -51,7 +52,20 @@ export const SpeakerVideoList: React.FC<SpeakerVideoListProps> = ({
 
   return (
     <>
-      <Title>{t('reviews.studentReviews')}</Title>
+      <div className="mt-14">
+        <SectionHeader
+          title={t('reviews.studentReviews')}
+          action={
+            <Link
+              to="/reviews"
+              className="inline-flex h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-line bg-white px-5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
+            >
+              {t('reviews.allReviews', 'Все отзывы')}
+              <ArrowRight size={16} aria-hidden />
+            </Link>
+          }
+        />
+      </div>
 
       <Swiper
         className="py-10 pointer"

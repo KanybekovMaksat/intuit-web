@@ -62,7 +62,7 @@ export const MessageForm = ({
       {mutation.isError && <Alert severity="error">{getApiError(mutation.error)}</Alert>}
       <div className="flex justify-end gap-2">
         {onDone && (
-          <Button onClick={onDone} className="text-primary/70">
+          <Button onClick={onDone} className="text-ink-soft">
             Отмена
           </Button>
         )}
@@ -70,7 +70,7 @@ export const MessageForm = ({
           type="submit"
           variant="contained"
           disabled={mutation.isPending || text.trim().length < 3}
-          className="bg-primary shadow-none hover:bg-green disabled:bg-primary/40 disabled:text-white"
+          className="bg-green-dark shadow-none hover:bg-primary disabled:bg-primary/40 disabled:text-white"
         >
           {submitLabel}
         </Button>
@@ -82,30 +82,30 @@ export const MessageForm = ({
 const MessageBubble = ({ message }: { message: dissertationTypes.DiscussionMessage }) => (
   <div
     id={`message-${message.id}`}
-    className={`rounded-lg p-4 scroll-mt-28 ${
+    className={`rounded-2xl p-4 scroll-mt-28 ${
       message.isDoctoralStudent
-        ? 'border border-green/30 bg-green/5'
-        : 'border border-primary/10 bg-white'
+        ? 'border border-green/30 bg-green/10'
+        : 'border border-line bg-white'
     }`}
   >
     <div className="mb-2 flex flex-wrap items-center gap-2 text-sm">
-      <span className="font-semibold text-primary">{message.author.fullName}</span>
+      <span className="font-semibold text-ink">{message.author.fullName}</span>
       {message.isDoctoralStudent && (
-        <span className="rounded-md bg-green px-2 py-0.5 text-xs font-semibold text-white">
+        <span className="rounded-full bg-green-dark px-2.5 py-0.5 text-xs font-semibold text-white">
           Докторант
         </span>
       )}
       {message.isMine && (
-        <span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+        <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
           Вы
         </span>
       )}
-      <span className="text-xs text-black/40">
+      <span className="text-xs text-ink-soft">
         {dissertationLib.formatDateTime(message.createdAt)}
       </span>
     </div>
-    {/* Текст выводится как обычный текст — React экранирует HTML */}
-    <p className="whitespace-pre-line break-words text-[15px] leading-relaxed text-black/80">
+    {/* Текст выводится как обычный текст: React экранирует HTML */}
+    <p className="whitespace-pre-line break-words text-[15px] leading-relaxed text-ink">
       {message.text}
     </p>
   </div>
@@ -122,10 +122,14 @@ export const DiscussionThread = ({ thread, dissertationId, canReply }: Discussio
   const hasStudentAnswer = thread.replies.some((reply) => reply.isDoctoralStudent)
 
   return (
-    <article className="rounded-lg border border-primary/10 bg-gray-light p-4 sm:p-3">
-      <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em]">
-        <span className="text-primary/60">Вопрос</span>
-        {!hasStudentAnswer && <span className="text-black/40">· ожидает ответа докторанта</span>}
+    <article className="rounded-2xl border border-line bg-gray-light p-4 sm:p-3">
+      <div className="mb-2 flex items-center gap-2 text-sm font-semibold">
+        <span className="text-ink">Вопрос</span>
+        {!hasStudentAnswer && (
+          <span className="rounded-full bg-white px-2.5 py-0.5 text-xs font-medium text-ink-soft">
+            Ожидает ответа докторанта
+          </span>
+        )}
       </div>
       <MessageBubble message={thread.question} />
 
@@ -148,7 +152,7 @@ export const DiscussionThread = ({ thread, dissertationId, canReply }: Discussio
               onDone={() => setReplying(false)}
             />
           ) : (
-            <Button size="small" onClick={() => setReplying(true)} className="text-green">
+            <Button size="small" onClick={() => setReplying(true)} className="text-green-dark">
               Ответить
             </Button>
           )}

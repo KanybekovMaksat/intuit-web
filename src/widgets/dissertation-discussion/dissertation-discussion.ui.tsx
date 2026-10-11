@@ -10,13 +10,13 @@ const PAGE_SIZE = 9
 
 const fieldSx = {
   backgroundColor: '#FFFFFF',
-  borderRadius: '8px',
+  borderRadius: '999px',
   '& .MuiOutlinedInput-root': {
-    borderRadius: '8px',
+    borderRadius: '999px',
     fontSize: '14px',
-    '& fieldset': { borderColor: 'rgba(42, 33, 114, 0.14)' },
-    '&:hover fieldset': { borderColor: '#00956F' },
-    '&.Mui-focused fieldset': { borderColor: '#00956F', borderWidth: '1px' },
+    '& fieldset': { borderColor: '#E1E3EE' },
+    '&:hover fieldset': { borderColor: '#2A2172' },
+    '&.Mui-focused fieldset': { borderColor: '#2A2172', borderWidth: '1px' },
   },
 }
 
@@ -56,17 +56,14 @@ export const DissertationDiscussion = () => {
   const totalPages = data ? Math.ceil(data.count / PAGE_SIZE) : 0
 
   return (
-    <section id="dissertations" className="py-12 px-6 sm:px-4 bg-gray-light rounded-2xl my-8">
+    <section id="dissertations" className="my-14 rounded-3xl bg-gray-light px-8 py-12 sm:px-4 sm:py-8">
       <div className="w-full">
-        <div className="mb-10 border-b border-primary/10 pb-6">
-          <div className="mb-3 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-green">
-            <span className="h-px w-8 bg-green" />
-            Высшая школа докторантуры
-          </div>
-          <Title className="!m-0 !text-left !text-4xl !font-semibold !leading-tight !text-primary md:!text-3xl">
+        <div className="mb-10">
+          <p className="mb-3 text-sm font-semibold text-green-dark">Высшая школа докторантуры</p>
+          <Title className="!m-0 !text-left !text-4xl !font-semibold !leading-tight md:!text-3xl">
             Общественное обсуждение диссертаций
           </Title>
-          <p className="mt-4 max-w-[760px] text-base text-black/70">
+          <p className="mt-4 max-w-[760px] text-base text-ink-soft">
             Ознакомьтесь с диссертациями докторантов и задайте вопросы по исследованию. Ответы
             докторантов публикуются открыто и доступны всем посетителям.
           </p>
@@ -74,7 +71,7 @@ export const DissertationDiscussion = () => {
 
         <DiscussionUserPanel />
 
-        <div className="mb-8 rounded-lg border border-primary/10 bg-white p-4 shadow-sm">
+        <div className="mb-8 rounded-3xl border border-line bg-white p-4">
           <div className="grid grid-cols-[2fr_1fr_1fr_auto] items-center gap-4 lg:grid-cols-1">
             <TextField
               fullWidth
@@ -85,7 +82,7 @@ export const DissertationDiscussion = () => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Search size={18} className="text-primary/60" />
+                    <Search size={18} className="text-ink-soft" />
                   </InputAdornment>
                 ),
               }}
@@ -125,7 +122,7 @@ export const DissertationDiscussion = () => {
             </TextField>
             <Button
               variant="outlined"
-              className="h-14 min-w-14 rounded-lg border-primary/15 bg-white px-0 text-primary shadow-none hover:border-green hover:bg-green/5"
+              className="h-14 min-w-14 rounded-full border-line bg-white px-0 text-primary shadow-none hover:border-primary hover:bg-gray-light"
               onClick={resetFilters}
               title="Сбросить фильтры"
               aria-label="Сбросить фильтры"
@@ -138,7 +135,7 @@ export const DissertationDiscussion = () => {
         {isLoading ? (
           <Loader />
         ) : isError ? (
-          <div className="rounded-lg border border-primary/10 bg-white p-8 text-center text-primary/70">
+          <div className="rounded-3xl border border-line bg-white p-8 text-center text-ink-soft">
             Не удалось загрузить диссертации. Попробуйте обновить страницу.
           </div>
         ) : (
@@ -152,7 +149,7 @@ export const DissertationDiscussion = () => {
                 <DissertationCard key={dissertation.id} dissertation={dissertation} />
               ))
             ) : (
-              <div className="col-span-3 rounded-lg border border-primary/10 bg-white p-8 text-center text-primary/70 xll:col-span-2 md:col-span-1">
+              <div className="col-span-3 rounded-3xl border border-line bg-white p-8 text-center text-ink-soft xll:col-span-2 md:col-span-1">
                 Диссертации не найдены
               </div>
             )}
@@ -176,7 +173,7 @@ export const DissertationDiscussion = () => {
                 '& .MuiPaginationItem-root': { color: '#2A2172' },
                 '& .MuiPaginationItem-root.Mui-selected': {
                   color: 'white',
-                  backgroundColor: '#00956F',
+                  backgroundColor: '#2A2172',
                 },
               }}
             />

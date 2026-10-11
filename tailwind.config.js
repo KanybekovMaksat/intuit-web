@@ -4,8 +4,8 @@ export default {
   important: "#root",
   theme: {
     fontFamily: {
-      sans: ["Inter", "sans-serif"],
-      serif: ["Inter", "serif"],
+      sans: ['"Onest Variable"', "Onest", "Inter", "system-ui", "sans-serif"],
+      serif: ['"Onest Variable"', "Onest", "Inter", "system-ui", "sans-serif"],
     },
     colors: {
       primary: "#2A2172",
@@ -14,7 +14,13 @@ export default {
       white: "#FFFFFF",
       black: "#000000",
       gray: "#CFD1DF",
-      "gray-light": "#F9FAFB",
+      "gray-light": "#F1F2F8",
+      ink: "#14123A",
+      "ink-soft": "#4B4D6B",
+      paper: "#FAFAFC",
+      mist: "#EEF0F7",
+      line: "#E1E3EE",
+      "green-dark": "#007A5A",
     },
     screens: {
       "xl-max": "1340px",

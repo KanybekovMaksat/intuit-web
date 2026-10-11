@@ -22,6 +22,7 @@ export interface EducationLevel {
 export interface Course {
   id: number;
   name: string;
+  number: number;
   educationLevel: number;
 }
 
@@ -29,6 +30,7 @@ export interface Group {
   id: number;
   name: string;
   course?: {
+    id: number;
     number: number;
   };
 }

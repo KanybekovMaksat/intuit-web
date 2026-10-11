@@ -13,6 +13,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fancyapps/ui": "^5.0.36",
+    "@fontsource-variable/onest": "^5.3.1",
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
     "@tanstack/react-query": "^5.45.1",

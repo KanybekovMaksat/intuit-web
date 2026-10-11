@@ -1,32 +1,41 @@
-import { Avatar, Card, Typography } from '@mui/material'
 import { t } from 'i18next'
 import { specializationTypes } from '~entities/specialization'
 import { Title } from '~shared/ui/title'
 
-export const CareerBlock = ({
-  professions,
-}: specializationTypes.Specialization) => {
-  console.log(professions)
+export const CareerBlock = ({ professions }: specializationTypes.Specialization) => {
+  if (!professions?.length) return null
 
   return (
-    <div className="my-10 rounded-xl">
+    <section>
       <Title>{t('specialization.professionTitle')}</Title>
-      <Typography variant="body1">
+      <p className="-mt-3 mb-8 max-w-[70ch] text-[1.0625rem] leading-relaxed text-ink-soft">
         {t('specialization.professionDescription')}
-      </Typography>
-      <div className="flex mt-5 flex-wrap gap-10 justify-center">
-        {professions.map((prof, i) => {
-          return (
-            <Card key={i} className="w-[400px] max-w-full sm:w-full rounded-xl flex flex-col items-center justify-start p-8 sm:p-5 shadow-none bg-[#f5f5f5]">
-              <Avatar className="h-[90px] w-[90px]" src={prof.photo} />
-              <Typography variant="h6" className="font-medium">
-                {prof.name}
-              </Typography>
-              <p className="font-medium">{prof.description}</p>
-            </Card>
-          )
-        })}
-      </div>
-    </div>
+      </p>
+
+      <ul className="grid grid-cols-3 gap-5 lg:grid-cols-2 md:grid-cols-1">
+        {professions.map((prof, index) => (
+          <li
+            key={`${prof.name}-${index}`}
+            className="flex flex-col gap-4 rounded-2xl border border-line bg-white p-6"
+          >
+            <span className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-gray-light">
+              {prof.photo ? (
+                <img src={prof.photo} alt="" loading="lazy" className="h-full w-full object-cover" />
+              ) : (
+                <span className="text-xl font-semibold text-primary">
+                  {prof.name?.charAt(0)}
+                </span>
+              )}
+            </span>
+            <div>
+              <h3 className="text-lg font-semibold leading-snug text-ink">{prof.name}</h3>
+              <p className="mt-1.5 text-[15px] leading-relaxed text-ink-soft">
+                {prof.description}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }

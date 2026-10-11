@@ -8,6 +8,7 @@ export const FacultySchema = z.object({
   subtitle: z.string(),
   text: z.string(),
   subtext: z.string(),
+  icon: z.string().optional(),
   programCount: z.number(),
   educationLevel: z.array(z.number()),
   documentCollections: z.array(

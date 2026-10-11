@@ -1,201 +1,109 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useTheme } from "@emotion/react";
-import { useMediaQuery } from "@mui/material";
+import React from 'react'
+import { DoorOpen, Clock, UserRound } from 'lucide-react'
 
 type GroupItem = {
-  id: number;
-  name: string;
-};
+  id: number
+  name: string
+}
 
 type ScheduleItem = {
-  id: number;
-  subject: { name: string };
-  teacher?: { fullName: string }; // Сделал необязательным
-  room: { number: string; building: string };
-  lessonTime: { startTime: string; endTime: string };
-  lessonType: { name: string };
-  dayOfWeek: number;
-  weekType: string;
-  groups?: GroupItem[]; // Сделал необязательным и исправил тип
-};
+  id: number
+  subject: { name: string }
+  teacher?: { fullName: string }
+  room: { number: string; building: string }
+  lessonTime: { startTime: string; endTime: string }
+  lessonType: { name: string }
+  dayOfWeek: number
+  weekType: string
+  groups?: GroupItem[]
+}
 
 type Props = {
-  schedule: ScheduleItem[];
-};
+  schedule: ScheduleItem[]
+}
 
+const weekLabel = (type: string): string => {
+  switch (type) {
+    case 'top':
+      return 'Числитель'
+    case 'bottom':
+      return 'Знаменатель'
+    default:
+      return ''
+  }
+}
+
+/** One responsive layout for every screen: number, time, subject, then people and room. */
 export const ScheduleDetailLesson: React.FC<Props> = ({ schedule }) => {
-  const getWeekTypeLabel = (type: string): string => {
-    switch (type) {
-      case "top":
-        return "Числитель";
-      case "bottom":
-        return "Знаменатель";
-      case "weekly":
-        return "";
-      default:
-        return "—";
-    }
-  };
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // 🟢 Перемещено выше
+  if (schedule.length === 0) {
+    return (
+      <div className="rounded-3xl border border-line bg-white px-6 py-14 text-center">
+        <p className="text-lg font-semibold text-ink">Занятий нет</p>
+        <p className="mt-1 text-ink-soft">Выберите другой день или тип недели</p>
+      </div>
+    )
+  }
 
   return (
-    <>
-      {isMobile ? (
-        <div className="space-y-4">
-          {schedule.map(
-            (
-              {
-                id,
-                subject,
-                lessonTime,
-                room,
-                weekType,
-                lessonType,
-                teacher,
-                groups,
-              },
-              index
-            ) => (
-              <div key={id} className="flex">
-                <div className="bg-sun w-5 rounded-s-sm flex items-center justify-center">
-                  {weekType?.trim() !== "" &&
-                    getWeekTypeLabel(weekType)?.trim() !== "" && (
-                      <span className="text-white block -rotate-90 origin-center whitespace-nowrap">
-                        {getWeekTypeLabel(weekType)}
-                      </span>
-                    )}
-                </div>
-                <div className="bg-[#F4F4F5] p-3 rounded w-full" key={id}>
-                  <div className="flex justify-between mb-4">
-                    <span className="py-2 px-4 bg-primary text-white rounded-lg font-semibold">
-                      {index + 1}
-                    </span>
-                    <span className="px-4 py-2 bg-white rounded-lg">
-                      {lessonTime.startTime}–{lessonTime.endTime}
-                    </span>
-                    <span className="px-4 py-2 bg-gray-100 rounded-lg bg-primary text-white">
-                      {room.number}
-                    </span>
-                  </div>
-                  <div className="flex flex-col mb-4">
-                    <span className="text-2xl">{subject?.name || "—"}</span>
-                    <span className="text-primary">
-                      {lessonType?.name || "—"}
-                    </span>
-                  </div>
-                  <div className="bg-primary h-[1px] mb-2"></div>
-                  <span className="text-xl">{teacher?.fullName}</span>
-                  {groups && (
-                    <div className="flex flex-wrap gap-2">
-                      {groups.map((group) => (
-                        <span
-                          className="bg-white p-2 rounded-[8px]"
-                          key={group.id}
-                        >
-                          {group.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )
-          )}
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {schedule.map(
-            (
-              {
-                id,
-                subject,
-                lessonTime,
-                room,
-                weekType,
-                lessonType,
-                teacher,
-                groups,
-              },
-              index
-            ) => (
-              <div
-                key={id}
-                className="flex relative justify-between items-center p-3 bg-white rounded-lg shadow"
-              >
-                <div className="flex items-center gap-x-4">
-                  <span className="py-2 px-4 bg-[#2A2172] text-white rounded-lg font-semibold">
-                    {index + 1}
-                  </span>
-                  <span className="px-4 py-2 bg-gray-100 rounded-lg bg-[#F4F4F5]">
-                    {lessonTime.startTime}–{lessonTime.endTime}
-                  </span>
-                  <span className="absolute top-[-24px] right-0 px-4 py-2 bg-primary rounded-lg bg-sun text-white">
-                    Кабинет: {room.number}
-                  </span>
-                  {weekType?.trim() !== "" &&
-                    getWeekTypeLabel(weekType)?.trim() !== "" && (
-                      <span className="px-4 py-2 bg-[#2A2172] text-white rounded-lg">
-                        {getWeekTypeLabel(weekType)}
-                      </span>
-                    )}
-                  <div className="flex flex-col">
-                    <span className="text-[#2A2172]">
-                      {subject?.name || "—"}
-                    </span>
-                    <span className="text-[#2A2172] font-bold">
-                      {lessonType?.name || "—"}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  {teacher?.fullName && (
-                    <span className="text-[#2A2172]">
-                      {teacher?.fullName || "—"}
-                    </span>
-                  )}
-                  {groups?.map((groupItem) => (
-                    <div
-                      className="px-4 py-2 bg-gray-100 rounded-lg bg-[#F4F4F5]"
-                      key={groupItem.id}
-                    >
-                      {groupItem.name}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )
-          )}
-        </div>
-      )}
-    </>
-  );
-};
+    <ol className="grid gap-3">
+      {schedule.map((lesson, index) => {
+        const label = weekLabel(lesson.weekType)
+        return (
+          <li
+            key={lesson.id}
+            className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-5 rounded-2xl border border-line bg-white p-5 md:grid-cols-[auto_minmax(0,1fr)] sm:gap-4 sm:p-4"
+          >
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-base font-semibold tabular-nums text-white">
+              {index + 1}
+            </span>
 
-ScheduleDetailLesson.propTypes = {
-  schedule: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      subject: PropTypes.shape({ name: PropTypes.string }).isRequired,
-      teacher: PropTypes.shape({ fullName: PropTypes.string }),
-      room: PropTypes.shape({
-        number: PropTypes.string.isRequired,
-        building: PropTypes.string.isRequired,
-      }).isRequired,
-      lessonTime: PropTypes.shape({
-        startTime: PropTypes.string.isRequired,
-        endTime: PropTypes.string.isRequired,
-      }).isRequired,
-      lessonType: PropTypes.shape({ name: PropTypes.string.isRequired })
-        .isRequired,
-      groups: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number.isRequired,
-          name: PropTypes.string.isRequired,
-        })
-      ),
-    })
-  ).isRequired,
-};
+            <div className="min-w-0">
+              <p className="text-lg font-semibold leading-snug text-ink break-words">
+                {lesson.subject?.name || '-'}
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-light px-3 py-1 font-medium tabular-nums text-ink">
+                  <Clock size={14} aria-hidden />
+                  {lesson.lessonTime.startTime} - {lesson.lessonTime.endTime}
+                </span>
+                {lesson.lessonType?.name && (
+                  <span className="rounded-full bg-green-dark/10 px-3 py-1 font-medium text-green-dark">
+                    {lesson.lessonType.name}
+                  </span>
+                )}
+                {label && (
+                  <span className="rounded-full bg-primary/10 px-3 py-1 font-medium text-primary">
+                    {label}
+                  </span>
+                )}
+              </div>
+              {lesson.teacher?.fullName && (
+                <p className="mt-3 inline-flex items-center gap-2 text-[15px] text-ink-soft">
+                  <UserRound size={16} aria-hidden />
+                  {lesson.teacher.fullName}
+                </p>
+              )}
+              {lesson.groups && lesson.groups.length > 0 && (
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {lesson.groups.map((group) => (
+                    <li
+                      key={group.id}
+                      className="rounded-full border border-line px-3 py-1 text-sm text-ink-soft"
+                    >
+                      {group.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-gray-light px-4 py-2 text-sm font-semibold text-ink md:col-start-2 md:justify-self-start">
+              <DoorOpen size={16} aria-hidden />
+              Кабинет {lesson.room?.number}
+            </span>
+          </li>
+        )
+      })}
+    </ol>
+  )
+}

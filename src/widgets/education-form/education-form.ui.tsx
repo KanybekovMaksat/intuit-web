@@ -1,36 +1,48 @@
 import { useTranslation } from 'react-i18next'
-import { EducationFormCard } from './ui/education-form-card.ui'
-import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined'
-import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined'
+import { BookOpen, Wrench } from 'lucide-react'
 import { Title } from '~shared/ui/title'
 
 export const EducationForm = () => {
   const { t } = useTranslation()
 
+  const forms = [
+    {
+      title: t('homepage.education-form.title'),
+      text: t('homepage.education-form.text'),
+      icon: BookOpen,
+      tone: 'bg-primary text-white',
+      iconTone: 'bg-white/15 text-white',
+      textTone: 'text-white/80',
+    },
+    {
+      title: t('homepage.education-form.secondTitle'),
+      text: t('homepage.education-form.secondText'),
+      icon: Wrench,
+      tone: 'bg-gray-light text-ink',
+      iconTone: 'bg-green-dark text-white',
+      textTone: 'text-ink-soft',
+    },
+  ]
+
   return (
-    <section className="my-10">
+    <section>
       <Title>{t('homepage.studyForms')}</Title>
 
-      <div className="relative w-full h-[250px] lg:h-[200px]">
-        <div className="absolute top-0 left-0 w-full h-full">
-          <EducationFormCard
-            title={t('homepage.education-form.title')}
-            text={t('homepage.education-form.text')}
-            icon={MenuBookOutlinedIcon}
-            direction="top-left"
-            bgColor="bg-blue"
-          />
-        </div>
-        <div className="absolute top-0 left-0 w-full h-full">
-          <EducationFormCard
-            title={t('homepage.education-form.secondTitle')}
-            text={t('homepage.education-form.secondText')}
-            icon={BuildOutlinedIcon}
-            direction="bottom-right"
-            bgColor="bg-green"
-          />
-        </div>
-      </div>
+      <ul className="grid grid-cols-2 gap-5 md:grid-cols-1">
+        {forms.map(({ title, text, icon: Icon, tone, iconTone, textTone }) => (
+          <li key={title} className={`flex flex-col gap-5 rounded-3xl p-8 sm:p-5 ${tone}`}>
+            <span className={`flex h-12 w-12 items-center justify-center rounded-2xl ${iconTone}`}>
+              <Icon size={24} aria-hidden />
+            </span>
+            <div>
+              <h3 className="text-2xl font-semibold leading-snug tracking-tight">{title}</h3>
+              <p className={`mt-2 max-w-[48ch] text-[1.0625rem] leading-relaxed ${textTone}`}>
+                {text}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
     </section>
   )
 }

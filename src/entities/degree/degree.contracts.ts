@@ -13,4 +13,5 @@ export const DegreeSchema = z.object({
   studyPeriod: z.string(),
   employment: z.string(),
   diploma: z.string(),
+  diplomaPhoto: z.string().optional(),
 });

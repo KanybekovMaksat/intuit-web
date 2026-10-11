@@ -1,69 +1,135 @@
-import { IconButton, Typography } from '@mui/material'
-import Box from '@mui/material/Box'
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded'
 import Modal from '@mui/material/Modal'
+import { X } from 'lucide-react'
 import { t } from 'i18next'
 
-export const MaterialModal = ({ videoUrl, open, handleClose }) => {
-  const getYouTubeEmbedUrl = (url) => {
-    if (url) {
-      const videoId = url.split('v=')[1]?.split('&')[0]
-      return videoId
-        ? `https://www.youtube.com/embed/${videoId}?rel=0`
-        : 'https://www.youtube.com/watch?v=2Y-Xa1h77KI'
-    }
-  }
+interface MaterialModalProps {
+  videoUrl?: string
+  open: boolean
+  handleClose: () => void
+  title?: string
+  subtitle?: string
+}
+
+const getYouTubeEmbedUrl = (url?: string) => {
+  if (!url) return undefined
+  const match =
+    url.match(/[?&]v=([^&#]+)/) ||
+    url.match(/youtu\.be\/([^?&#]+)/) ||
+    url.match(/embed\/([^?&#]+)/)
+  return match ? `https://www.youtube.com/embed/${match[1]}?rel=0&autoplay=1` : undefined
+}
+
+/*
+ * MUI renders modals in a portal outside #root, and Tailwind here is scoped to #root
+ * (important: '#root'), so utility classes do not apply. Styles are inline on purpose.
+ */
+export const MaterialModal = ({ videoUrl, open, handleClose, title, subtitle }: MaterialModalProps) => {
+  const src = getYouTubeEmbedUrl(videoUrl)
+
   return (
     <Modal
       open={open}
       onClose={handleClose}
-      BackdropProps={{
-        style: {
-          backgroundColor: 'rgba(0, 0, 0, 0.05)', // Черный с прозрачностью 50%
-          border: 'none',
+      slotProps={{
+        backdrop: {
+          style: { backgroundColor: 'rgba(20, 18, 58, 0.78)', backdropFilter: 'blur(6px)' },
         },
       }}
     >
-      <Box
-        sx={{
-          width: '800px', // Фиксированная ширина модального окна
-          height: '500px', // Высота соответствует соотношению 16:9
-          maxWidth: '100%', // Чтобы не выходить за границы экрана
-          margin: '50px auto',
-          padding: 3,
-          background: 'white',
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 'min(960px, calc(100vw - 32px))',
+          outline: 'none',
+          fontFamily: "'Onest Variable', Onest, Inter, system-ui, sans-serif",
         }}
       >
-        <Box
-          className="flex justify-between items-center w-full"
-          sx={{
+        <div
+          style={{
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             justifyContent: 'space-between',
+            gap: 16,
+            marginBottom: 12,
+            color: '#fff',
           }}
         >
-          <Typography className="font-medium" variant="h4">
-            {t("windowPage.review")}
-          </Typography>
-          <IconButton onClick={handleClose}>
-            <CancelRoundedIcon />
-          </IconButton>
-        </Box>
-        <iframe
-          src={getYouTubeEmbedUrl(videoUrl)}
-          title="YouTube video player"
-          frameBorder="0"
+          <div style={{ minWidth: 0 }}>
+            <p style={{ margin: 0, fontSize: 14, color: 'rgba(255,255,255,0.7)' }}>
+              {t('windowPage.review', 'Отзыв')}
+            </p>
+            {title && (
+              <h3 style={{ margin: '2px 0 0', fontSize: 20, fontWeight: 600, lineHeight: 1.3 }}>
+                {title}
+              </h3>
+            )}
+            {subtitle && (
+              <p style={{ margin: '2px 0 0', fontSize: 14, color: 'rgba(255,255,255,0.7)' }}>
+                {subtitle}
+              </p>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={handleClose}
+            aria-label="Закрыть"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 44,
+              height: 44,
+              flexShrink: 0,
+              border: 0,
+              borderRadius: 9999,
+              background: 'rgba(255,255,255,0.16)',
+              color: '#fff',
+              cursor: 'pointer',
+            }}
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <div
           style={{
+            position: 'relative',
             width: '100%',
-            height: '80%',
-            borderRadius: '8px', // Закруглённые углы
-            marginTop: '30px',
+            aspectRatio: '16 / 9',
+            overflow: 'hidden',
+            borderRadius: 16,
+            background: '#14123A',
+            boxShadow: '0 32px 80px -24px rgba(0,0,0,0.6)',
           }}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          allowFullScreen
-        ></iframe>
-      </Box>
+        >
+          {src ? (
+            <iframe
+              src={src}
+              title={title || 'Видео отзыв'}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          ) : (
+            <div
+              style={{
+                display: 'flex',
+                height: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'rgba(255,255,255,0.7)',
+                fontSize: 14,
+              }}
+            >
+              Видео недоступно
+            </div>
+          )}
+        </div>
+      </div>
     </Modal>
   )
 }

@@ -24,10 +24,10 @@ export const DocumentDialog = ({ document: doc, onClose }: DocumentDialogProps) 
   >
     {doc && (
       <div className="flex h-full flex-col">
-        <div className="flex items-center justify-between gap-4 border-b border-primary/10 px-4 py-2">
+        <div className="flex items-center justify-between gap-4 border-b border-line px-4 py-2">
           <div className="min-w-0">
-            <div className="truncate font-semibold text-primary">{doc.title || doc.kindDisplay}</div>
-            <div className="text-xs text-black/50">Документ доступен только для просмотра</div>
+            <div className="truncate font-semibold text-ink">{doc.title || doc.kindDisplay}</div>
+            <div className="text-xs text-ink-soft">Документ доступен только для просмотра</div>
           </div>
           <IconButton onClick={onClose} aria-label="Закрыть">
             <X size={22} />

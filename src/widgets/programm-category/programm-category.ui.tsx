@@ -1,15 +1,15 @@
-import { Button, InputAdornment, Pagination, TextField, useMediaQuery, useTheme } from '@mui/material'
+import { Pagination, useMediaQuery, useTheme } from '@mui/material'
 import Select, { SingleValue, StylesConfig } from 'react-select'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Search, X } from 'lucide-react'
+import { RotateCcw, Search, SearchX, X } from 'lucide-react'
 import { degreeQueries } from '~entities/degree'
 import { facultyQueries } from '~entities/faculties'
 import { programQueries } from '~entities/programs'
 import { ProfessionCard } from '~entities/profession'
 import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
-import { Title } from '~shared/ui/title'
+import { SectionHeader } from '~shared/ui/title'
 
 type Option = {
   value: number
@@ -122,36 +122,60 @@ export const ProgramCategory = ({
   const [currentPage, setCurrentPage] = useState(1)
 
   const itemsPerPage = 8
+  const listRef = useRef<HTMLDivElement>(null)
   const professions = getApiList<ProgramItem>((propdata || serverData)?.data)
+  const normalizedSearch = searchQuery.trim().toLowerCase()
 
-  const filteredProfessions = professions.filter((profession) => {
-    const educationLevels = profession.educationLevel || []
-    const faculties = profession.faculty || []
-    const normalizedSearch = searchQuery.trim().toLowerCase()
-
-    const matchesDegree = selectedDegree
-      ? educationLevels.some((level) => getRelationId(level) === selectedDegree)
+  const matchesProgram = (
+    profession: ProgramItem,
+    degree: number | null,
+    faculty: number | null
+  ) => {
+    const matchesDegree = degree
+      ? (profession.educationLevel || []).some((level) => getRelationId(level) === degree)
       : true
-    const matchesFaculty = selectedFaculty
-      ? faculties.some((faculty) => getRelationId(faculty) === selectedFaculty)
+    const matchesFaculty = faculty
+      ? (profession.faculty || []).some((item) => getRelationId(item) === faculty)
       : true
     const matchesSearch = normalizedSearch
       ? profession.title.toLowerCase().includes(normalizedSearch)
       : true
-
     return matchesDegree && matchesFaculty && matchesSearch
-  })
+  }
 
-  const totalPages = Math.ceil(
-    filteredProfessions.length / itemsPerPage
+  const filteredProfessions = professions.filter((profession) =>
+    matchesProgram(profession, selectedDegree, selectedFaculty)
   )
+
+  // Counts and options react to the other active filters, so a choice never leads to an empty list
+  const degreeCounts = new Map<number, number>()
+  sortedDegrees.forEach((degree) => {
+    degreeCounts.set(
+      degree.value,
+      professions.filter((item) => matchesProgram(item, degree.value, selectedFaculty)).length
+    )
+  })
+  const allCount = professions.filter((item) => matchesProgram(item, null, selectedFaculty)).length
+
+  const availableFaculties = sortedFaculties.filter(
+    (faculty) =>
+      faculty.value === selectedFaculty ||
+      professions.some((item) => matchesProgram(item, selectedDegree, faculty.value))
+  )
+
+  const totalPages = Math.ceil(filteredProfessions.length / itemsPerPage)
   const paginatedProfessions = filteredProfessions.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   )
 
-  const handleDegreeChange = (selectedOption: SingleValue<Option>) => {
-    setSelectedDegree(selectedOption?.value || null)
+  const hasActiveFilters =
+    selectedDegree !== (degreeId || null) ||
+    selectedFaculty !== (facultyId || null) ||
+    normalizedSearch !== ''
+
+  const handleDegreeChange = (value: number | null) => {
+    setSelectedDegree(value)
     setCurrentPage(1)
   }
 
@@ -174,48 +198,39 @@ export const ProgramCategory = ({
 
   const handlePageChange = (_event: ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value)
+    listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const customSelectStyles: StylesConfig<Option, false> = {
-    control: (provided) => ({
+    control: (provided, state) => ({
       ...provided,
-      borderColor: 'rgba(42, 33, 114, 0.14)',
-      borderRadius: '8px',
+      borderColor: state.isFocused ? '#2A2172' : '#E1E3EE',
+      borderRadius: '9999px',
       boxShadow: 'none',
       fontSize: '14px',
-      fontWeight: 600,
+      fontWeight: 500,
       minHeight: '48px',
-      padding: '2px 6px',
-      '&:hover': {
-        borderColor: '#00956F',
-      },
+      padding: '0 8px',
+      cursor: 'pointer',
+      '&:hover': { borderColor: '#2A2172' },
     }),
-    placeholder: (provided) => ({
-      ...provided,
-      color: 'rgba(42, 33, 114, 0.55)',
-    }),
-    indicatorSeparator: (provided) => ({
-      ...provided,
-      backgroundColor: 'rgba(42, 33, 114, 0.1)',
-    }),
+    placeholder: (provided) => ({ ...provided, color: '#4B4D6B' }),
+    singleValue: (provided) => ({ ...provided, color: '#14123A' }),
+    indicatorSeparator: () => ({ display: 'none' }),
     menu: (provided) => ({
       ...provided,
-      borderRadius: '8px',
+      borderRadius: '16px',
       overflow: 'hidden',
+      border: '1px solid #E1E3EE',
+      boxShadow: '0 16px 40px -12px rgba(42, 33, 114, 0.25)',
       zIndex: 9999,
     }),
-    menuPortal: (base) => ({
-      ...base,
-      zIndex: 9999,
-    }),
+    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected
-        ? '#2A2172'
-        : state.isFocused
-          ? 'rgba(0, 149, 111, 0.08)'
-          : '#FFFFFF',
-      color: state.isSelected ? '#FFFFFF' : '#2A2172',
+      cursor: 'pointer',
+      backgroundColor: state.isSelected ? '#2A2172' : state.isFocused ? '#EEF0F7' : '#FFFFFF',
+      color: state.isSelected ? '#FFFFFF' : '#14123A',
     }),
   }
 
@@ -227,131 +242,161 @@ export const ProgramCategory = ({
     return <Loader />
   }
 
+  const showDegreeTabs = !degreeId && sortedDegrees.length > 0
+  const showFacultySelect = !facultyId
+
+  const tabClass = (active: boolean) =>
+    `inline-flex h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-4 text-sm font-semibold transition-colors ${
+      active
+        ? 'border-primary bg-primary text-white'
+        : 'border-line bg-white text-ink hover:border-primary/40'
+    }`
+
+  const searchPlaceholder = t('homepage.degrees.searchPlaceholder', 'Поиск по названию программы')
+  const resetLabel = t('homepage.degrees.reset', 'Сбросить фильтры')
+
   return (
-    <section className="py-12 px-6 sm:px-4 bg-gray-light rounded-2xl my-8">
+    <section className="my-12 rounded-3xl bg-gray-light px-10 py-12 xll:px-8 sm:my-8 sm:rounded-2xl sm:px-4 sm:py-8">
       <div className="w-full">
-        <div className="mb-10 flex items-end justify-between gap-6 border-b border-primary/10 pb-6 md:flex-col md:items-start">
-          <div>
-            <div className="mb-3 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-green">
-              <span className="h-px w-8 bg-green" />
-              {t('homepage.degrees.academicPrograms', {
-                defaultValue: t('homepage.degrees.degreeCategory'),
-              })}
-            </div>
-            <Title className="!m-0 !text-left !text-4xl !font-semibold !leading-tight !text-primary md:!text-3xl">
-              {t('homepage.degrees.programs')}
-            </Title>
-          </div>
-        </div>
+        <SectionHeader title={t('homepage.degrees.programs')} />
 
-        <div className="mb-8 rounded-lg border border-primary/10 bg-white p-4 shadow-sm">
-          <div className="grid grid-cols-[1fr_1fr_auto] items-center gap-4 lg:grid-cols-1">
-            <Select
-              options={sortedDegrees}
-              styles={customSelectStyles}
-              placeholder={t('homepage.degrees.selectDegreePlaceholder')}
-              className="z-50"
-              onChange={handleDegreeChange}
-              menuPortalTarget={
-                typeof document !== 'undefined' ? document.body : undefined
-              }
-              value={
-                sortedDegrees.find(
-                  (degree) => degree.value === selectedDegree
-                ) || null
-              }
-            />
-
-            <Select
-              options={sortedFaculties}
-              styles={customSelectStyles}
-              placeholder={t('homepage.degrees.selectDirectionPlaceholder')}
-              className="z-50"
-              onChange={handleFacultyChange}
-              menuPortalTarget={
-                typeof document !== 'undefined' ? document.body : undefined
-              }
-              value={
-                sortedFaculties.find(
-                  (faculty) => faculty.value === selectedFaculty
-                ) || null
-              }
-            />
-
-            <Button
-              variant="outlined"
-              className="h-12 min-w-12 rounded-lg border-primary/15 bg-white px-0 text-primary shadow-none hover:border-green hover:bg-green/5"
-              onClick={handleClearFilters}
-              title="Сбросить фильтры"
-              aria-label="Сбросить фильтры"
+        {showDegreeTabs && (
+          <div
+            role="tablist"
+            aria-label={t('homepage.degrees.selectDegreePlaceholder')}
+            className="-mx-1 mb-4 flex gap-2 overflow-x-auto px-1 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected={selectedDegree === null}
+              onClick={() => handleDegreeChange(null)}
+              className={tabClass(selectedDegree === null)}
             >
-              <X size={18} />
-            </Button>
+              {t('homepage.degrees.all', 'Все')}
+              <span className={selectedDegree === null ? 'text-white/70' : 'text-ink-soft'}>
+                {allCount}
+              </span>
+            </button>
+            {sortedDegrees.map((degree) => {
+              const active = selectedDegree === degree.value
+              const count = degreeCounts.get(degree.value) || 0
+              return (
+                <button
+                  key={degree.value}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  disabled={count === 0 && !active}
+                  onClick={() => handleDegreeChange(degree.value)}
+                  className={`${tabClass(active)} disabled:cursor-not-allowed disabled:opacity-45`}
+                >
+                  {degree.label}
+                  <span className={active ? 'text-white/70' : 'text-ink-soft'}>{count}</span>
+                </button>
+              )
+            })}
           </div>
+        )}
 
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Поиск по названию программы"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="mt-4"
-            sx={{
-              backgroundColor: '#FFFFFF',
-              borderRadius: '8px',
-              '& .MuiOutlinedInput-root': {
-                borderRadius: '8px',
-                fontSize: '14px',
-                '& fieldset': {
-                  borderColor: 'rgba(42, 33, 114, 0.14)',
-                },
-                '&:hover fieldset': {
-                  borderColor: '#00956F',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#00956F',
-                  borderWidth: '1px',
-                },
-              },
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search size={18} className="text-primary/60" />
-                </InputAdornment>
-              ),
-            }}
-          />
+        <div
+          className={`grid gap-3 lg:grid-cols-1 ${
+            showFacultySelect ? 'grid-cols-[minmax(0,1fr)_minmax(0,360px)]' : 'grid-cols-1'
+          }`}
+        >
+          <label className="relative block">
+            <span className="sr-only">{searchPlaceholder}</span>
+            <Search
+              size={18}
+              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-soft"
+            />
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder={searchPlaceholder}
+              className="h-12 w-full rounded-full border border-line bg-white pl-11 pr-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-soft focus:border-primary"
+            />
+          </label>
+
+          {showFacultySelect && (
+            <Select
+              options={availableFaculties}
+              styles={customSelectStyles}
+              isClearable
+              placeholder={t('homepage.degrees.selectDirectionPlaceholder')}
+              aria-label={t('homepage.degrees.selectDirectionPlaceholder')}
+              noOptionsMessage={() => t('homepage.degrees.noResults', 'Ничего не найдено')}
+              onChange={handleFacultyChange}
+              menuPortalTarget={typeof document !== 'undefined' ? document.body : undefined}
+              value={sortedFaculties.find((faculty) => faculty.value === selectedFaculty) || null}
+            />
+          )}
         </div>
 
-        <div className="grid grid-cols-4 gap-6 xl:grid-cols-3 xll:grid-cols-2 md:grid-cols-1">
-          {paginatedProfessions?.length ? (
-            paginatedProfessions.map((profession, index) => (
+        <div
+          ref={listRef}
+          className="mb-6 mt-5 flex min-h-[36px] scroll-mt-24 items-center justify-between gap-4"
+        >
+          <p className="text-sm text-ink-soft" aria-live="polite">
+            {t('homepage.degrees.found', {
+              defaultValue: 'Найдено программ: {{count}}',
+              count: filteredProfessions.length,
+            })}
+          </p>
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={handleClearFilters}
+              className="inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-primary transition-colors hover:bg-white"
+            >
+              <RotateCcw size={15} />
+              {resetLabel}
+            </button>
+          )}
+        </div>
+
+        {paginatedProfessions.length ? (
+          <div className="grid grid-cols-4 gap-6 xl:grid-cols-3 xll:grid-cols-2 md:grid-cols-1">
+            {paginatedProfessions.map((profession, index) => (
               <ProfessionCard
                 key={profession.slug || profession.id || index}
-                degree={getRelationLabel(
-                  profession.educationLevel?.[0],
-                  sortedDegrees
-                )}
-                faculties={getRelationLabel(
-                  profession.faculty?.[0],
-                  sortedFaculties
-                )}
+                degree={getRelationLabel(profession.educationLevel?.[0], sortedDegrees)}
+                faculties={getRelationLabel(profession.faculty?.[0], sortedFaculties)}
                 title={profession.title}
                 url={profession.slug}
                 icon={getRelationIcon(profession.faculty?.[0])}
                 index={(currentPage - 1) * itemsPerPage + index}
               />
-            ))
-          ) : (
-            <div className="col-span-4 rounded-lg border border-primary/10 bg-white p-8 text-center text-primary/70 md:col-span-1">
-              Программы не найдены
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-line bg-white px-6 py-14 text-center">
+            <SearchX size={32} className="text-ink-soft" />
+            <p className="text-lg font-semibold text-ink">
+              {t('homepage.degrees.emptyTitle', 'Программы не найдены')}
+            </p>
+            <p className="max-w-[40ch] text-sm text-ink-soft">
+              {t(
+                'homepage.degrees.emptyHint',
+                'Измените запрос или сбросьте фильтры, чтобы увидеть все программы.'
+              )}
+            </p>
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={handleClearFilters}
+                className="mt-2 inline-flex h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-white transition-colors hover:bg-ink"
+              >
+                <X size={16} />
+                {resetLabel}
+              </button>
+            )}
+          </div>
+        )}
 
         {totalPages > 1 && (
-          <div className="mt-8 flex justify-center w-full overflow-x-auto py-1">
+          <div className="mt-8 flex w-full justify-center overflow-x-auto py-1">
             <Pagination
               count={totalPages}
               page={currentPage}
@@ -360,21 +405,17 @@ export const ProgramCategory = ({
               siblingCount={isMobile ? 0 : 1}
               boundaryCount={1}
               sx={{
-                '& .MuiPagination-ul': {
-                  flexWrap: 'nowrap',
-                  justifyContent: 'center',
-                },
+                '& .MuiPagination-ul': { flexWrap: 'nowrap', justifyContent: 'center' },
                 '& .MuiPaginationItem-root': {
-                  color: '#2A2172',
-                  minWidth: isMobile ? '28px' : '32px',
-                  height: isMobile ? '28px' : '32px',
-                  padding: isMobile ? '0 2px' : '0 6px',
-                  margin: isMobile ? '0 1px' : '0 3px',
+                  color: '#14123A',
+                  minWidth: isMobile ? '28px' : '36px',
+                  height: isMobile ? '28px' : '36px',
                   fontSize: isMobile ? '12px' : '14px',
+                  fontWeight: 600,
                 },
                 '& .MuiPaginationItem-root.Mui-selected': {
                   color: 'white',
-                  backgroundColor: '#00956F !important',
+                  backgroundColor: '#2A2172 !important',
                 },
               }}
             />

@@ -1,91 +1,65 @@
-import { Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-// import { HeroCarousel } from './heroCarousel/HeroCarousel'
 import { Link } from 'react-router-dom'
-
-import 'swiper/css'
-import 'swiper/css/pagination'
-import 'swiper/css/effect-fade'
+import { ArrowRight } from 'lucide-react'
 import { degreeQueries } from '~entities/degree'
 import { Loader } from '~shared/ui/loader'
 import { FacultyCarousel } from './facultyCarousel'
 import { getApiList } from '~shared/lib/api/getApiList'
 import { DegreeSchema } from '~entities/degree/degree.types'
-// import { FacultyCarousel } from './heroCarousel/FacultyCarousel'
+import { PageHero } from '~shared/ui/page'
 
 export const InternationalHero = () => {
   const { t } = useTranslation()
-  const {
-    data: facultyData,
-    isLoading,
-    isError,
-  } = degreeQueries.useGetDegrees()
+  const { data, isLoading, isError } = degreeQueries.useGetDegrees()
 
   if (isLoading) {
     return <Loader />
   }
   if (isError) {
-    return <div>{t('loading.error')}</div>
+    return <div className="py-20 text-center text-ink-soft">{t('loading.error')}</div>
   }
 
-  const degrees = getApiList<DegreeSchema>(facultyData?.data)
+  const degrees = getApiList<DegreeSchema>(data?.data)
+
+  const goToForm = (event: React.MouseEvent) => {
+    const form = document.getElementById('enroll-form')
+    if (form) {
+      event.preventDefault()
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
 
   return (
-    <section className=" r-sm:h-[360px]  rounded-md r-sm:mb-16 mb-20 relative overflow-hidden bg-[url('/bg2.png')] bg-cover bg-top ">
-      <div className="relative py-5  r-md:py-6 px-4">
-        <div className=" z-[100px] md:p-0">
-          <div className="flex justify-between items-end md:flex-col mb-[30px]">
-            <div className="mb-10 md:mb-0 r-md:mb-2 r-md:max-w-2xl max-w-4xl">
-              <Typography
-                variant="h1"
-                className="mt-4 md:mb-4 md:text-2xl w-full md:w-full  text-white font-[900]   text-5xl"
+    <div className="mb-20">
+      <PageHero
+        title="For international students"
+        subtitle="Education that leads to real work"
+        actions={
+          <a
+            href="#enroll-form"
+            onClick={goToForm}
+            className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-white px-6 text-[15px] font-semibold text-primary transition-all duration-200 hover:bg-white/90 active:scale-[0.98]"
+          >
+            {t('homepage.hero.helpButton', 'Помочь с выбором')}
+            <ArrowRight size={18} aria-hidden />
+          </a>
+        }
+      >
+        <ul className="flex flex-wrap gap-2">
+          {degrees.map((item) => (
+            <li key={item.slug}>
+              <Link
+                to={`/degree/${item.slug}/`}
+                className="inline-flex h-10 items-center whitespace-nowrap rounded-full border border-white/30 px-4 text-sm font-medium text-white transition-colors duration-200 hover:border-white hover:bg-white hover:text-primary"
               >
-                For international students
-              </Typography>
-              <p className="mb-20 md:mb-0 text-xl md:text-sm text-white mt-2 italic ">
-                Education that leads to real work{' '}
-              </p>
-              <div className="flex flex-wrap max-w-[450px] gap-2 gap-y-4 md:hidden">
-                {degrees.map((item, index) => (
-                  <Link key={index} to={`/degree/${item.slug}/`}>
-                    <span className=" text-[14px] px-4 hover:cursor-pointer  py-1 border border-white/50 bg-white rounded-full text-black font-bold">
-                      {item.title}
-                    </span>
-                  </Link>
-                ))}
-                <button className=" text-[14px] px-4 hover:cursor-pointer  py-1  bg-blue   rounded-full text-white font-bold">
-                  Помочь с выбором
-                </button>
-              </div>
-            </div>
-            <div className="w-[450px] md:w-full flex flex-col items-center">
-              <img
-                className="r-lg:hidden h-[350px] md:w-full md:h-auto object-cover md:my-5"
-                src="/imagee.png"
-                alt="Hero"
-              />
-            </div>
-            <div className="hidden mt-3 flex-wrap max-w-full gap-y-8 gap-1  md:flex">
-              {degrees.map((item, index) => (
-                <Link key={index} to={`/degree/${item.slug}/`}>
-                  <span className=" text-[14px] px-2 hover:cursor-pointer  py-3 border border-white/50 bg-white rounded-full text-black font-bold">
-                    {item.title}
-                  </span>
-                </Link>
-              ))}
-              <a href="">
-                <span className=" text-[14px] px-2 hover:cursor-pointer  py-3 border border-blue text-white bg-blue rounded-full font-bold">
-                  Помочь с выбором
-                </span>
-              </a>
-            </div>
-          </div>
-          <div className="mt-[50px]">
-            {/* <HeroCarousel /> */}
-            <FacultyCarousel />
-          </div>
-        </div>
-      </div>
-    </section>
+                {item.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </PageHero>
+
+      <FacultyCarousel />
+    </div>
   )
 }

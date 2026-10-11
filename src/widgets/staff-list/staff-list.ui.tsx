@@ -1,18 +1,16 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StaffCard, staffQueries } from '~entities/staff'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Pagination } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/pagination'
-import Button from '@mui/material/Button'
-import ButtonGroup from '@mui/material/ButtonGroup'
 import { Staff } from '~entities/staff/staff.types'
-import { MenuItem, Select } from '@mui/material'
 import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 
+const PREVIEW_COUNT = 6
+
 const StaffList = () => {
+  const { t } = useTranslation()
   const [selectedPosition, setSelectedPosition] = useState<number | null>(29)
+  const [showAll, setShowAll] = useState(false)
 
   const {
     data: staffData,
@@ -50,73 +48,56 @@ const StaffList = () => {
 
   return (
     <>
-      <div className="position-navigation flex justify-start my-4 lg:hidden">
-        {isPositionsSuccess && (
-          <ButtonGroup
-            sx={{
-              '& .MuiButtonGroup-grouped:not(:last-of-type)': {
-                borderRight: '1px solid green',
-              },
-            }}
-            variant="contained"
-            aria-label="position navigation"
-          >
-            {positions.map(
-              (position: { id: number; title: string; level: number }) => (
-                <Button
-                  key={position.id}
-                  className={` ${
-                    selectedPosition === position.id
-                      ? 'bg-blue text-white'
-                      : 'bg-green'
-                  }`}
-                  onClick={() => setSelectedPosition(position.id)}
-                >
-                  {position.title}
-                </Button>
-              )
-            )}
-          </ButtonGroup>
-        )}
-      </div>
-      <div>
-        <Select
-          value={selectedPosition}
-          className="mt-5 hidden lg:block w-full"
-          onChange={(e) => setSelectedPosition(e.target.value)}
+      {isPositionsSuccess && (
+        <div
+          role="tablist"
+          aria-label="position navigation"
+          className="-mx-1 flex gap-2 overflow-x-auto px-1 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {positions.map(
-            (position: { id: number; title: string; level: number }) => (
-              <MenuItem key={position.id} value={position.id}>
-                {position.title}
-              </MenuItem>
-            )
-          )}
-        </Select>
+          {positions.map((position: { id: number; title: string; level: number }) => (
+            <button
+              key={position.id}
+              type="button"
+              role="tab"
+              aria-selected={selectedPosition === position.id}
+              onClick={() => {
+                setSelectedPosition(position.id)
+                setShowAll(false)
+              }}
+              className={`h-10 shrink-0 whitespace-nowrap rounded-full border px-5 text-sm font-semibold transition-colors ${
+                selectedPosition === position.id
+                  ? 'border-primary bg-primary text-white'
+                  : 'border-line bg-white text-ink hover:border-primary/40'
+              }`}
+            >
+              {position.title}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-6 grid grid-cols-3 gap-5 xll:grid-cols-2 md:grid-cols-1">
+        {(showAll ? filterData : filterData.slice(0, PREVIEW_COUNT)).map((staff: Staff) => (
+          <StaffCard key={staff.id} {...staff} />
+        ))}
       </div>
 
-      <Swiper
-        className="py-10 px-1 staff-list "
-        modules={[Pagination]}
-        slidesPerView={3}
-        pagination={{ clickable: true }}
-        breakpoints={{
-          0: {
-            slidesPerView: 1,
-          },
-          768: {
-            slidesPerView: 3,
-            spaceBetween: 10,
-          },
-        }}
-      >
-        {filterData &&
-          filterData.map((staff: Staff) => (
-            <SwiperSlide key={staff.id} className="shadow-lg rounded-lg">
-              <StaffCard {...staff} />
-            </SwiperSlide>
-          ))}
-      </Swiper>
+      {filterData.length > PREVIEW_COUNT && (
+        <div className="mt-8 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setShowAll((prev) => !prev)}
+            className="h-12 rounded-full border border-line bg-white px-6 text-[15px] font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
+          >
+            {showAll
+              ? t('homepage.staff.collapse', 'Свернуть')
+              : t('homepage.staff.showAll', {
+                  defaultValue: 'Показать всех ({{count}})',
+                  count: filterData.length,
+                })}
+          </button>
+        </div>
+      )}
     </>
   )
 }

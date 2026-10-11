@@ -2,6 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Design tokens: one navy, one green, one neutral family.
+   Shape rule: cards 16px, interactive elements fully round. */
+:root {
+  --c-primary: #2a2172;
+  --c-green: #00956f;
+  --c-ink: #14123a;
+  --c-ink-soft: #4b4d6b;
+  --c-paper: #fafafc;
+  --c-mist: #eef0f7;
+  --c-line: #e1e3ee;
+  --radius-card: 16px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: light;
+}
+
+html {
+  background: var(--c-paper);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--c-paper);
+  color: var(--c-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(0, 149, 111, 0.22);
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-green);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Profession Card */
 
 .prof-card:hover .prof-card__text {
@@ -74,7 +126,7 @@ main table {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #00956f; /* Светло-серый */
+  background-color: #00956f;
   border-radius: 2px;
 }
 
@@ -112,7 +164,7 @@ html,
 body {
   position: relative;
   height: 100%;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Onest Variable', 'Onest', 'Inter', system-ui, sans-serif;
 }
 
 .review-slide .swiper-slide {
@@ -126,4 +178,155 @@ body {
       transparent 1px
     ),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+}
+
+/* Typography polish: no orphans, balanced headings */
+h1, h2, h3 {
+  text-wrap: balance;
+}
+p, li {
+  text-wrap: pretty;
+}
+
+/* Tactile press feedback on buttons and card-links */
+button:not(:disabled):active,
+a.group:active {
+  transform: translateY(1px);
+}
+
+/* Rich text that comes from the CMS: Tailwind's reset strips lists and
+   headings, so restore a readable measure and rhythm here. */
+.prose-muit {
+  color: var(--c-ink-soft);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  max-width: 72ch;
+}
+.prose-muit.prose-wide {
+  max-width: none;
+}
+.prose-muit > :first-child {
+  margin-top: 0;
+}
+.prose-muit p {
+  margin: 0 0 1.1em;
+}
+.prose-muit h1,
+.prose-muit h2,
+.prose-muit h3,
+.prose-muit h4 {
+  color: var(--c-ink);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin: 1.8em 0 0.6em;
+}
+.prose-muit h2 {
+  font-size: 1.6rem;
+}
+.prose-muit h3 {
+  font-size: 1.3rem;
+}
+.prose-muit h4 {
+  font-size: 1.1rem;
+}
+.prose-muit ul,
+.prose-muit ol {
+  margin: 0 0 1.2em;
+  padding-left: 1.4em;
+}
+.prose-muit ul {
+  list-style: disc;
+}
+.prose-muit ol {
+  list-style: decimal;
+}
+.prose-muit li {
+  margin: 0.35em 0;
+}
+.prose-muit li::marker {
+  color: var(--c-green);
+}
+.prose-muit a {
+  color: #007a5a;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose-muit a:hover {
+  color: var(--c-primary);
+}
+.prose-muit strong {
+  color: var(--c-ink);
+  font-weight: 600;
+}
+.prose-muit img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  margin: 1.4em 0;
+}
+.prose-muit blockquote {
+  margin: 1.4em 0;
+  padding: 0.2em 0 0.2em 1.1em;
+  border-left: 3px solid var(--c-green);
+  color: var(--c-ink);
+}
+.prose-muit iframe,
+.prose-muit video {
+  max-width: 100%;
+  border-radius: 16px;
+}
+.prose-muit table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.prose-muit th,
+.prose-muit td {
+  border: 1px solid var(--c-line);
+  padding: 0.6em 0.8em;
+  text-align: left;
+}
+.prose-muit th {
+  background: #f1f2f8;
+  color: var(--c-ink);
+  font-weight: 600;
+}
+
+/* Enroll form phone field: match the text inputs (react-phone-input-2 ships its own look) */
+.react-tel-input.enroll-phone .form-control {
+  width: 100%;
+  height: 48px;
+  padding-left: 58px;
+  border: 1px solid var(--c-line);
+  border-radius: 12px;
+  background: var(--c-paper);
+  color: var(--c-ink);
+  font-size: 15px;
+  box-shadow: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.react-tel-input.enroll-phone .form-control:focus {
+  border-color: var(--c-primary);
+  background: #fff;
+  box-shadow: none;
+}
+.react-tel-input.enroll-phone.has-error .form-control {
+  border-color: #dc2626;
+}
+.react-tel-input.enroll-phone .flag-dropdown {
+  border: none;
+  border-radius: 12px 0 0 12px;
+  background: transparent;
+}
+.react-tel-input.enroll-phone .selected-flag {
+  width: 50px;
+  padding-left: 14px;
+  border-radius: 12px 0 0 12px;
+}
+.react-tel-input.enroll-phone .selected-flag:hover,
+.react-tel-input.enroll-phone .selected-flag:focus,
+.react-tel-input.enroll-phone .flag-dropdown.open .selected-flag {
+  background: transparent;
 }

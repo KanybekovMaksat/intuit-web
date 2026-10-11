@@ -6,6 +6,7 @@ import { getApiList } from '~shared/lib/api/getApiList'
 import { Loader } from '~shared/ui/loader'
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { SectionHeader } from '~shared/ui/title'
 
 export const EventList = () => {
   const { t } = useTranslation()
@@ -29,29 +30,22 @@ export const EventList = () => {
   if (isSuccess && events.length > 0) {
 
     return (
-      <section className="py-12 px-6 sm:px-4 bg-gray-light rounded-2xl my-8">
+      <section className="my-12 rounded-3xl bg-gray-light px-10 py-12 xll:px-8 sm:my-8 sm:rounded-2xl sm:px-4 sm:py-8">
         <div className="w-full">
-          <div className="mb-10 flex items-end justify-between gap-6 border-b border-primary/10 pb-6 md:flex-col md:items-start">
-            <div>
-              <div className="mb-3 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-green">
-                <span className="h-px w-8 bg-green" />
-                {t('homepage.events.upcomingLabel')}
-              </div>
-              <h2 className="text-4xl font-semibold leading-tight text-primary md:text-3xl">
-                {t('homepage.events.otherEvents')}
-              </h2>
-            </div>
+          <SectionHeader
+            title={t('homepage.events.otherEvents')}
+            action={
+              <Link
+                to="/events"
+                className="group inline-flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line bg-white px-5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
+              >
+                {t('homepage.buttons.viewButton')}
+                <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              </Link>
+            }
+          />
 
-            <Link 
-              to="/news" 
-              className="group inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-primary/15 bg-white px-5 text-sm font-semibold text-primary transition-all hover:border-green hover:text-green hover:shadow-md"
-            >
-              {t('homepage.buttons.viewButton')}
-              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-4 gap-6 xll:grid-cols-3 lg:grid-cols-2 md:grid-cols-1">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
             {events.slice(0, 4).map((event: eventTypes.Event, idx: number) => (
               <motion.div 
                 key={event.slug}

@@ -1,5 +1,5 @@
 import { Card, Typography } from '@mui/material'
-import BoltRoundedIcon from '@mui/icons-material/BoltRounded'
+import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
@@ -54,29 +54,29 @@ const opportunities: OpportunityItem[] = [
   },
 ]
 
-const OpportunityCard = ({ item }: { item: OpportunityItem }) => {
+const OpportunityCard = ({ item, featured = false }: { item: OpportunityItem; featured?: boolean }) => {
   const { t } = useTranslation()
 
   return (
     <Card
-      className="rounded-2xl w-full h-full min-h-[260px] p-6 sm:p-5 pb-6 bg-[#F9FAFB] border border-[#2A2172]/10 shadow-sm hover:shadow-md hover:border-[#00956F]/40 transition-all duration-300 flex flex-col justify-start text-left"
+      className="flex h-full min-h-[260px] w-full flex-col justify-start p-7 text-left transition-all duration-300 hover:-translate-y-0.5 sm:p-5"
       sx={{
-        backgroundColor: '#F9FAFB',
+        backgroundColor: featured ? '#2A2172' : '#FFFFFF',
         borderRadius: '16px',
-        border: '1px solid rgba(42, 33, 114, 0.1)',
-        boxShadow: '0 2px 12px rgba(42, 33, 114, 0.05)',
+        border: featured ? '1px solid #2A2172' : '1px solid #E1E3EE',
+        boxShadow: 'none',
         textAlign: 'left',
+        '&:hover': { borderColor: 'rgba(42, 33, 114, 0.35)' },
       }}
     >
       <Typography
         variant="h6"
         component="h3"
-        className="text-[#2A2172] font-bold text-lg sm:text-[16px] leading-snug text-left"
+        className="text-lg font-semibold leading-snug tracking-tight text-left sm:text-[16px]"
         sx={{
-          fontWeight: 700,
-          color: '#2A2172',
+          fontWeight: 600,
+          color: featured ? '#FFFFFF' : '#14123A',
           textAlign: 'left',
-          fontFamily: 'Inter, sans-serif',
         }}
       >
         {t(item.titleKey)}
@@ -86,13 +86,9 @@ const OpportunityCard = ({ item }: { item: OpportunityItem }) => {
         {item.bullets.map((bulletKey) => (
           <li
             key={bulletKey}
-            className="flex items-start gap-2.5 text-left text-sm sm:text-[13px] leading-relaxed text-[#2A2172]/85 font-normal"
+            className={`flex items-start gap-2.5 text-left text-sm leading-relaxed font-normal ${featured ? 'text-white/85' : 'text-ink-soft'}`}
           >
-            <BoltRoundedIcon
-              className="flex-shrink-0 mt-0.5 text-[#00956F]"
-              fontSize="small"
-              sx={{ color: '#00956F', fontSize: '18px' }}
-            />
+            <Check size={18} strokeWidth={2.2} className={`mt-0.5 shrink-0 ${featured ? 'text-white' : 'text-green'}`} aria-hidden />
             <span className="flex-1 text-left leading-snug">{t(bulletKey)}</span>
           </li>
         ))}
@@ -110,9 +106,9 @@ export const OpportunitiesList = () => {
 
       {/* Desktop grid (>= 1024px) */}
       <div className="grid grid-cols-4 gap-5 mt-6 xll:grid-cols-2 lg:hidden items-stretch">
-        {opportunities.map((item) => (
+        {opportunities.map((item, i) => (
           <div key={item.id} className="h-full">
-            <OpportunityCard item={item} />
+            <OpportunityCard item={item} featured={i === 0} />
           </div>
         ))}
       </div>
@@ -134,7 +130,7 @@ export const OpportunitiesList = () => {
         >
           {opportunities.map((item) => (
             <SwiperSlide key={item.id} className="!h-auto !flex items-stretch">
-              <OpportunityCard item={item} />
+              <OpportunityCard item={item} featured={item.id === 'materials'} />
             </SwiperSlide>
           ))}
         </Swiper>

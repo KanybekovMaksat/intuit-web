@@ -38,4 +38,13 @@ export const SpecializationSchema = z.object({
   faculty: z.array(z.number()),
   phoneNumber: z.string().optional(),
   contractPrice: z.string().optional(),
+  professions: z
+    .array(
+      z.object({
+        name: z.string(),
+        description: z.string().optional(),
+        photo: z.string().optional(),
+      })
+    )
+    .default([]),
 })

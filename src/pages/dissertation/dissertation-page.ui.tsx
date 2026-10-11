@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useMemo, useState } from 'react'
-import { Breadcrumbs, Button, FormControlLabel, Switch, Typography } from '@mui/material'
+import { Button, FormControlLabel, Switch } from '@mui/material'
 import { Eye, FileText, LogIn } from 'lucide-react'
 import { Link as RouterLink, useLocation, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
@@ -8,15 +8,16 @@ import { sessionQueries } from '~entities/session'
 import { AuthDialog } from '~features/auth'
 import { pathKeys } from '~shared/lib/react-router'
 import { Loader } from '~shared/ui/loader'
+import { PageHero } from '~shared/ui/page'
 import { DiscussionThread, MessageForm } from './ui/discussion-thread.ui'
 import { DocumentDialog } from './ui/document-dialog.ui'
 
 const { formatDate, discussionStatusLabel, questionsLabel } = dissertationLib
 
 const InfoRow = ({ label, children }: { label: string; children: ReactNode }) => (
-  <div className="border-b border-primary/10 py-3 last:border-b-0">
-    <div className="text-xs font-semibold uppercase tracking-[0.12em] text-primary/50">{label}</div>
-    <div className="mt-1 text-[15px] text-black/80">{children}</div>
+  <div className="border-b border-line py-3 last:border-b-0">
+    <div className="text-xs font-medium text-ink-soft">{label}</div>
+    <div className="mt-1 text-[15px] text-ink">{children}</div>
   </div>
 )
 
@@ -48,7 +49,7 @@ export const DissertationPage = () => {
   if (isLoading) return <Loader />
   if (isError || !dissertation) {
     return (
-      <div className="my-20 text-center text-primary/70">
+      <div className="my-20 text-center text-ink-soft">
         Диссертация не найдена или ещё не опубликована.
       </div>
     )
@@ -60,56 +61,38 @@ export const DissertationPage = () => {
   const mainDocument = dissertation.documents.find((doc) => doc.kind === 'dissertation')
 
   return (
-    <div className="my-10">
+    <div className="mb-20">
       <Helmet>
         <title>{dissertation.title}</title>
       </Helmet>
 
-      <div
-        className="rounded-2xl p-5 flex flex-col gap-6"
-        style={{
-          background: 'linear-gradient(200deg, rgba(42,33,115,1) 0%, rgba(0,149,111,1) 100%)',
-        }}
-      >
-        <Breadcrumbs aria-label="breadcrumb" className="text-[white]">
-          <RouterLink to="/" className="text-white hover:underline">
-            Главная
-          </RouterLink>
-          <RouterLink to={phdUrl} className="text-white hover:underline">
-            Докторантура PhD
-          </RouterLink>
-          <RouterLink to={`${phdUrl}#dissertations`} className="text-white hover:underline">
-            Общественное обсуждение
-          </RouterLink>
-        </Breadcrumbs>
-        <div>
-          <span className="inline-block rounded-lg bg-white px-2.5 py-1 text-xs font-semibold text-primary">
-            {discussionStatusLabel[dissertation.discussionStatus]}
-          </span>
-          <Typography
-            variant="h1"
-            className="mt-4 text-[white] font-semibold text-[36px] leading-tight md:text-[26px]"
-          >
-            {dissertation.title}
-          </Typography>
-          <div className="mt-3 text-lg text-white/80">{dissertation.doctoralStudentName}</div>
-        </div>
-        {mainDocument && (
-          <div className="flex flex-wrap gap-3">
-            <Button
-              variant="contained"
+      <PageHero
+        title={dissertation.title}
+        subtitle={dissertation.doctoralStudentName}
+        crumbs={[
+          { label: 'Докторантура PhD', to: phdUrl },
+          { label: 'Общественное обсуждение', to: `${phdUrl}#dissertations` },
+        ]}
+        actions={
+          mainDocument ? (
+            <button
+              type="button"
               onClick={() => setOpenedDocument(mainDocument)}
-              startIcon={<Eye size={18} />}
-              className="bg-white text-primary shadow-none hover:bg-white/90"
+              className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-white px-6 text-[15px] font-semibold text-primary transition-all duration-200 hover:bg-white/90 active:scale-[0.98]"
             >
+              <Eye size={18} aria-hidden />
               Читать диссертацию
-            </Button>
-          </div>
-        )}
-      </div>
+            </button>
+          ) : undefined
+        }
+      >
+        <span className="inline-flex rounded-full bg-white/15 px-3 py-1 text-sm font-semibold">
+          {discussionStatusLabel[dissertation.discussionStatus]}
+        </span>
+      </PageHero>
 
       {isOwner && dissertation.status !== 'published' && (
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg bg-primary/5 p-4 text-primary">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-gray-light p-4 text-ink">
           <span>
             {dissertation.status === 'pending'
               ? 'Предпросмотр: работа на проверке у модератора и пока не видна посетителям.'
@@ -118,7 +101,7 @@ export const DissertationPage = () => {
           {(dissertation.status === 'pending' || dissertation.status === 'draft') && (
             <RouterLink
               to={pathKeys.phd.submit(dissertation.id)}
-              className="font-semibold text-green hover:underline"
+              className="font-semibold text-green-dark hover:underline"
             >
               Исправить
             </RouterLink>
@@ -127,14 +110,14 @@ export const DissertationPage = () => {
       )}
 
       <div className="mt-8 grid grid-cols-[1fr_360px] gap-8 lg:grid-cols-1">
-        <section className="min-w-0 self-start rounded-lg border border-primary/10 bg-white p-6 shadow-sm sm:p-4">
+        <section className="min-w-0 self-start rounded-3xl border border-line bg-white p-7 sm:p-4">
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-semibold text-primary">Общественное обсуждение</h2>
-              <div className="mt-1 text-sm text-black/50">
+              <h2 className="text-2xl font-semibold tracking-tight text-ink">Общественное обсуждение</h2>
+              <div className="mt-1 text-sm text-ink-soft">
                 {questionsLabel(dissertation.questionsCount)}
                 {isOwner && dissertation.unansweredCount !== null && (
-                  <> · без вашего ответа: <b className="text-primary">{dissertation.unansweredCount}</b></>
+                  <> {String.fromCharCode(183)} без вашего ответа: <b className="text-ink">{dissertation.unansweredCount}</b></>
                 )}
               </div>
             </div>
@@ -149,27 +132,27 @@ export const DissertationPage = () => {
           </div>
 
           {dissertation.discussionStatus === 'finished' && (
-            <div className="mb-6 rounded-lg bg-black/5 p-4 text-sm text-black/70">
+            <div className="mb-6 rounded-2xl bg-gray-light p-4 text-sm text-ink-soft">
               Обсуждение завершено. Новые вопросы и ответы не принимаются, история обсуждения
               сохранена.
             </div>
           )}
           {dissertation.discussionStatus === 'upcoming' && (
-            <div className="mb-6 rounded-lg bg-primary/5 p-4 text-sm text-primary">
+            <div className="mb-6 rounded-2xl bg-gray-light p-4 text-sm text-ink">
               Общественное обсуждение ещё не началось.
             </div>
           )}
 
           {isOpen && !user && (
-            <div className="mb-6 flex items-center justify-between gap-4 rounded-lg bg-green/5 p-4 md:flex-col md:items-start">
-              <span className="text-sm text-black/70">
+            <div className="mb-6 flex items-center justify-between gap-4 rounded-2xl bg-green/10 p-4 md:flex-col md:items-start">
+              <span className="text-sm text-ink-soft">
                 Чтобы задать вопрос докторанту, войдите или зарегистрируйтесь.
               </span>
               <Button
                 variant="contained"
                 startIcon={<LogIn size={18} />}
                 onClick={() => setAuthOpen(true)}
-                className="shrink-0 bg-primary shadow-none hover:bg-green"
+                className="shrink-0 bg-green-dark shadow-none hover:bg-primary"
               >
                 Войти и задать вопрос
               </Button>
@@ -185,13 +168,13 @@ export const DissertationPage = () => {
             </div>
           )}
           {isOpen && isOwner && (
-            <div className="mb-6 rounded-lg bg-green/5 p-4 text-sm text-black/70">
-              Это ваша диссертация. Отвечайте на вопросы в ветках — ответы публикуются открыто.
+            <div className="mb-6 rounded-lg bg-green/5 p-4 text-sm text-ink-soft">
+              Это ваша диссертация. Отвечайте на вопросы в ветках, ответы публикуются открыто.
             </div>
           )}
 
           {threads.length === 0 ? (
-            <p className="py-6 text-center text-black/50">
+            <p className="py-6 text-center text-ink-soft">
               {onlyMine ? 'Вы ещё не задавали вопросов.' : 'Вопросов пока нет.'}
             </p>
           ) : (
@@ -209,18 +192,18 @@ export const DissertationPage = () => {
         </section>
 
         <aside className="flex flex-col gap-6">
-          <div className="rounded-lg border border-primary/10 bg-white px-6 py-3 shadow-sm sm:px-4">
+          <div className="rounded-3xl border border-line bg-white px-6 py-3 sm:px-4">
             <InfoRow label="Докторант">{dissertation.doctoralStudentName}</InfoRow>
             <InfoRow label="Специальность">{dissertation.specialty}</InfoRow>
             <InfoRow label="Научный руководитель">{dissertation.supervisor}</InfoRow>
             <InfoRow label="Дата публикации">{formatDate(dissertation.publishedAt)}</InfoRow>
           </div>
 
-          <div className="rounded-lg border border-primary/10 bg-white p-6 shadow-sm sm:p-4">
-            <h2 className="text-lg font-semibold text-primary">Документы</h2>
-            <p className="mb-3 text-xs text-black/50">Доступны только для просмотра на сайте</p>
+          <div className="rounded-3xl border border-line bg-white p-6 sm:p-4">
+            <h2 className="text-lg font-semibold text-ink">Документы</h2>
+            <p className="mb-3 text-xs text-ink-soft">Доступны только для просмотра на сайте</p>
             {dissertation.documents.length === 0 ? (
-              <p className="text-sm text-black/50">Документы не прикреплены.</p>
+              <p className="text-sm text-ink-soft">Документы не прикреплены.</p>
             ) : (
               <ul className="flex flex-col gap-3">
                 {dissertation.documents.map((doc) => (
@@ -228,10 +211,10 @@ export const DissertationPage = () => {
                     <button
                       type="button"
                       onClick={() => setOpenedDocument(doc)}
-                      className="flex w-full items-center gap-3 rounded-lg p-2 text-left hover:bg-green/10"
+                      className="flex w-full items-center gap-3 rounded-xl p-2 text-left hover:bg-gray-light"
                     >
-                      <FileText size={22} className="shrink-0 text-green" />
-                      <span className="min-w-0 flex-1 text-sm text-black/80">
+                      <FileText size={22} className="shrink-0 text-green-dark" />
+                      <span className="min-w-0 flex-1 text-sm text-ink">
                         {doc.title || doc.kindDisplay}
                       </span>
                       <span className="flex items-center gap-1 text-sm font-semibold text-primary">

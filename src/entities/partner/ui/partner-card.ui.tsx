@@ -1,13 +1,10 @@
-import { Card, Typography } from '@mui/material'
 import { Partner } from '../partner.types'
 
 export const PartnerCard = ({ logo, title }: Partner) => {
   return (
-    <Card className="bg-[#ECEDF0] min-w-64 h-24  mx-2 p-10 flex  items-center justify-center gap-3 rounded-xl shadow-none">
-      <img src={logo} alt={title} className="h-12 w-12 rounded-full " />
-      <Typography variant="body1" className="font-bold uppercase text-[12px]">
-        {title}
-      </Typography>
-    </Card>
+    <div className="mx-2 flex h-20 min-w-60 max-w-[360px] items-center gap-3 rounded-2xl border border-line bg-white px-5">
+      <img src={logo} alt="" className="h-11 w-11 shrink-0 rounded-full object-contain" />
+      <span className="text-[13px] font-semibold leading-snug text-ink">{title}</span>
+    </div>
   )
 }

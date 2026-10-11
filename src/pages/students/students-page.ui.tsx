@@ -1,6 +1,5 @@
-import { Typography, Container, Box, Button } from "@mui/material";
 import { t } from "i18next";
-import { Link as RouterLink } from "react-router-dom";
+import { PageHero, LinkCard } from "~shared/ui/page";
 import { Schedule } from "~widgets/schedule";
 
 export const StudentsPage = () => {
@@ -50,101 +49,26 @@ export const StudentsPage = () => {
   ];
 
   return (
-    <div className="w-full py-10">
-      <Schedule />
-      <Typography
-        variant="h4"
-        className="font-bold text-center mb-8 text-gray-800"
-        style={{ fontSize: "clamp(1.5rem, 5vw, 2.5rem)" }}
-      >
-        {t("studentsPage.forStudents")}
-      </Typography>
-      <Box
-        display="flex"
-        flexWrap={"wrap"}
-        justifyContent="center"
-        gap={2}
-        className="notion-like-embed"
-      >
-        {links.map((link, index) => (
-          <Box
-            key={index}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              border: "1px solid #e0e0e0",
-              borderRadius: "8px",
-              padding: "16px",
-              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-              transition: "transform 0.2s",
-              "&:hover": {
-                transform: "translateY(-4px)",
-              },
-              width: "350px",
-              minHeight: "300px",
-            }}
-            className="md:flex md:flex-col"
-          >
-            <Box
-              component="img"
-              src={link.image}
-              alt={link.title}
-              sx={{
-                width: 64,
-                height: 64,
-                borderRadius: "8px",
-                marginRight: "16px",
-              }}
+    <div className="mb-20">
+      <PageHero compact title={t("studentsPage.forStudents")} />
+
+      <section className="mt-10">
+        <Schedule />
+      </section>
+
+      <ul className="mt-14 grid grid-cols-3 gap-5 lg:grid-cols-2 md:grid-cols-1">
+        {links.map((link) => (
+          <li key={link.title}>
+            <LinkCard
+              title={link.title}
+              description={link.description}
+              image={link.image}
+              href={link.isExternal ? link.url : undefined}
+              to={link.isExternal ? undefined : link.url}
             />
-            <Box
-              className="md:flex md:flex-col md:items-center 
-            flex flex-col justify-between w-full h-full"
-            >
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "500",
-                  color: "text.primary",
-                  marginBottom: "4px",
-                }}
-                className="text-center"
-              >
-                {link.title}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "text.secondary",
-                  marginBottom: "8px",
-                }}
-                className="text-center"
-              >
-                {link.description}
-              </Typography>
-              {link.isExternal ? (
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full"
-                >
-                  <Button className="w-full bg-green" variant="contained">
-                    {t("aboutPage.go")}
-                  </Button>
-                </a>
-              ) : (
-                <RouterLink to={link.url} className="w-full">
-                  <Button className="w-full bg-green" variant="contained">
-                    {t("aboutPage.go")}
-                  </Button>
-                </RouterLink>
-              )}
-            </Box>
-          </Box>
+          </li>
         ))}
-      </Box>
-      {/* <FirstSlider /> */}
+      </ul>
     </div>
   );
 };

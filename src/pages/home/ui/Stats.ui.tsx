@@ -1,98 +1,55 @@
-import React, { useState } from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
-import CountUp from 'react-countup';
-import { useInView } from 'react-intersection-observer';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next'
+import CountUp from 'react-countup'
+import { useInView } from 'react-intersection-observer'
+import { useReducedMotion } from 'framer-motion'
 
-import { Building2, Calendar, GraduationCap, Users } from 'lucide-react';
+type Tone = 'navy' | 'green' | 'soft'
 
-const iconMap: Record<string, React.ReactNode> = {
-  year: <Calendar />,
-  institutes: <Building2 />,
-  faculty: <Users />,
-  graduates: <GraduationCap />,
-};
-
-interface StatsCardProps {
-  count: number;
-  label: string;
-  color: string;
-  iconKey: string;
-  showPlusOnly?: boolean;
+interface StatProps {
+  count: number
+  label: string
+  prefix?: string
+  tone: Tone
 }
-const StatsCard: React.FC<StatsCardProps> = ({
-  count,
-  label,
-  color,
-  iconKey,
-  showPlusOnly,
-}) => {
-  const [isCounting, setIsCounting] = useState(false);
-  const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.3 });
 
-  React.useEffect(() => {
-    if (inView) setIsCounting(true);
-    else setIsCounting(false);
-  }, [inView]);
+const toneClass: Record<Tone, { box: string; label: string }> = {
+  navy: { box: 'bg-primary text-white', label: 'text-white/75' },
+  green: { box: 'bg-green-dark text-white', label: 'text-white/80' },
+  soft: { box: 'bg-white text-primary border border-line', label: 'text-ink-soft' },
+}
+
+const Stat = ({ count, label, prefix = '', tone }: StatProps) => {
+  const reduce = useReducedMotion()
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.4 })
+  const styles = toneClass[tone]
 
   return (
-    <Card
+    <div
       ref={ref}
-      className="w-full  rounded-lg shadow-none bg-green border-green transition-transform text-white "
+      className={`flex min-h-[168px] flex-col justify-between rounded-2xl p-6 sm:min-h-[132px] sm:p-5 ${styles.box}`}
     >
-      <CardContent className="flex  justify-between items-start gap-3 p-3">
-        <div>
-          <Typography variant="h5" className={` font-[900] md:font-semibold`}>
-            {showPlusOnly ? (
-              `+${count}`
-            ) : isCounting ? (
-              <CountUp start={0} end={count} duration={2} separator="" />
-            ) : (
-              '0'
-            )}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            className="text-sm md:text-xs leading-tight text-white/90 mt-1"
-          >
-            {label}
-          </Typography>
-        </div>
-        <div className="bg-blue p-2 sm:p-1.5 rounded-full flex-shrink-0 flex items-center justify-center">{iconMap[iconKey]}</div>
-      </CardContent>
-    </Card>
-  );
-};
+      <div className="text-5xl font-semibold leading-none tracking-tight tabular-nums lg:text-4xl">
+        {prefix}
+        {reduce || inView ? (
+          <CountUp start={reduce ? count : 0} end={count} duration={2} separator="" />
+        ) : (
+          count
+        )}
+      </div>
+      <div className={`mt-6 text-sm leading-snug ${styles.label}`}>{label}</div>
+    </div>
+  )
+}
 
 export const Stats = () => {
+  const { t } = useTranslation()
+
   return (
-    <div className="flex justify-between md:grid md:grid-cols-2 gap-5 sm:gap-3 mt-6 sm:mt-4">
-      <StatsCard
-        count={2006}
-        label={t('homepage.Stats.yearOfEstablishment')}
-        color="blue"
-        iconKey="year"
-      />
-      <StatsCard
-        count={8}
-        label={t('homepage.Stats.institutes')}
-        color="green"
-        iconKey="institutes"
-      />
-      <StatsCard
-        count={155}
-        label={t('homepage.Stats.facultyMembers')}
-        color="purple"
-        iconKey="faculty"
-        showPlusOnly
-      />
-      <StatsCard
-        count={5000}
-        label={t('homepage.Stats.graduates')}
-        color="red"
-        iconKey="graduates"
-        showPlusOnly
-      />
+    <div className="mt-6 grid grid-cols-4 gap-4 lg:grid-cols-2">
+      <Stat tone="navy" count={2006} label={t('homepage.Stats.yearOfEstablishment')} />
+      <Stat tone="soft" count={8} label={t('homepage.Stats.institutes')} />
+      <Stat tone="soft" prefix="+" count={155} label={t('homepage.Stats.facultyMembers')} />
+      <Stat tone="green" prefix="+" count={5000} label={t('homepage.Stats.graduates')} />
     </div>
-  );
-};
+  )
+}

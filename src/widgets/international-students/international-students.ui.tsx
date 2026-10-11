@@ -1,494 +1,333 @@
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-  Avatar,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useInView } from 'react-intersection-observer'
+import { useReducedMotion } from 'framer-motion'
+import CountUp from 'react-countup'
 import {
   Globe,
-  Target,
   Users,
   Briefcase,
   Mail,
   Phone,
   MapPin,
-  CheckCircle2,
+  Check,
   Award,
   Building2,
   Calendar,
   Layers,
+  Target,
 } from 'lucide-react'
-import { motion } from 'framer-motion'
-import CountUp from 'react-countup'
-import { useInView } from 'react-intersection-observer'
-import { useTranslation } from 'react-i18next'
-import { useEffect } from 'react'
+import { PageHero } from '~shared/ui/page'
 
-const StatCard = ({
+const StatTile = ({
   icon: Icon,
   value,
-  label,
   suffix = '',
+  label,
 }: {
-  icon: any
+  icon: React.ElementType
   value: number
-  label: string
   suffix?: string
+  label: string
 }) => {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  })
+  const reduce = useReducedMotion()
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 })
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5 }}
-    >
-      <Card className="h-full border-none shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white/80 backdrop-blur-sm overflow-hidden group rounded-lg">
-        <Box className="absolute top-0 left-0 w-1 h-full bg-blue-600 group-hover:w-2 transition-all duration-300 rounded-lg" />
-        <CardContent className="flex flex-col items-center text-center p-6">
-          <Box className="p-3 bg-blue-50 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300">
-            <Icon size={32} className="text-blue-600" />
-          </Box>
-          <Typography variant="h4" className="font-bold text-gray-900 mb-1">
-            {inView ? <CountUp end={value} duration={2.5} /> : 0}
-            {suffix}
-          </Typography>
-          <Typography variant="body2" className="text-gray-600 font-medium">
-            {label}
-          </Typography>
-        </CardContent>
-      </Card>
-    </motion.div>
+    <li ref={ref} className="flex flex-col gap-4 rounded-2xl border border-line bg-white p-6">
+      <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+        <Icon size={24} aria-hidden />
+      </span>
+      <div>
+        <p className="text-4xl font-semibold leading-none tracking-tight tabular-nums text-ink">
+          {reduce || !inView ? value : <CountUp end={value} duration={2.4} />}
+          {suffix}
+        </p>
+        <p className="mt-2 text-[15px] text-ink-soft">{label}</p>
+      </div>
+    </li>
   )
 }
 
-const PartnershipCard = ({ title, content, icon: Icon }: { title: string, content: string, icon: any }) => (
-  <Card className="border border-gray-100 shadow-md hover:shadow-lg transition-all duration-300 h-full">
-    <CardContent className="p-6">
-      <Box className="flex items-center mb-4">
-        <Box className="p-2 bg-blue-100 rounded-lg mr-4">
-          <Icon size={24} className="text-blue-700" />
-        </Box>
-        <Typography variant="h6" className="font-bold text-gray-800">
-          {title}
-        </Typography>
-      </Box>
-      <Typography variant="body2" className="text-gray-600 leading-relaxed">
-        {content}
-      </Typography>
-    </CardContent>
-  </Card>
-)
+const asList = (value: unknown): string[] => (Array.isArray(value) ? (value as string[]) : [])
 
 export const InternationalStudents = () => {
   const { t, i18n } = useTranslation()
 
-  // Default to Kyrgyz on mount as per user request
+  // Default to Kyrgyz on mount when the visitor has not chosen a language yet
   useEffect(() => {
     if (i18n.language !== 'kg' && !localStorage.getItem('i18nextLng')) {
-       i18n.changeLanguage('kg')
+      i18n.changeLanguage('kg')
     }
   }, [i18n])
 
-  const listItems = t('internationalPage.exchange.items', { returnObjects: true }) as string[]
-  const projectAreas = t('internationalPage.globalEngagement.projectAreas.items', { returnObjects: true }) as string[]
-  const duties = t('internationalPage.roles.duties', { returnObjects: true }) as any[]
+  const exchangeItems = asList(t('internationalPage.exchange.items', { returnObjects: true }))
+  const projectAreas = asList(
+    t('internationalPage.globalEngagement.projectAreas.items', { returnObjects: true })
+  )
+  const duties = t('internationalPage.roles.duties', { returnObjects: true }) as unknown
+  const dutyList = Array.isArray(duties)
+    ? (duties as { title: string; items?: string[] }[])
+    : []
+
+  const contacts = [
+    {
+      icon: MapPin,
+      label: t('internationalPage.contact.addressLabel'),
+      value: t('internationalPage.contact.addressValue'),
+    },
+    {
+      icon: Phone,
+      label: t('internationalPage.contact.phoneLabel'),
+      value: '+996 770 604 233',
+      href: 'tel:+996770604233',
+    },
+    {
+      icon: Mail,
+      label: t('internationalPage.contact.emailLabel'),
+      value: 'vise.edu.kg@gmail.com',
+      href: 'mailto:vise.edu.kg@gmail.com',
+    },
+    {
+      icon: Building2,
+      label: t('internationalPage.contact.locationLabel'),
+      value: t('internationalPage.contact.locationValue'),
+    },
+  ]
+
+  const partners = [
+    {
+      title: t('internationalPage.strategicPartners.erasmus.title'),
+      text: t('internationalPage.strategicPartners.erasmus.description'),
+      icon: Globe,
+    },
+    {
+      title: t('internationalPage.strategicPartners.iaeste.title'),
+      text: t('internationalPage.strategicPartners.iaeste.description'),
+      icon: Briefcase,
+    },
+  ]
 
   return (
-    <Box className="bg-slate-50 min-h-screen">
-      {/* Hero Section */}
-      <Box 
-        className="relative py-20 px-12 md:px-6 sm:px-4 rounded-2xl overflow-hidden shadow-lg" 
-        style={{ 
-          background: 'linear-gradient(135deg, #00956F 0%, #00956F 50%, #00956F 100%)' 
-        }}
-      >
-        <Box className="absolute inset-0 opacity-10">
-          <Globe className="absolute -right-20 -top-20 w-96 h-96 text-white rotate-12" />
-        </Box>
-        <div className="relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <Typography
-              variant="overline"
-              className="text-white font-bold tracking-widest block mb-4"
-            >
-              {t('internationalPage.hero.department')}
-            </Typography>
-            <Typography
-              variant="h2"
-              className="text-white font-black mb-6 leading-tight"
-              style={{ 
-                fontSize: 'clamp(1.75rem, 6vw, 4.25rem)',
-                textShadow: '0 2px 10px rgba(0,0,0,0.2)'
-              }}
-            >
-              {t('internationalPage.hero.title')} <br />
-              <span className="text-blue-400">{t('internationalPage.hero.subtitle')}</span>
-            </Typography>
-            <Typography
-              variant="h5"
-              className="text-white max-w-2xl leading-relaxed mb-8 opacity-90 font-light"
-            >
-              {t('internationalPage.hero.description')}
-            </Typography>
-          </motion.div>
+    <div className="mb-10">
+      <PageHero
+        crumbs={[{ label: t('internationalPage.hero.department') }]}
+        title={
+          <>
+            {t('internationalPage.hero.title')}{' '}
+            <span className="text-white/70">{t('internationalPage.hero.subtitle')}</span>
+          </>
+        }
+        subtitle={t('internationalPage.hero.description')}
+      />
+
+      <ul className="mt-6 grid grid-cols-4 gap-4 lg:grid-cols-2 sm:grid-cols-1">
+        <StatTile icon={Users} value={1500} suffix="+" label={t('internationalPage.stats.students')} />
+        <StatTile icon={Building2} value={15} label={t('internationalPage.stats.partners')} />
+        <StatTile icon={Globe} value={10} suffix="+" label={t('internationalPage.stats.countries')} />
+        <StatTile icon={Calendar} value={2006} label={t('internationalPage.stats.founded')} />
+      </ul>
+
+      <section className="mt-14 grid grid-cols-2 gap-5 md:grid-cols-1">
+        <div className="rounded-3xl bg-gray-light p-8 sm:p-5">
+          <h2 className="text-2xl font-semibold tracking-tight text-ink">
+            {t('internationalPage.whoWeAre.title')}
+          </h2>
+          <div className="mt-4 grid gap-4 text-[1.0625rem] leading-relaxed text-ink-soft">
+            <p>{t('internationalPage.whoWeAre.text1')}</p>
+            <p>{t('internationalPage.whoWeAre.text2')}</p>
+          </div>
         </div>
-      </Box>
 
-      {/* Facts & Figures */}
-      <div className="-mt-16 mb-20 relative z-20 px-12 md:px-6 sm:px-4">
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard icon={Users} value={1500} suffix="+" label={t('internationalPage.stats.students')} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard icon={Building2} value={15} label={t('internationalPage.stats.partners')} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard icon={Globe} value={10} suffix="+" label={t('internationalPage.stats.countries')} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard icon={Calendar} value={2006} label={t('internationalPage.stats.founded')} />
-          </Grid>
-        </Grid>
-      </div>
+        <div className="relative overflow-hidden rounded-3xl bg-primary p-8 text-white sm:p-5">
+          <Target
+            aria-hidden
+            size={140}
+            className="pointer-events-none absolute -bottom-8 -right-8 text-white/10"
+          />
+          <h2 className="relative text-2xl font-semibold tracking-tight">
+            {t('internationalPage.mission.title')}
+          </h2>
+          <blockquote className="relative mt-4 border-l-2 border-green pl-4 text-lg leading-relaxed text-white">
+            {t('internationalPage.mission.quote')}
+          </blockquote>
+          <p className="relative mt-4 text-[15px] leading-relaxed text-white/80">
+            {t('internationalPage.mission.description')}
+          </p>
+        </div>
+      </section>
 
-      {/* Who We Are & Mission */}
-      <div className="mb-24 px-12 md:px-6 sm:px-4">
-        <Grid container spacing={8} alignItems="center">
-          <Grid item xs={12} md={6}>
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <Box className="flex items-center mb-4">
-                <Box className="p-2 bg-[#00956F] rounded mr-3">
-                  <Users className="text-white" size={24} />
-                </Box>
-                <Typography variant="h4" className="font-bold text-gray-900">
-                  {t('internationalPage.whoWeAre.title')}
-                </Typography>
-              </Box>
-              <Typography variant="body1" className="text-gray-700 text-lg leading-relaxed mb-6">
-                {t('internationalPage.whoWeAre.text1')}
-              </Typography>
-              <Typography variant="body1" className="text-gray-700 text-lg leading-relaxed mb-6">
-                {t('internationalPage.whoWeAre.text2')}
-              </Typography>
-            </motion.div>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="bg-white p-8 sm:p-5 rounded-3xl shadow-xl border border-blue-50 relative overflow-hidden"
-            >
-              <Box className="absolute top-0 right-0 p-4 opacity-5">
-                <Target size={120} />
-              </Box>
-              <Box className="flex items-center mb-4">
-                <Box className="p-2 bg-indigo-600 rounded mr-3">
-                  <Target className="text-white" size={24} />
-                </Box>
-                <Typography variant="h4" className="font-bold text-gray-900">
-                  {t('internationalPage.mission.title')}
-                </Typography>
-              </Box>
-              <Typography variant="body1" className="text-gray-700 text-lg leading-relaxed italic border-l-4 border-indigo-500 pl-4 mb-6">
-                "{t('internationalPage.mission.quote')}"
-              </Typography>
-              <Typography variant="body1" className="text-gray-700 leading-relaxed">
-                {t('internationalPage.mission.description')}
-              </Typography>
-            </motion.div>
-          </Grid>
-        </Grid>
-      </div>
-      <Box className="bg-gray-100 py-20 mb-24 px-12 md:px-6 sm:px-4 rounded-2xl">
-        <div className="w-full">
-          <Typography variant="h3" className="font-bold text-center mb-4 text-gray-900">
-            {t('internationalPage.globalEngagement.title')}
-          </Typography>
-          <Typography variant="h6" className="text-center mb-12 text-gray-600 max-w-2xl mx-auto">
-            {t('internationalPage.globalEngagement.description')}
-          </Typography>
+      <section className="mt-14">
+        <h2 className="text-[2.5rem] font-semibold leading-[1.1] tracking-tight text-ink lg:text-4xl md:!text-[28px]">
+          {t('internationalPage.globalEngagement.title')}
+        </h2>
+        <p className="mt-4 max-w-[70ch] text-[1.0625rem] leading-relaxed text-ink-soft">
+          {t('internationalPage.globalEngagement.description')}
+        </p>
 
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
-              <PartnershipCard
-                icon={Briefcase}
-                title={t('internationalPage.globalEngagement.partnership.title')}
-                content={t('internationalPage.globalEngagement.partnership.content')}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <PartnershipCard
-                icon={Layers}
-                title={t('internationalPage.globalEngagement.jointProjects.title')}
-                content={t('internationalPage.globalEngagement.jointProjects.content')}
-              />
-            </Grid>
-          </Grid>
+        <div className="mt-8 grid grid-cols-2 gap-5 md:grid-cols-1">
+          {[
+            {
+              icon: Briefcase,
+              title: t('internationalPage.globalEngagement.partnership.title'),
+              content: t('internationalPage.globalEngagement.partnership.content'),
+            },
+            {
+              icon: Layers,
+              title: t('internationalPage.globalEngagement.jointProjects.title'),
+              content: t('internationalPage.globalEngagement.jointProjects.content'),
+            },
+          ].map(({ icon: Icon, title, content }) => (
+            <article key={title} className="rounded-2xl border border-line bg-white p-6">
+              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <Icon size={24} aria-hidden />
+              </span>
+              <h3 className="mt-4 text-xl font-semibold text-ink">{title}</h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">{content}</p>
+            </article>
+          ))}
+        </div>
 
-          <Box className="mt-12 bg-white p-8 sm:p-5 rounded-2xl shadow-sm border border-gray-200">
-            <Typography variant="h5" className="font-bold mb-6 flex items-center">
-              <CheckCircle2 className="text-green-500 mr-2" /> {t('internationalPage.globalEngagement.projectAreas.title')}
-            </Typography>
-            <Grid container spacing={2}>
-              {Array.isArray(projectAreas) && projectAreas.map((item, index) => (
-                <Grid item xs={12} sm={6} key={index}>
-                  <Box className="flex items-start p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors duration-200">
-                    <Box className="mt-1 mr-3 flex-shrink-0">
-                      <div className="w-2 h-2 bg-blue-600 rounded-full" />
-                    </Box>
-                    <Typography variant="body2" className="text-gray-700 font-medium">
-                      {item}
-                    </Typography>
-                  </Box>
-                </Grid>
+        {projectAreas.length > 0 && (
+          <div className="mt-5 rounded-3xl bg-gray-light p-8 sm:p-5">
+            <h3 className="text-xl font-semibold text-ink">
+              {t('internationalPage.globalEngagement.projectAreas.title')}
+            </h3>
+            <ul className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-1">
+              {projectAreas.map((item) => (
+                <li key={item} className="flex items-start gap-3 rounded-2xl bg-white p-4">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-dark text-white">
+                    <Check size={14} aria-hidden strokeWidth={3} />
+                  </span>
+                  <span className="text-[15px] font-medium leading-relaxed text-ink">{item}</span>
+                </li>
               ))}
-            </Grid>
-          </Box>
+            </ul>
+          </div>
+        )}
+      </section>
+
+      <section className="mt-14 grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-start gap-8 lg:grid-cols-1">
+        <div>
+          <h2 className="text-[2.5rem] font-semibold leading-[1.1] tracking-tight text-ink lg:text-4xl md:!text-[28px]">
+            {t('internationalPage.exchange.title')}{' '}
+            <span className="text-green-dark">{t('internationalPage.exchange.subtitle')}</span>
+          </h2>
+          <div className="mt-5 grid max-w-[70ch] gap-4 text-[1.0625rem] leading-relaxed text-ink-soft">
+            <p>{t('internationalPage.exchange.text1')}</p>
+            <p>{t('internationalPage.exchange.text2')}</p>
+          </div>
+          {exchangeItems.length > 0 && (
+            <ul className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-1">
+              {exchangeItems.map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-dark text-white">
+                    <Check size={14} aria-hidden strokeWidth={3} />
+                  </span>
+                  <span className="text-[15px] font-medium leading-relaxed text-ink">{item}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-      </Box>
 
-      {/* Exchange & Mobility */}
-      <div className="mb-24 px-12 md:px-6 sm:px-4">
-        <Grid container spacing={8} alignItems="stretch">
-          <Grid item xs={12} lg={7}>
-            <Box className="h-full flex flex-col justify-center">
-              <Typography variant="h3" className="font-bold text-gray-900 mb-6">
-                {t('internationalPage.exchange.title')} <span className="text-blue-600">{t('internationalPage.exchange.subtitle')}</span>
-              </Typography>
-              <Typography variant="body1" className="text-gray-700 text-lg leading-relaxed mb-6">
-                {t('internationalPage.exchange.text1')}
-              </Typography>
-              <Typography variant="body1" className="text-gray-700 leading-relaxed mb-8">
-                {t('internationalPage.exchange.text2')}
-              </Typography>
-
-              <List className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {Array.isArray(listItems) && listItems.map((text, index) => (
-                  <ListItem key={index} className="px-0 py-1">
-                    <ListItemIcon className="min-w-[40px]">
-                      <CheckCircle2 size={20} className="text-blue-600" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={text}
-                      primaryTypographyProps={{ variant: 'body2', className: 'text-gray-800 font-medium' }}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-          </Grid>
-          <Grid item xs={12} lg={5}>
-            <Box className="rounded-3xl shadow-2xl overflow-hidden h-full flex flex-col" style={{ background: 'linear-gradient(135deg, #00956F 0%, #00956F 100%)' }}>
-              <Box className="p-8 sm:p-5">
-                <Typography variant="h5" className="font-bold mb-6 flex items-center text-white">
-                  <Award className="mr-2" /> {t('internationalPage.strategicPartners.title')}
-                </Typography>
-
-                <Card 
-                  sx={{ 
-                    bgcolor: 'rgba(255, 255, 255, 0.1)', 
-                    color: 'white',
-                    mb: 3, 
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: 'none',
-                    '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.15)' }
-                  }}
-                >
-                  <CardContent className="p-6">
-                    <Box className="flex justify-between items-start mb-4">
-                      <Typography variant="h6" className="font-bold">{t('internationalPage.strategicPartners.erasmus.title')}</Typography>
-                      <Box className="p-1 bg-white rounded flex items-center justify-center w-10 h-10 overflow-hidden shadow-sm">
-                        <Globe size={24} className="text-blue-600" />
-                      </Box>
-                    </Box>
-                    <Typography variant="body2" className="text-blue-50 opacity-90 leading-relaxed">
-                      {t('internationalPage.strategicPartners.erasmus.description')}
-                    </Typography>
-                  </CardContent>
-                </Card>
-
-                <Card 
-                  sx={{ 
-                    bgcolor: 'rgba(255, 255, 255, 0.1)', 
-                    color: 'white',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: 'none',
-                    '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.15)' }
-                  }}
-                >
-                  <CardContent className="p-6">
-                    <Box className="flex justify-between items-start mb-4">
-                      <Typography variant="h6" className="font-bold">{t('internationalPage.strategicPartners.iaeste.title')}</Typography>
-                      <Box className="p-1 bg-blue-100 rounded flex items-center justify-center w-10 h-10 overflow-hidden shadow-sm">
-                        <Briefcase size={24} className="text-blue-700" />
-                      </Box>
-                    </Box>
-                    <Typography variant="body2" className="text-blue-50 opacity-90 leading-relaxed">
-                      {t('internationalPage.strategicPartners.iaeste.description')}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Box>
-            </Box>
-          </Grid>
-        </Grid>
-      </div>
-
-      {/* Roles & Responsibilities */}
-      <Box className="bg-white py-20 border-y border-gray-100 px-12 md:px-6 sm:px-4 rounded-2xl">
-        <div className="w-full">
-          <Typography variant="h3" className="font-bold text-center mb-16 text-gray-900">
-            {t('internationalPage.roles.title')}
-          </Typography>
-          <Grid container spacing={4}>
-            {Array.isArray(duties) && duties.map((duty: any, index: number) => (
-              <Grid item xs={12} md={4} key={index}>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="h-full"
-                >
-                  <Box className="flex items-start mb-3">
-                    <Typography variant="h1" className="text-4xl font-black text-blue-100 mr-4 leading-none select-none">
-                      {String(index + 1).padStart(2, '0')}
-                    </Typography>
-                    <Typography variant="h6" className="font-bold leading-tight mt-1 text-gray-800">
-                      {duty.title}
-                    </Typography>
-                  </Box>
-                  <List dense>
-                    {Array.isArray(duty.items) && duty.items.map((item: string, i: number) => (
-                      <ListItem key={i} className="px-0 items-start">
-                        <ListItemIcon className="min-w-[24px] mt-1">
-                          <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={item}
-                          primaryTypographyProps={{ variant: 'body2', className: 'text-gray-600' }}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </motion.div>
-              </Grid>
+        <aside className="rounded-3xl bg-green-dark p-8 text-white sm:p-5">
+          <h3 className="flex items-center gap-2 text-xl font-semibold">
+            <Award size={22} aria-hidden />
+            {t('internationalPage.strategicPartners.title')}
+          </h3>
+          <ul className="mt-5 grid gap-3">
+            {partners.map(({ title, text, icon: Icon }) => (
+              <li key={title} className="rounded-2xl bg-white/10 p-5 ring-1 ring-white/20">
+                <div className="flex items-start justify-between gap-3">
+                  <h4 className="text-lg font-semibold">{title}</h4>
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-green-dark">
+                    <Icon size={22} aria-hidden />
+                  </span>
+                </div>
+                <p className="mt-3 text-[15px] leading-relaxed text-white/85">{text}</p>
+              </li>
             ))}
-          </Grid>
-        </div>
-      </Box>
+          </ul>
+        </aside>
+      </section>
 
-      {/* Team & Contact Section */}
-      <div className="w-full py-20 px-12 md:px-6 sm:px-4">
-        <Grid container spacing={6}>
-          <Grid item xs={12} md={7}>
-            <Box className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
-              <Box className="bg-blue-600 p-6">
-                <Typography variant="h5" className="text-white font-bold flex items-center">
-                  <Mail className="mr-2" /> {t('internationalPage.contact.title')}
-                </Typography>
-              </Box>
-              <Box className="p-8 sm:p-5">
-                <Grid container spacing={4}>
-                  <Grid item xs={12} sm={6}>
-                    <Box className="flex items-start mb-6">
-                      <Box className="p-2 bg-blue-50 rounded-lg mr-4">
-                        <MapPin className="text-blue-600" size={20} />
-                      </Box>
-                      <Box>
-                        <Typography variant="subtitle2" className="text-gray-500 font-bold uppercase tracking-wider">{t('internationalPage.contact.addressLabel')}</Typography>
-                        <Typography variant="body1" className="text-gray-800 whitespace-pre-line">{t('internationalPage.contact.addressValue')}</Typography>
-                      </Box>
-                    </Box>
-                    <Box className="flex items-start">
-                      <Box className="p-2 bg-blue-50 rounded-lg mr-4">
-                        <Phone className="text-blue-600" size={20} />
-                      </Box>
-                      <Box>
-                        <Typography variant="subtitle2" className="text-gray-500 font-bold uppercase tracking-wider">{t('internationalPage.contact.phoneLabel')}</Typography>
-                        <Typography variant="body1" className="text-gray-800">+996 770 604 233</Typography>
-                      </Box>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Box className="flex items-start mb-6">
-                      <Box className="p-2 bg-blue-50 rounded-lg mr-4">
-                        <Mail className="text-blue-600" size={20} />
-                      </Box>
-                      <Box>
-                        <Typography variant="subtitle2" className="text-gray-500 font-bold uppercase tracking-wider">{t('internationalPage.contact.emailLabel')}</Typography>
-                        <Typography variant="body1" className="text-gray-800">vise.edu.kg@gmail.com</Typography>
-                      </Box>
-                    </Box>
-                    <Box className="flex items-start">
-                      <Box className="p-2 bg-blue-50 rounded-lg mr-4">
-                        <Building2 className="text-blue-600" size={20} />
-                      </Box>
-                      <Box>
-                        <Typography variant="subtitle2" className="text-gray-500 font-bold uppercase tracking-wider">{t('internationalPage.contact.locationLabel')}</Typography>
-                        <Typography variant="body1" className="text-gray-800">{t('internationalPage.contact.locationValue')}</Typography>
-                      </Box>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Box>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={5}>
-            <Card className="h-full border-none shadow-xl bg-gradient-to-br from-white to-gray-50 rounded-3xl overflow-hidden group">
-              <Box className="bg-gray-100 flex justify-center py-10 relative">
-                <Box className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <Award size={100} />
-                </Box>
-                <Avatar
-                  src="/zhazgul.jpeg"
-                  alt={t('internationalPage.team.name')}
-                  className="w-40 h-40 border-4 border-white shadow-lg bg-blue-600"
-                >
-                  <Users size={60} />
-                </Avatar>
-              </Box>
-              <CardContent className="text-center p-8 sm:p-5">
-                <Typography variant="h5" className="font-black text-gray-900 mb-1">
-                  {t('internationalPage.team.name')}
-                </Typography>
-                <Typography variant="body1" className="text-blue-600 font-bold mb-6">
-                  {t('internationalPage.team.position')}
-                </Typography>
-                <Divider className="mb-6 mx-auto w-12" />
-                <Typography variant="body2" className="text-gray-500 italic">
-                  {t('internationalPage.team.bio')}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </div>
-    </Box>
+      {dutyList.length > 0 && (
+        <section className="mt-14">
+          <h2 className="text-[2.5rem] font-semibold leading-[1.1] tracking-tight text-ink lg:text-4xl md:!text-[28px]">
+            {t('internationalPage.roles.title')}
+          </h2>
+          <ol className="mt-8 grid grid-cols-3 gap-5 lg:grid-cols-1">
+            {dutyList.map((duty, index) => (
+              <li key={duty.title} className="rounded-3xl border border-line bg-white p-7 sm:p-5">
+                <div className="flex items-start gap-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold tabular-nums text-white">
+                    {index + 1}
+                  </span>
+                  <h3 className="mt-1.5 text-lg font-semibold leading-snug text-ink">
+                    {duty.title}
+                  </h3>
+                </div>
+                {Array.isArray(duty.items) && (
+                  <ul className="mt-5 grid gap-2.5">
+                    {duty.items.map((item) => (
+                      <li key={item} className="flex gap-3 text-[15px] leading-relaxed text-ink-soft">
+                        <span
+                          aria-hidden
+                          className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-green"
+                        />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      <section className="mt-14 grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-stretch gap-5 lg:grid-cols-1">
+        <div className="rounded-3xl border border-line bg-white p-8 sm:p-5">
+          <h2 className="text-2xl font-semibold tracking-tight text-ink">
+            {t('internationalPage.contact.title')}
+          </h2>
+          <dl className="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-1">
+            {contacts.map(({ icon: Icon, label, value, href }) => (
+              <div key={label} className="flex items-start gap-4">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Icon size={20} aria-hidden />
+                </span>
+                <div className="min-w-0">
+                  <dt className="text-sm text-ink-soft">{label}</dt>
+                  <dd className="mt-1 whitespace-pre-line text-[15px] font-medium text-ink break-words">
+                    {href ? (
+                      <a href={href} className="transition-colors hover:text-primary">
+                        {value}
+                      </a>
+                    ) : (
+                      value
+                    )}
+                  </dd>
+                </div>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <article className="flex flex-col items-center rounded-3xl bg-gray-light p-8 text-center sm:p-5">
+          <img
+            src="/zhazgul.jpeg"
+            alt={t('internationalPage.team.name')}
+            className="h-36 w-36 rounded-full object-cover ring-4 ring-white"
+          />
+          <h3 className="mt-5 text-xl font-semibold text-ink">{t('internationalPage.team.name')}</h3>
+          <p className="mt-1 font-medium text-green-dark">{t('internationalPage.team.position')}</p>
+          <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">
+            {t('internationalPage.team.bio')}
+          </p>
+        </article>
+      </section>
+    </div>
   )
 }

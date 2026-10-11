@@ -1,117 +1,66 @@
-import React from 'react'
-import {
-  Typography,
-  Container,
-  Box,
-  List,
-  ListItem,
-  ListItemText,
-} from '@mui/material'
 import { t } from 'i18next'
+import { PageHero } from '~shared/ui/page'
+
+const taskKeys = [
+  'vision.primary',
+  'vision.primary2',
+  'vision.primary3',
+  'vision.primary4',
+  'vision.primary5',
+  'vision.primary6',
+  'vision.primary7',
+  'vision.primary8',
+  'vision.primary9',
+]
 
 export const VisionPage = () => {
+  const blocks = [
+    { title: t('vision.item'), text: t('vision.text') },
+    { title: t('vision.text2'), text: t('vision.text3') },
+  ]
+
   return (
-    <div className="w-full py-10">
-      <Typography
-        variant="h4"
-        className="font-bold text-center mb-8 text-gray-800"
-        style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}
-      >
-        {t("vision.title")}
-      </Typography>
+    <div className="mb-20">
+      <PageHero
+        compact
+        title={t('vision.title')}
+        crumbs={[{ label: t('aboutPage.title', 'Об университете'), to: '/about' }]}
+      />
 
-      {/* Видение */}
-      <Box mb={6}>
-        <Typography variant="h5" className="font-semibold mb-4 text-gray-700">
-          {t("vision.item")}
-        </Typography>
-        <Typography variant="body1" className="text-gray-600 text-justify">
-          {t("vision.text")}
-        </Typography>
-      </Box>
+      <div className="mt-10 grid grid-cols-2 gap-5 md:grid-cols-1">
+        {blocks.map((block) => (
+          <section key={block.title} className="rounded-3xl bg-gray-light p-8 sm:p-5">
+            <h2 className="text-2xl font-semibold tracking-tight text-ink">{block.title}</h2>
+            <p className="mt-3 text-[1.0625rem] leading-relaxed text-ink-soft">{block.text}</p>
+          </section>
+        ))}
+      </div>
 
-      {/* Миссия */}
-      <Box mb={6}>
-        <Typography variant="h5" className="font-semibold mb-4 text-gray-700">
-          {t("vision.text2")}
-        </Typography>
-        <Typography variant="body1" className="text-gray-600 text-justify">
-         {t("vision.text3")}
-        </Typography>
-      </Box>
+      <section className="mt-5 rounded-3xl bg-primary p-8 text-white sm:p-5">
+        <h2 className="text-2xl font-semibold tracking-tight">{t('vision.goal')}</h2>
+        <p className="mt-3 max-w-[70ch] text-[1.0625rem] leading-relaxed text-white/85">
+          {t('vision.description')}
+        </p>
+      </section>
 
-      {/* Стратегическая цель */}
-      <Box mb={6}>
-        <Typography variant="h5" className="font-semibold mb-4 text-gray-700">
-          {t("vision.goal")}
-        </Typography>
-        <Typography variant="body1" className="text-gray-600 text-justify">
-         {t("vision.description")}
-        </Typography>
-      </Box>
-
-      {/* Задачи */}
-      <Box>
-        <Typography variant="h5" className="font-semibold mb-4 text-gray-700">
-          {t("vision.heading")}
-        </Typography>
-        <List>
-          <ListItem>
-            <ListItemText
-              className="text-justify"
-              primary={t("vision.primary")}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              className="text-justify"
-              primary={t("vision.primary2")}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              className="text-justify"
-              primary={t("vision.primary3")}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              className="text-justify"
-              primary={t("vision.primary4")}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              className="text-justify"
-              primary={t("vision.primary5")}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              className="text-justify"
-              primary={t("vision.primary6")}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              className="text-justify"
-              primary={t("vision.primary7")}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              className="text-justify"
-              primary={t("vision.primary8")}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              className="text-justify"
-              primary={t("vision.primary9")}
-            />
-          </ListItem>
-        </List>
-      </Box>
+      <section className="mt-14">
+        <h2 className="text-[2rem] font-semibold tracking-tight text-ink md:text-2xl">
+          {t('vision.heading')}
+        </h2>
+        <ol className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-1">
+          {taskKeys.map((key, index) => (
+            <li
+              key={key}
+              className="flex gap-4 rounded-2xl border border-line bg-white p-5"
+            >
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-green-dark text-sm font-semibold tabular-nums text-white">
+                {index + 1}
+              </span>
+              <p className="text-[15px] leading-relaxed text-ink-soft">{t(key)}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
     </div>
   )
 }

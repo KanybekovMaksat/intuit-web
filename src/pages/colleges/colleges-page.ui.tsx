@@ -1,130 +1,81 @@
-import {
-  Typography,
-  Container,
-  Card,
-  CardMedia,
-  CardContent,
-  Link,
-} from '@mui/material'
-import ComtehnoLogo from './comtehno-logo.png' // Add appropriate logos
+import { ArrowUpRight } from 'lucide-react'
+import ComtehnoLogo from './comtehno-logo.png'
 import InnovativeCollegeLogo from './innovative-college-logo.png'
 import { NewsList } from '~widgets/news-list'
 import { SpeakerVideoList } from '~widgets/speaker-list'
 import { EnrollForm } from '~widgets/enroll-form'
 import { t } from 'i18next'
+import { PageHero } from '~shared/ui/page'
+
+const colleges = [
+  {
+    key: 'comtehnoCard',
+    href: 'https://comtehno.kg',
+    logo: ComtehnoLogo,
+    logoBg: 'bg-gray-light',
+  },
+  {
+    key: 'itecCard',
+    href: 'https://itec.kg/',
+    logo: InnovativeCollegeLogo,
+    logoBg: 'bg-primary',
+  },
+]
 
 export const CollegesPage = () => {
   return (
-    <section className="my-10">
-      <div className="w-full py-10">
-        <Typography
-          variant="h4"
-          className="font-bold text-center mb-8 text-gray-800"
-          style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}
-        >
-          {t('homepage.degrees.colleges')}
-        </Typography>
+    <div className="mb-10">
+      <PageHero
+        title={t('homepage.degrees.colleges')}
+        subtitle={t('collegesPage.after9Or11')}
+      />
 
-        <Typography
-          variant="body1"
-          className="text-gray-700 mb-6"
-          style={{ fontSize: 'clamp(1rem, 4vw, 1.25rem)', lineHeight: 1.6 }}
-        >
-          {t('collegesPage.after9Or11')}
-        </Typography>
-
-        <div className="flex flex-wrap justify-center gap-6">
-          <Link
-            href="https://comtehno.kg"
-            className="no-underline"
-            target="_blank"
-            rel="noopener"
-          >
-            <Card className="flex flex-col mb-4 border border-gray shadow-none hover:shadow-lg p-4 w-full max-w-lg items-center h-full">
-              <CardMedia
-                component="img"
-                alt={t('collegesPage.comtehnoCard.title')}
-                image={ComtehnoLogo}
-                className="h-[120px] w-[120px] object-cover"
-              />
-              <CardContent>
-                <Typography
-                  variant="h6"
-                  component="h5"
-                  className="text-lg font-semibold mb-2 sm:text-center"
-                >
-                  {t('collegesPage.comtehnoCard.title')}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  className="mb-2 sm:text-center"
-                >
-                  {t('collegesPage.comtehnoCard.description')}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  className="text-blue-500 sm:text-center"
-                >
-                  {t('collegesPage.comtehnoCard.moreInfo')}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link
-            href="https://itec.kg/"
-            className="no-underline"
-            target="_blank"
-            rel="noopener"
-          >
-            <Card className="flex flex-col  mb-4 border border-gray shadow-none hover:shadow-lg p-4 w-full max-w-lg items-center h-full">
-              <div className="bg-blue inline-block w-[120px] rounded">
-                <CardMedia
-                  component="img"
-                  alt="Innovative College Logo"
-                  image={InnovativeCollegeLogo}
-                  className="h-[120px] w-[120px] object-cover"
+      <ul className="mt-10 grid grid-cols-2 gap-5 md:grid-cols-1">
+        {colleges.map((college) => (
+          <li key={college.key}>
+            <a
+              href={college.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex h-full flex-col gap-6 rounded-3xl border border-line bg-white p-8 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_22px_44px_-26px_rgba(42,33,114,0.4)] sm:p-5"
+            >
+              <span
+                className={`flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl ${college.logoBg}`}
+              >
+                <img
+                  src={college.logo}
+                  alt=""
+                  className="h-full w-full object-contain p-2"
                 />
+              </span>
+              <div>
+                <h2 className="text-2xl font-semibold leading-snug tracking-tight text-ink">
+                  {t(`collegesPage.${college.key}.title`)}
+                </h2>
+                <p className="mt-3 text-[1.0625rem] leading-relaxed text-ink-soft">
+                  {t(`collegesPage.${college.key}.description`)}
+                </p>
               </div>
-              <CardContent>
-                <Typography
-                  variant="h6"
-                  component="h5"
-                  className="text-lg font-semibold mb-2 sm:text-center"
-                >
-                  {t('collegesPage.itecCard.title')}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  className="mb-2 sm:text-center"
-                >
-                  {t('collegesPage.itecCard.description')}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  className="text-blue-500 sm:text-center"
-                >
-                  {t('collegesPage.itecCard.moreInfo')}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Link>
-        </div>
-        <Typography
-          variant="body1"
-          className="text-gray-700 mt-6"
-          style={{ fontSize: 'clamp(1rem, 4vw, 1.25rem)', lineHeight: 1.6 }}
-        >
-          {t('collegesPage.careerOpportunities')}
-        </Typography>
-      </div>
+              <span className="mt-auto inline-flex items-center gap-1.5 text-[15px] font-semibold text-green-dark">
+                {t(`collegesPage.${college.key}.moreInfo`)}
+                <ArrowUpRight
+                  size={18}
+                  aria-hidden
+                  className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                />
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <p className="mt-8 max-w-[75ch] text-[1.0625rem] leading-relaxed text-ink-soft">
+        {t('collegesPage.careerOpportunities')}
+      </p>
+
       <NewsList />
       <SpeakerVideoList />
       <EnrollForm />
-    </section>
+    </div>
   )
 }

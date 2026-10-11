@@ -1,61 +1,51 @@
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Tooltip,
-  Typography,
-} from '@mui/material'
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded'
+import { Check } from 'lucide-react'
 import { specializationTypes } from '~entities/specialization'
 import { t } from 'i18next'
 import { Title } from '~shared/ui/title'
 
-export const SkillsBlock = ({
-  skills,
-  tools,
-}: specializationTypes.Specialization) => {
-  console.log(tools)
+export const SkillsBlock = ({ skills, tools }: specializationTypes.Specialization) => {
+  if (!skills?.length && !tools?.length) return null
 
   return (
-    <div>
+    <section>
       <Title>{t('specialization.skillsAndTools')}</Title>
 
-      <div className="flex gap-20 md:flex-col">
-        <div className="p-5  border-t mt-5 border-gray">
-          <List>
-            {skills.map((chunk, chunkIndex) => (
-              <ListItem className="p-0" key={chunkIndex}>
-                <ListItemIcon className="min-w-[35px]">
-                  <CheckCircleRoundedIcon className="text-green" />
-                </ListItemIcon>
-                <ListItemText
-                  id={`${chunk.name} + ${chunkIndex}`}
-                  primary={chunk.name}
-                />
-              </ListItem>
+      <div className="grid grid-cols-2 items-start gap-5 md:grid-cols-1">
+        {skills?.length > 0 && (
+          <ul className="grid gap-3 rounded-3xl bg-gray-light p-7 sm:p-5">
+            {skills.map((skill, index) => (
+              <li key={`${skill.name}-${index}`} className="flex items-start gap-3">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-dark text-white">
+                  <Check size={14} aria-hidden strokeWidth={3} />
+                </span>
+                <span className="text-[15px] leading-relaxed text-ink">{skill.name}</span>
+              </li>
             ))}
-          </List>
-        </div>
-        <div className="border-t mt-5 border-gray  flex flex-wrap  gap-5 items-start  pt-5">
-          {tools.map((tool, i) => (
-            <Tooltip
-              key={i}
-              title={tool.description}
-              className="cursor-pointer"
-            >
-              <div className="flex bg-[#f5f5f5] py-2 px-3 gap-2 rounded-md border border-gray">
-                <img
-                  className="rounded max-h-[40px] "
-                  src={`${tool.logo}`}
-                  alt=""
-                />
-                <p className="font-bold">{tool.name}</p>
-              </div>
-            </Tooltip>
-          ))}
-        </div>
+          </ul>
+        )}
+
+        {tools?.length > 0 && (
+          <ul className="flex flex-wrap gap-3">
+            {tools.map((tool, index) => (
+              <li
+                key={`${tool.name}-${index}`}
+                title={tool.description}
+                className="flex items-center gap-3 rounded-2xl border border-line bg-white px-4 py-3"
+              >
+                {tool.logo && (
+                  <img
+                    className="h-9 w-9 shrink-0 rounded-lg object-contain"
+                    src={tool.logo}
+                    alt=""
+                    loading="lazy"
+                  />
+                )}
+                <span className="text-[15px] font-semibold text-ink">{tool.name}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-    </div>
+    </section>
   )
 }

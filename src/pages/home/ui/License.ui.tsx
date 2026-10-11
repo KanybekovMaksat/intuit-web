@@ -1,11 +1,24 @@
 import Fancybox from './Fancybox'
-import Gerb from '../../../assets/gerb.svg'
 import { t } from 'i18next'
 import { Title } from '~shared/ui/title'
+import { ArrowUpRight, FileBadge2, ScrollText } from 'lucide-react'
+
+const documents = [
+  {
+    href: 'https://intuit.kg/documents/license.pdf',
+    titleKey: 'homepage.License.licenses',
+    Icon: ScrollText,
+  },
+  {
+    href: 'https://intuit.kg/documents/Svidetelstvo.png',
+    titleKey: 'homepage.License.certificate',
+    Icon: FileBadge2,
+  },
+]
 
 export const License = () => {
   return (
-    <div className=" mx-auto py-10 ">
+    <section className="mx-auto py-6">
       <Title>{t('homepage.License.documents')}</Title>
       <Fancybox
         options={{
@@ -14,57 +27,44 @@ export const License = () => {
           },
         }}
       >
-        <div className="flex justify-between gap-4 lg:flex-col">
-          <div className="max-w-md w-full border border-gray rounded-lg bg-white p-3 shadow hover:shadow-lg transition-shadow duration-300 min-h-[150px]">
-            <div className="flex flex-col ">
-              <h3 className="text-xl font-bold ">
-                {t('homepage.License.officialDocuments')}
-              </h3>
-              <p className="text-sm text-gray-600 mt-4">
-                {t('homepage.License.description')}
-              </p>
-            </div>
+        <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-stretch gap-6 lg:grid-cols-1">
+          <div className="flex flex-col justify-center">
+            <h3 className="text-2xl font-semibold leading-snug tracking-tight text-primary md:text-xl">
+              {t('homepage.License.officialDocuments')}
+            </h3>
+            <p className="mt-4 max-w-[52ch] text-base leading-relaxed text-ink-soft">
+              {t('homepage.License.description')}
+            </p>
           </div>
-          <a
-            data-fancybox="gallery"
-            href="https://intuit.kg/documents/license.pdf"
-            className="flex items-center border border-gray rounded-lg bg-white p-6 shadow hover:shadow-lg transition-shadow duration-300 min-h-[150px]"
-          >
-            <div className="flex  items-center justify-center gap-3">
-              <div className="w-24 h-24 ">
-                <img src={Gerb} alt="" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {t('homepage.License.licenses')}
-                </h3>
-                <p className="text-sm text-gray-600 mt-2">
-                  {t('homepage.License.viewDocument')}
-                </p>
-              </div>
-            </div>
-          </a>
-          <a
-            data-fancybox="gallery"
-            href="https://intuit.kg/documents/Svidetelstvo.png"
-            className="block border border-gray rounded-lg bg-white p-6 shadow hover:shadow-lg transition-shadow duration-300 min-h-[150px]"
-          >
-            <div className="flex  items-center gap-3">
-              <div className="w-24 h-24">
-                <img src={Gerb} alt="" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {t('homepage.License.certificate')}
-                </h3>
-                <p className="text-sm text-gray-600 mt-2">
-                  {t('homepage.License.viewDocument')}
-                </p>
-              </div>
-            </div>
-          </a>
+
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-1">
+            {documents.map(({ href, titleKey, Icon }) => (
+              <a
+                key={href}
+                data-fancybox="gallery"
+                href={href}
+                className="group flex min-h-[200px] flex-col justify-between rounded-2xl border border-line bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_40px_-16px_rgba(42,33,114,0.25)]"
+              >
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-mist text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-white">
+                  <Icon size={28} strokeWidth={1.6} />
+                </span>
+                <div>
+                  <h4 className="text-lg font-semibold leading-snug tracking-tight text-ink">
+                    {t(titleKey)}
+                  </h4>
+                  <span className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+                    {t('homepage.License.viewDocument')}
+                    <ArrowUpRight
+                      size={16}
+                      className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    />
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </Fancybox>
-    </div>
+    </section>
   )
 }

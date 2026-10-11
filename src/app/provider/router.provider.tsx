@@ -9,7 +9,9 @@ import { homePageRoute } from "~pages/home/home-page.route";
 import { GenericLayout } from "~app/layout";
 import { enrollPageRoute } from "~pages/enroll";
 import { institutesPageRoute } from "~pages/institutes";
-import { newsPageRoute } from "~pages/news";
+import { newsPageRoute, newsListPageRoute } from "~pages/news";
+import { eventsPageRoute } from "~pages/events";
+import { reviewsPageRoute } from "~pages/reviews";
 import { paymentsPageRoute } from "~pages/payments";
 import { institutePageRoute } from "~pages/institute";
 import { specializationPageRoute } from "~pages/specialization";
@@ -90,6 +92,9 @@ const router = createBrowserRouter([
           institutesPageRoute,
           teacherPageRoute,
           newsPageRoute,
+          newsListPageRoute,
+          eventsPageRoute,
+          reviewsPageRoute,
           paymentsPageRoute,
           institutePageRoute,
           specializationPageRoute,

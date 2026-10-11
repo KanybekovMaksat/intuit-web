@@ -1,87 +1,60 @@
-import { useTheme } from "@emotion/react";
-import { useMediaQuery } from "@mui/material";
-import { useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
-import { schedulesQueries } from "~entities/schedules";
+import { useState } from 'react'
+import { Navigate, useParams } from 'react-router-dom'
+import { schedulesQueries } from '~entities/schedules'
+import { Loader } from '~shared/ui/loader'
 import {
   ScheduleDetailFilter,
   ScheduleDetailLesson,
   ScheduleDetailTop,
-} from "~features/scheduleDetail";
+} from '~features/scheduleDetail'
+
+const normalizeWeekType = (value: unknown): string => {
+  const s = String(value ?? '').trim().toLowerCase()
+  if (s === 'weekly' || s === '' || s === 'еженедельно') return ''
+  if (s === 'top' || s === 'числитель' || s === 'numerator') return 'top'
+  if (s === 'bottom' || s === 'знаменатель' || s === 'denominator') return 'bottom'
+  return s
+}
+
+const todayIndex = () => {
+  const today = new Date().getDay()
+  return today >= 1 && today <= 5 ? today - 1 : null
+}
 
 export const ScheduleDetailTeacher = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // 🟢 Перемещено выше
+  const { slug } = useParams<{ slug: string }>()
+  const [day, setDay] = useState<number | null>(todayIndex())
+  const [weekType, setWeekType] = useState<'top' | 'bottom' | null>(null)
 
-  // ------------- фильтры -------------
-  const getTodayIndex = () => {
-    const today = new Date().getDay();
-    // оставляем только рабочие дни (Пн–Пт), иначе null
-    return today >= 1 && today <= 5 ? today - 1 : null;
-  };
-  const [day, setDay] = useState<number | null>(getTodayIndex());
-  const [weekType, setWeekType] = useState<"top" | "bottom" | null>(null);
-  // -----------------------------------
+  const { data, isError, isLoading } = schedulesQueries.useGetTeacherDetails(slug || '')
 
-  if (!slug) return <Navigate to="/404" replace />;
+  if (!slug) return <Navigate to="/404" replace />
+  if (isLoading) return <Loader />
+  if (isError || !data) {
+    return <p className="py-20 text-center text-ink-soft">Ошибка загрузки расписания</p>
+  }
 
-  const { data, isError, isLoading } =
-    schedulesQueries.useGetTeacherDetails(slug);
+  const { teacher, schedule } = data
 
-  if (isLoading) return <p>Загрузка…</p>;
-  if (isError || !data) return <p>Ошибка загрузки расписания</p>;
-
-  const { teacher, schedule } = data;
-
-  /* фильтрация */
-  const normalizeWeekType = (wt: unknown): string => {
-    const s = String(wt ?? "")
-      .trim()
-      .toLowerCase();
-    // если у вас на бэке другие значения — добавьте алиасы сюда
-    if (s === "weekly" || s === "" || s === "еженедельно") return ""; // общий урок
-    if (s === "top" || s === "числитель" || s === "numerator") return "top";
-    if (s === "bottom" || s === "знаменатель" || s === "denominator")
-      return "bottom";
-    return s;
-  };
-
-  const filtered = schedule.filter((item) => {
-    if (day !== null && item.dayOfWeek !== day) return false;
-
+  const filtered = schedule.filter((item: { dayOfWeek: number; weekType: string }) => {
+    if (day !== null && item.dayOfWeek !== day) return false
     if (weekType) {
-      const itemWT = normalizeWeekType(item.weekType);
-      if (itemWT && itemWT !== weekType) return false; // явно другой тип — отсекаем
+      const itemWeek = normalizeWeekType(item.weekType)
+      if (itemWeek && itemWeek !== weekType) return false
     }
-
-    return true;
-  });
+    return true
+  })
 
   return (
-    <div>
-      {!isMobile && (
-        <ScheduleDetailTop
-          fullName={teacher?.fullName ?? "Преподователя нет!"}
-        />
-      )}
-
+    <div className="mb-20">
+      <ScheduleDetailTop fullName={teacher?.fullName ?? 'Преподаватель не указан'} />
       <ScheduleDetailFilter
         currentDay={day}
         onDayChange={setDay}
         currentWeekType={weekType}
         onWeekTypeChange={setWeekType}
       />
-
       <ScheduleDetailLesson schedule={filtered} />
-
-      {isMobile && (
-        <div className="mt-10">
-          <ScheduleDetailTop
-            fullName={teacher?.fullName ?? "Преподователя нет!"}
-          />
-        </div>
-      )}
     </div>
-  );
-};
+  )
+}

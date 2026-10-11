@@ -1,5 +1,4 @@
 import React from 'react'
-import { Typography } from '@mui/material'
 import { StaffCard, staffQueries } from '~entities/staff'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
@@ -12,10 +11,10 @@ import { Loader } from '~shared/ui/loader'
 import { Staff } from '~entities/staff/staff.types'
 
 interface DescriptionCardProps {
-  subtitle: string
-  text: string
-  subtext: string
-  id: number
+  subtitle?: string
+  text?: string
+  subtext?: string
+  id?: number
 }
 
 const DescriptionCard: React.FC<DescriptionCardProps> = ({ text, id }) => {
@@ -24,48 +23,50 @@ const DescriptionCard: React.FC<DescriptionCardProps> = ({ text, id }) => {
     isSuccess,
     isError,
     isLoading,
-  } = staffQueries.useGetStaffs(id)
+  } = staffQueries.useGetStaffs(id as number)
   const staffs = getApiList<Staff>(staffData?.data)
+  const hasStaff = isSuccess && staffs.length > 0
 
   return (
-    <div className="my-2 md:flex md:flex-col md:items-center">
-      {/* Блок с преподавателями (справа) */}
-      <div className="w-[550px] bg-[#e0e1e5] p-5 sm:p-4 rounded-xl float-right ml-5 lg:float-none lg:ml-0 lg:w-full items-center">
-        <Title>{t('descriptionPage.leadingTeachers')}</Title>
+    <section
+      className={`grid items-start gap-8 lg:grid-cols-1 ${
+        hasStaff || isLoading ? 'grid-cols-[minmax(0,1fr)_420px]' : 'grid-cols-1'
+      }`}
+    >
+      <div>
+        <Title>{t('descriptionPage.aboutInstitute')}</Title>
+        <div className="prose-muit prose-wide" dangerouslySetInnerHTML={{ __html: text || '' }} />
+      </div>
 
-        <div className="flex justify-center ">
+      {(isLoading || isError || hasStaff) && (
+        <aside className="mt-14 rounded-3xl bg-gray-light p-6 sm:mt-6 sm:p-4 lg:mt-0">
+          <h2 className="text-xl font-semibold tracking-tight text-ink">
+            {t('descriptionPage.leadingTeachers')}
+          </h2>
+
           {isLoading && <Loader />}
-          {isError && <div>Произошла ошибка при загрузке данных.</div>}
+          {isError && (
+            <p className="mt-4 text-ink-soft">{t('loading.dataNotLoaded', 'Не удалось загрузить данные')}</p>
+          )}
 
-          {isSuccess && staffs.length > 0 ? (
+          {hasStaff && (
             <Swiper
-              className="py-20 px-1 staff-list"
+              className="staff-list !pb-10 pt-4"
               modules={[Pagination]}
-              spaceBetween={20}
+              spaceBetween={16}
               slidesPerView={1}
               pagination={{ clickable: true }}
             >
               {staffs.map((staff) => (
-                <SwiperSlide className="flex justify-center" key={staff.id}>
+                <SwiperSlide className="!bg-transparent" key={staff.id}>
                   <StaffCard {...staff} />
                 </SwiperSlide>
               ))}
             </Swiper>
-          ) : (
-            isSuccess && <div>Нет данных о преподавателях.</div>
           )}
-        </div>
-      </div>
-
-      {/* Левый блок с текстом */}
-      <div className="p-5 bg-white shadow-lg rounded-lg text-justify">
-        <Title>{t('descriptionPage.aboutInstitute')}</Title>
-        <div dangerouslySetInnerHTML={{ __html: text }}></div>
-      </div>
-
-      {/* Очистка обтекания, чтобы текст дальше шел на всю ширину */}
-      <div className="clear-both"></div>
-    </div>
+        </aside>
+      )}
+    </section>
   )
 }
 

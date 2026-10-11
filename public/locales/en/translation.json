@@ -1,11 +1,13 @@
 {
   "header": {
+    "apply": "Apply now",
     "international": "For International Students",
-    "phd": "PhD / Dissertations"
+    "phd": "PhD / Dissertations",
+    "institutes": "Institutes"
   },
   "homepage": {
     "hero": {
-      "title": "Choose not just a specialty — choose the future with MUIT",
+      "title": "Choose not just a specialty, choose the future with MUIT",
       "subtitle": "Education that leads to real work",
       "helpButton": "Help with choosing"
     },
@@ -24,7 +26,7 @@
     "TeachingStaff": "Teaching Staff",
     "HeadPage": {
       "name": "Mambetkulov Ormon",
-      "learningExperience": "I really enjoy the learning experience here — no boring lectures, just practice! Everything is to the point and immediately applicable in practice.",
+      "learningExperience": "I really enjoy the learning experience here, no boring lectures, just practice! Everything is to the point and immediately applicable in practice.",
       "rectoratePlans": {
         "2020-2021": "Rectorate Plan 2020-2021",
         "march2021": "Rectorate Plan March 2021",
@@ -55,7 +57,14 @@
       "programs": "Academic Programs",
       "academicPrograms": "Specialization",
       "selectDegreePlaceholder": "Choose a degree",
-      "selectDirectionPlaceholder": "Select Field of Study"
+      "selectDirectionPlaceholder": "Select Field of Study",
+      "all": "All",
+      "found": "Programmes found: {{count}}",
+      "reset": "Reset filters",
+      "emptyTitle": "No programmes found",
+      "emptyHint": "Change the query or reset the filters to see all programmes.",
+      "searchPlaceholder": "Search by programme name",
+      "noResults": "Nothing found"
     },
     "loading": {
       "loading": "Loading",
@@ -127,14 +136,17 @@
     "aboutUniversity": {
       "title": "About the University",
       "goal": "Our goal is quality education for your successful career",
-      "description": "At MUIT, we train highly skilled specialists in demand in Kyrgyzstan and abroad. Start building your professional future with us. For over 25 years, MUIT has been teaching relevant and in-demand professions. Here, you’ll gain knowledge that can help grow your business or land a job in a major company."
+      "description": "At MUIT, we train highly skilled specialists in demand in Kyrgyzstan and abroad. Start building your professional future with us. For over 25 years, MUIT has been teaching relevant and in-demand professions. Here, you’ll gain knowledge that can help grow your business or land a job in a major company.",
+      "watchVideo": "Watch video"
     },
     "staff": {
       "rectorate": "Rectorate",
       "directors": "Institute Directors",
       "departmentHead": "Department Head",
       "uvrDeputyDirector": "Deputy Director for Academic Affairs",
-      "professorStaff": "Professorial Teaching Staff"
+      "professorStaff": "Professorial Teaching Staff",
+      "showAll": "Show all ({{count}})",
+      "collapse": "Collapse"
     },
     "diploma": {
       "yourFutureDiploma": "Your future diploma",
@@ -185,7 +197,11 @@
       "errors": {
         "nameRequired": "Please enter your name",
         "phoneRequired": "Please enter your contact phone number"
-      }
+      },
+      "direct": "Or contact us directly",
+      "hours": "Mon-Fri",
+      "successTitle": "Application sent",
+      "another": "Send another application"
     },
     "education-form": {
       "title": "Full-time",
@@ -410,7 +426,8 @@
   },
   "news-page": {
     "otherNews": "Other News",
-    "news": "News"
+    "news": "News",
+    "allNews": "All news"
   },
   "paymentsPage": {
     "code": "Code",
@@ -419,7 +436,8 @@
     "studyCost": "Cost of study",
     "MUIT": "MUIT",
     "KOMTEKHNO_KITE": "Graduates of KOMTEKHNO and KIT colleges",
-    "KR": "Graduates of KR colleges"
+    "KR": "Graduates of KR colleges",
+    "title": "Tuition fees"
   },
   "enrollPage": {
     "introCard": {
@@ -512,7 +530,9 @@
           ]
         }
       ]
-    }
+    },
+    "specializations": "Specializations",
+    "documents": "University documents"
   },
   "specialization": {
     "professionPhoto": "Photo of the profession",
@@ -527,7 +547,10 @@
     "studyDuration": "Study duration",
     "format": "Format",
     "result": "Result",
-    "invalidAddress": "Invalid address"
+    "invalidAddress": "Invalid address",
+    "phone": "Phone",
+    "contractPrice": "Contract price",
+    "directions": "Programme"
   },
   "studentsPage": {
     "windowTitle": "Single Window",
@@ -631,7 +654,14 @@
     }
   },
   "reviews": {
-    "studentReviews": "Student Reviews"
+    "studentReviews": "Student Reviews",
+    "allReviews": "All reviews",
+    "empty": "No reviews yet",
+    "search": "Search by name",
+    "institute": "Institute",
+    "allInstitutes": "All institutes",
+    "level": "Level",
+    "allLevels": "All levels"
   },
   "applicantsPage": {
     "admission": "Admission",
@@ -663,7 +693,9 @@
       "headTitle": "Rectorate",
       "headDescription": "Learn more about our Rectorate"
     },
-    "go": "Go"
+    "go": "Go",
+    "title": "About the university",
+    "subtitle": "History, mission, rankings and official documents of IntUIT"
   },
   "institutesPage": {
     "introCard": {
@@ -827,5 +859,61 @@
     "goHome": "Home Page",
     "colleges": "Programs",
     "schedule": "Schedule"
+  },
+  "loading": {
+    "error": "Could not load data. Please refresh the page.",
+    "dataNotLoaded": "Data could not be loaded"
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "label": "Breadcrumb",
+    "news": "News",
+    "events": "Events",
+    "teachers": "Teachers"
+  },
+  "teacherPage": {
+    "cv": "CV"
+  },
+  "newsPage": {
+    "title": "All news",
+    "count": "Posts: {{count}}",
+    "empty": "No news yet",
+    "search": "Search by title",
+    "category": "Section",
+    "allCategories": "All sections",
+    "year": "Year",
+    "allYears": "All years",
+    "sort": "Sort",
+    "sortNew": "Newest first",
+    "sortOld": "Oldest first",
+    "found": "Found: {{count}}",
+    "emptyTitle": "Nothing found",
+    "emptyHint": "Change the query or reset the filters.",
+    "reset": "Reset filters"
+  },
+  "eventsPage": {
+    "title": "All events",
+    "empty": "No events yet",
+    "search": "Search by title",
+    "status": "Status",
+    "allStatuses": "All events",
+    "upcoming": "Current",
+    "finished": "Finished",
+    "sort": "Sort",
+    "sortNew": "Newest first",
+    "sortOld": "Oldest first",
+    "found": "Found: {{count}}"
+  },
+  "newsDetail": {
+    "readingTime": "{{count}} min read",
+    "gallery": "Photos",
+    "share": "Share",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "copyPrompt": "Copy the link",
+    "neighbours": "Neighbouring posts",
+    "older": "Previous",
+    "newer": "Next",
+    "related": "Read also"
   }
 }

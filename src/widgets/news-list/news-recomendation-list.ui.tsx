@@ -1,38 +1,31 @@
-import { Box } from '@mui/material'
 import { t } from 'i18next'
 import { newsQueries, NewsRecomendationCard } from '~entities/news'
 import { Loader } from '~shared/ui/loader'
 
+const RAIL_COUNT = 5
+
+type NewsItem = { id: number; title: string; date: string; slug: string }
+
 export const NewsRecomendationList = () => {
-  const {
-    data: newsRecomendationList,
-    isLoading,
-    isError,
-    isSuccess,
-  } = newsQueries.useGetNews()
-  console.log(newsRecomendationList)
+  const { data, isLoading, isError, isSuccess } = newsQueries.useGetNews()
 
   if (isError) {
-    return <div>{t('loading.error')}</div>
+    return <div className="text-ink-soft">{t('loading.error')}</div>
   }
   if (isLoading) {
     return <Loader />
   }
-  if (isSuccess) {
-    return (
-      <Box className="flex flex-col gap-10 mt-10 ">
-        {newsRecomendationList.data.results &&
-          newsRecomendationList.data.results.map((news, index) => {
-            if (index <= 4) {
-              return (
-                <NewsRecomendationCard
-                  key={news.id}
-                  {...news}
-                ></NewsRecomendationCard>
-              )
-            }
-          })}
-      </Box>
-    )
-  }
+  if (!isSuccess) return null
+
+  const items = ((data?.data?.results || []) as NewsItem[]).slice(0, RAIL_COUNT)
+
+  return (
+    <ul className="grid gap-3">
+      {items.map((news) => (
+        <li key={news.id}>
+          <NewsRecomendationCard title={news.title} date={news.date} slug={news.slug} />
+        </li>
+      ))}
+    </ul>
+  )
 }
