@@ -2,11 +2,17 @@ import { useTranslation } from 'react-i18next'
 import { BookOpen, Wrench } from 'lucide-react'
 import { Title } from '~shared/ui/title'
 
-export const EducationForm = () => {
+interface EducationFormProps {
+  /** Which forms to show; both by default. */
+  forms?: ('full' | 'part')[]
+}
+
+export const EducationForm = ({ forms: only = ['full', 'part'] }: EducationFormProps) => {
   const { t } = useTranslation()
 
-  const forms = [
+  const all = [
     {
+      key: 'full' as const,
       title: t('homepage.education-form.title'),
       text: t('homepage.education-form.text'),
       icon: BookOpen,
@@ -15,6 +21,7 @@ export const EducationForm = () => {
       textTone: 'text-white/80',
     },
     {
+      key: 'part' as const,
       title: t('homepage.education-form.secondTitle'),
       text: t('homepage.education-form.secondText'),
       icon: Wrench,
@@ -23,20 +30,24 @@ export const EducationForm = () => {
       textTone: 'text-ink-soft',
     },
   ]
+  const forms = all.filter((form) => only.includes(form.key))
+  if (forms.length === 0) return null
 
   return (
     <section>
       <Title>{t('homepage.studyForms')}</Title>
 
-      <ul className="grid grid-cols-2 gap-5 md:grid-cols-1">
-        {forms.map(({ title, text, icon: Icon, tone, iconTone, textTone }) => (
-          <li key={title} className={`flex flex-col gap-5 rounded-3xl p-8 sm:p-5 ${tone}`}>
+      <ul
+        className={`grid gap-5 md:grid-cols-1 ${forms.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}
+      >
+        {forms.map(({ key, title, text, icon: Icon, tone, iconTone, textTone }) => (
+          <li key={key} className={`flex flex-col gap-5 rounded-3xl p-8 sm:p-5 ${tone}`}>
             <span className={`flex h-12 w-12 items-center justify-center rounded-2xl ${iconTone}`}>
               <Icon size={24} aria-hidden />
             </span>
             <div>
               <h3 className="text-2xl font-semibold leading-snug tracking-tight">{title}</h3>
-              <p className={`mt-2 max-w-[48ch] text-[1.0625rem] leading-relaxed ${textTone}`}>
+              <p className={`mt-2 max-w-[56ch] text-[1.0625rem] leading-relaxed ${textTone}`}>
                 {text}
               </p>
             </div>

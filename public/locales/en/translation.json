@@ -550,7 +550,18 @@
     "invalidAddress": "Invalid address",
     "phone": "Phone",
     "contractPrice": "Contract price",
-    "directions": "Programme"
+    "directions": "Programme",
+    "aboutCourse": "About the course",
+    "aboutProgram": "About the programme",
+    "skillsTitle": "Skills and tools",
+    "skillsLearn": "What you will learn",
+    "skillsMaster": "What you will master",
+    "tools": "Software and tools",
+    "employment": "Employment",
+    "diploma": "Diploma",
+    "document": "Certificate",
+    "related": "Other programmes",
+    "more": "Learn more"
   },
   "studentsPage": {
     "windowTitle": "Single Window",

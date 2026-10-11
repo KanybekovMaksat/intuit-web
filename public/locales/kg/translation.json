@@ -552,7 +552,18 @@
     "invalidAddress": "Туура эмес дарек",
     "phone": "Телефон номери",
     "contractPrice": "Контракттын баасы",
-    "directions": "Багыт"
+    "directions": "Багыт",
+    "aboutCourse": "Курс жөнүндө",
+    "aboutProgram": "Программа жөнүндө",
+    "skillsTitle": "Көндүмдөр жана куралдар",
+    "skillsLearn": "Эмнеге үйрөнөсүз",
+    "skillsMaster": "Эмнени өздөштүрөсүз",
+    "tools": "Программалар жана куралдар",
+    "employment": "Жумушка орношуу",
+    "diploma": "Диплом",
+    "document": "Документ",
+    "related": "Башка программалар",
+    "more": "Кененирээк"
   },
   "studentsPage": {
     "windowTitle": "Бирдиктүү терезе",

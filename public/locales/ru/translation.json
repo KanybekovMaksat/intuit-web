@@ -550,7 +550,18 @@
     "invalidAddress": "Неправильный адрес",
     "phone": "Номер телефона",
     "contractPrice": "Стоимость контракта",
-    "directions": "Направление"
+    "directions": "Направление",
+    "aboutCourse": "О курсе",
+    "aboutProgram": "О программе",
+    "skillsTitle": "Навыки и инструменты",
+    "skillsLearn": "Чему вы научитесь",
+    "skillsMaster": "Что вы освоите",
+    "tools": "Программы и инструменты",
+    "employment": "Трудоустройство",
+    "diploma": "Диплом",
+    "document": "Документ",
+    "related": "Другие программы",
+    "more": "Подробнее"
   },
   "studentsPage": {
     "windowTitle": "Единое окно",

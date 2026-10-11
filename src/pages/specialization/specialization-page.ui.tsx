@@ -2,6 +2,8 @@ import { SpecializationBanner } from './ui/SpecializationBanner.ui'
 import { SkillsBlock } from './ui/SkillBlock.ui'
 import { CareerBlock } from './ui/CareerBlock.ui.tsx'
 import { About } from './ui/About.ui.tsx'
+import { RelatedPrograms } from './ui/RelatedPrograms.ui'
+import { getProgramKind, getStudyForms } from './lib/kind'
 import { EnrollForm } from '~widgets/enroll-form'
 import { specializationQueries } from '~entities/specialization/'
 import { useParams } from 'react-router-dom'
@@ -40,13 +42,19 @@ export const SpecializationPage = () => {
 
   if (!isSuccess) return null
 
+  const program = specializationData.data
+  const { isCourse } = getProgramKind(program.educationLevel)
+  // Explanation of full/part-time study makes sense for degree programs only
+  const studyForms = isCourse ? [] : getStudyForms(program.trainingForm)
+
   return (
     <div className="mb-10">
-      <SpecializationBanner {...specializationData.data} />
-      <About {...specializationData.data} />
-      <SkillsBlock {...specializationData.data} />
-      <CareerBlock {...specializationData.data} />
-      <EducationForm />
+      <SpecializationBanner {...program} />
+      <About {...program} />
+      <SkillsBlock {...program} />
+      <CareerBlock {...program} />
+      {studyForms.length > 0 && <EducationForm forms={studyForms} />}
+      <RelatedPrograms {...program} />
       <EnrollForm />
     </div>
   )
