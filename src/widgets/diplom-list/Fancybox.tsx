@@ -3,6 +3,9 @@ import React, { useRef, useEffect } from "react";
 import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
+// глобально отключаем Hash-плагин: hash-слаги вида #gallery-1 иначе заново открывают окно
+NativeFancybox.defaults.Hash = false
+
 function Fancybox(props) {
   const containerRef = useRef(null);
 
