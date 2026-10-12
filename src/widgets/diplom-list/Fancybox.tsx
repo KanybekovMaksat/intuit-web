@@ -10,7 +10,8 @@ function Fancybox(props) {
     const container = containerRef.current;
 
     const delegate = props.delegate || "[data-fancybox]";
-    const options = props.options || {};
+    // Hash: false — иначе #gallery-N в URL заново открывает окно после закрытия
+    const options = { Hash: false, ...(props.options || {}) };
 
     NativeFancybox.bind(container, delegate, options);
 
@@ -18,7 +19,7 @@ function Fancybox(props) {
       NativeFancybox.unbind(container);
       NativeFancybox.close();
     };
-  });
+  }, []);
 
   return <div ref={containerRef}>{props.children}</div>;
 }
